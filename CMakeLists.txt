@@ -58,6 +58,12 @@ MESSAGE( STATUS "RELEASE_DATE: ${MODRUBY_RELEASE_DATE}" )
 MESSAGE( STATUS "VERSION:      ${VERSION}" )
 MESSAGE( STATUS "SOVERSION:    ${SOVERSION}" )
 
+#-------------------------------------------------------------------------------
+# Ruby
+#-------------------------------------------------------------------------------
+
+INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/config/ruby.cmake)
+
 # Create debian/changelog file
 CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/debian/changelog.in 
                 ${CMAKE_CURRENT_SOURCE_DIR}/debian/changelog )
@@ -80,12 +86,6 @@ CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/include/apr.h.in
 # Apache config file
 CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/config/mod_ruby.conf.in 
                 ${CMAKE_CURRENT_SOURCE_DIR}/config/mod_ruby.conf )
-
-#-------------------------------------------------------------------------------
-# Ruby
-#-------------------------------------------------------------------------------
-
-INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/config/ruby.cmake)
 
 #-------------------------------------------------------------------------------
 # Project Options
@@ -158,9 +158,6 @@ ADD_SUBDIRECTORY(src)
 IF( CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" )
 SET( CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}" )
 ENDIF()
-
-# Install Ruby library
-INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/lib/core/ DESTINATION ${RUBY_RUBY_LIB_DIR} COMPONENT)
 
 # Display status message for important variables
 MESSAGE( STATUS )
