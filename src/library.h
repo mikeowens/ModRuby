@@ -99,15 +99,6 @@ struct Arguments
     ID id;
     int n;
     VALUE *argv;
-
-    Arguments( VALUE recv, 
-               ID id, 
-               int n, 
-               VALUE *argv ) 
-        : recv(recv), id(id), n(n), argv(argv)
-    {
-
-    }
 };
 
 /* Call a ruby function in a safe way. Translate ruby errors into c++

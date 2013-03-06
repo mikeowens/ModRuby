@@ -252,7 +252,11 @@ VALUE method(VALUE recv, ID id, int n, ...)
         va_end(ar);
     } 
 
-    Arguments arg(recv, id, n, argv);
+    Arguments arg;
+    arg.recv = recv;
+    arg.id   = id;
+    arg.n    = n;
+    arg.argv = argv;
 
     int error = 0;
     VALUE result = rb_protect(method_wrap, reinterpret_cast<VALUE>(&arg), &error);
@@ -282,7 +286,11 @@ VALUE vm_method(VALUE recv, ID id, int n, va_list ar)
         }
     } 
 
-    Arguments arg(recv, id, n, argv);
+    Arguments arg;
+    arg.recv = recv;
+    arg.id   = id;
+    arg.n    = n;
+    arg.argv = argv;    
 
     int error = 0;
     VALUE result = rb_protect(method_wrap, reinterpret_cast<VALUE>(&arg), &error);

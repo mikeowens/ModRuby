@@ -436,23 +436,23 @@ class Request
     
     void allow_methods(int reset, ...) const;
     
-    inline void    get_mime_headers() const { ap_get_mime_headers(_req); }
-    inline void    get_mime_headers_core( apr_bucket_brigade *bb) const
+    inline void get_mime_headers() const { ap_get_mime_headers(_req); }
+    inline void get_mime_headers_core( apr_bucket_brigade *bb) const
     {
         ap_get_mime_headers_core(_req, bb);
     }
 
-    inline void    finalize_request_protocol() const
+    inline void finalize_request_protocol() const
     {
         ap_finalize_request_protocol(_req);
     }
 
-    inline void    send_error_response(int recursive_error) const
+    inline void send_error_response(int recursive_error) const
     {
         ap_send_error_response(_req, recursive_error);
     }
 
-    inline void    set_content_length(apr_off_t length) const
+    inline void set_content_length(apr_off_t length) const
     {
         ap_set_content_length(_req, length);
     }
@@ -477,16 +477,16 @@ class Request
         return ap_make_etag(_req,  force_weak);
     }
 
-    inline void    set_etag() const { ap_set_etag(_req); }
+    inline void set_etag() const { ap_set_etag(_req); }
 
-    inline void    set_last_modified() const {ap_set_last_modified(_req); }
+    inline void set_last_modified() const {ap_set_last_modified(_req); }
 
-    inline int    meets_conditions() const
+    inline int meets_conditions() const
     {
         return ap_meets_conditions(_req);
     }
 
-    inline void    set_content_type(const char* ct) const
+    inline void set_content_type(const char* ct) const
     {
         ap_set_content_type(_req, ct);
     }
@@ -501,22 +501,22 @@ class Request
         return ap_should_client_block(_req);
     }
 
-    inline void    note_auth_failure() const
+    inline void note_auth_failure() const
     {
         ap_note_auth_failure(_req);
     }
 
-    inline void    note_basic_auth_failure() const
+    inline void note_basic_auth_failure() const
     {
         ap_note_basic_auth_failure(_req);
     }
 
-    inline void    note_digest_auth_failure() const
+    inline void note_digest_auth_failure() const
     {
         ap_note_digest_auth_failure(_req);
     }
 
-    inline void    parse_uri(const char* uri) const
+    inline void parse_uri(const char* uri) const
     {
         ap_parse_uri(_req, uri);
     }

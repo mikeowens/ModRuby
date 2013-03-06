@@ -40,8 +40,12 @@ VALUE Object::method(const char* name, int n, ...)
         va_end(ar);
     } 
 
-    Arguments arg(self, rb_intern(name), n, argv);
-
+    Arguments arg;
+    arg.recv = self;
+    arg.id   = rb_intern(name);
+    arg.n    = n;
+    arg.argv = argv;
+    
     int error = 0;
     VALUE result = rb_protect(ruby::method_wrap, reinterpret_cast<VALUE>(&arg), &error);
 
