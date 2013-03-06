@@ -1,0 +1,25 @@
+#ifndef MODRUBY_PLATFORM_DECL
+#define MODRUBY_PLATFORM_DECL
+
+#include "platform_${PLATFORM}.h"
+
+// Use APR_STRINGIFY_HELPER instead
+#define STRINGIFY(a) #a
+
+// Use APR_STRINGIFY instead
+#define MAKE_STR(a) STRINGIFY(a)
+
+#define MODRUBY_RELEASE_VERSION "${MODRUBY_RELEASE_VERSION}"
+#define MODRUBY_RELEASE_DATE    "${MODRUBY_RELEASE_DATE}"
+
+#define SYSTEM_OS   "${SYSTEM}"
+
+#if defined(__i386__)
+#define SYSTEM_ARCH "${CMAKE_SYSTEM_PROCESSOR}"
+#endif
+
+#if defined(__x86_64__)
+#define SYSTEM_ARCH "${CMAKE_SYSTEM_PROCESSOR}"
+#endif
+
+#endif

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo Enabling mod_ruby in Apache conf ...
+a2enmod ruby
+echo Done
+
+echo Restarting Apache ...
+apache2ctl restart
+echo Done
+
+#DEBHELPER#

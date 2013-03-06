@@ -1,0 +1,9 @@
+LoadModule rsp_module ${APACHE_MODULES_DIR}/mod_rsp.so
+
+<IfModule rsp_module>
+
+AddHandler rsp-handler .rsp
+AddHandler rsp-handler .rhtml
+AddType text/html .rhtml .rsp
+
+</IfModule>

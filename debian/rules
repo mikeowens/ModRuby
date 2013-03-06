@@ -1,0 +1,78 @@
+#!/usr/bin/make -f
+version=2.0.5
+major=2
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+
+    # Build makefiles for entire project
+	cmake .
+
+	touch configure-stamp
+
+build: build-stamp
+build-stamp: configure-stamp 
+	dh_testdir
+
+    # mod_mod-ruby: clean build from mod-ruby-dev and make new mod_rso.so
+	cd src && $(MAKE)
+
+clean:
+	dh_testdir
+	dh_testroot
+    # Build makefiles for entire project
+	cmake .
+	rm -f build-stamp configure-stamp
+	rm -rf debian/mod-ruby
+	rm -rf debian/mod-ruby-git
+	rm -rf CMakeFiles
+	rm -rf CMakeCache.txt
+
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+	dh_installchangelogs 
+
+	#---------------------------------------------------------------------------
+	# mod-ruby
+	#---------------------------------------------------------------------------
+
+	cd src && $(MAKE) DESTDIR=$(CURDIR)/debian/mod-ruby install
+	mkdir -p $(CURDIR)/debian/mod-ruby/etc/apache2/mods-available
+	cp debian/mod_ruby.conf $(CURDIR)/debian/mod-ruby/etc/apache2/mods-available/ 
+	cp debian/mod_ruby.load $(CURDIR)/debian/mod-ruby/etc/apache2/mods-available/
+
+	#---------------------------------------------------------------------------
+	# mod-ruby-git
+	#---------------------------------------------------------------------------
+
+	cd $(CURDIR)/debian/mod-ruby-git && \
+       $(CURDIR)/debian/scripts/gitlink.sh \
+       $(CURDIR)/debian/mod_ruby-git.gitmap mod-ruby
+
+	dh_installdocs
+
+binary-indep: build install
+# We have nothing to do by default.
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_strip
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs
+	dh_installdeb
+	#dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure

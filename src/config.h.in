@@ -1,0 +1,3 @@
+#include "${PROJECT_SOURCE_DIR}/include/platform.h"
+#include "${PROJECT_SOURCE_DIR}/include/common.h"
+#include "${PROJECT_SOURCE_DIR}/include/apr.h"

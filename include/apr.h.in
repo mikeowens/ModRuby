@@ -1,0 +1,17 @@
+#ifndef MODRUBY_APR_INCLUDES
+#define MODRUBY_APR_INCLUDES
+
+#include <${APR_ROOT}/apr.h>
+#include <${APR_ROOT}/apr_env.h>
+#include <${APR_ROOT}/apr_portable.h>
+#include <${APR_ROOT}/apr_strings.h>
+#include <${APR_ROOT}/apr_dso.h>
+#include <${APR_ROOT}/apr_file_io.h>
+#include <${APR_ROOT}/apr_file_info.h>
+#include <${APR_ROOT}/apr_tables.h>
+#include <${APR_ROOT}/apr_sha1.h>
+#include <${APR_ROOT}/apr_file_io.h>
+#include <${APR_ROOT}/apr_sha1.h>
+#include <${APR_ROOT}/apr_getopt.h>
+
+#endif

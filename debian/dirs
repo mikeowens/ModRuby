@@ -1,0 +1,6 @@
+var/www
+usr/lib
+usr/bin
+usr/lib/apache2/modules
+etc/apache2/mods-available
+etc/apache2/sites-available

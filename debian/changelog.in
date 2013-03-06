@@ -1,0 +1,5 @@
+mod-ruby (${MODRUBY_RELEASE_VERSION}~${LINUX_DISTRO}) ${LINUX_DISTRO}; urgency=low
+
+  * Release of ${MODRUBY_RELEASE_VERSION}
+
+ -- Michael Owens <mike@mikeowens.ws>  ${MODRUBY_RELEASE_DATE}

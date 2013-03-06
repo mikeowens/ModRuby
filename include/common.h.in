@@ -1,0 +1,17 @@
+#if defined(__cplusplus) || defined(c_plusplus)
+# define BEGIN_DECL    extern "C" {
+# define END_DECL    }
+#else
+# define BEGIN_DECL
+# define END_DECL
+#endif
+
+#ifdef UNIX
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#endif

@@ -1,0 +1,7 @@
+src/librhtml.so usr/lib/
+src/librhtml.so.${SOVERSION} usr/lib/
+lib/core/modruby .${RUBY_RUBY_LIB_DIR}/
+lib/core/modruby.rb .${RUBY_RUBY_LIB_DIR}/
+debian/mod_ruby.conf etc/apache2/mods-available/
+debian/mod_ruby.load etc/apache2/mods-available/
+src/mod_ruby.so usr/lib/apache2/modules/
