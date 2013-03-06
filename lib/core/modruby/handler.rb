@@ -10,18 +10,18 @@ module ModRuby
 class Handler
 
   # This is dummy handler for testing
-  def dummy(req)
-    req.puts 'Dummy handler'
+  def dummy(request)
+    request.puts 'Dummy handler'
   end
 
   # This is the Apache RHTML script handler
-  def rhtml(req)
-    Runner.new(req).runRhtml()
+  def rhtml(request)
+    Runner.new(request).runRhtml()
   end
 
   # This is the Apache Ruby script handler
-  def script(req)
-    Runner.new(req).runScript()
+  def script(request)
+    Runner.new(request).runScript()
   end
 end
 

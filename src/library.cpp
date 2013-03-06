@@ -1,4 +1,5 @@
 #include <ruby.h>
+#include <ruby/encoding.h>
 #include <QTextStream>
 
 #include "library.h"
@@ -80,9 +81,31 @@ void startup(const char* script_name)
         return;
     }
     
+    int fake_argc = 0;
+    char *fake_args[fake_argc];
+    char **fake_argv = fake_args;
+
+    ruby_sysinit(&fake_argc, &fake_argv);
+    
     // Initialize Ruby itself
+    RUBY_INIT_STACK;    
     ruby_init();
+
     ruby_init_loadpath();
+
+    // To load prelude.rb
+    static char* args[] = { "ruby", "/dev/null" };
+    ruby_process_options(2, args);
+
+    // Load Ruby encodings, otherwise we'll get all kinds of "Unitialized
+    // constanct Encoding::UTF-7", etc. everywhere.
+    rb_enc_find_index("encdb");
+
+    VALUE gem;
+    gem = rb_define_module("Gem");
+    rb_const_set(gem, rb_intern("Enable"), Qtrue);
+    rb_require("rubygems");
+
     ruby_script((char*)script_name);
 
     running = true;
@@ -90,14 +113,14 @@ void startup(const char* script_name)
 
 void shutdown(int exit_code)
 {
+    free_all();
+    rb_exit(exit_code);
+
     if(running == false)
     {
         return;
     }
     
-    free_all();
-    rb_exit(exit_code);
-
     running = false;
 }
 
