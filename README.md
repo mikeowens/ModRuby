@@ -1,4 +1,4 @@
-                       mod_ruby: An Apache module for Ruby
+= mod_ruby
 
 == About
 
