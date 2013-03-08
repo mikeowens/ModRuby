@@ -2,6 +2,7 @@
 #include <apache2/http_log.h>
 
 #include <QMap>
+#include <QTextStream>
 
 #include "library.h"
 #include "object.h"

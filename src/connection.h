@@ -66,6 +66,11 @@ class MODCPP_API Connection
         return _c->local_ip;
     }
 
+    inline int local_port() const
+    {
+        return _c->local_addr->port;
+    }
+
     inline const char* local_host() const
     {
         return _c->local_host;
@@ -84,6 +89,11 @@ class MODCPP_API Connection
     inline const char* remote_ip() const
     {
         return _c->remote_ip;
+    }
+
+    inline int remote_port() const
+    {
+        return _c->remote_addr->port;
     }
 
     inline const char* remote_logname() const

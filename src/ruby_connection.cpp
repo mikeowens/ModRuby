@@ -19,10 +19,11 @@ static VALUE m_id(VALUE self);
 static VALUE m_keepalive(VALUE self);
 static VALUE m_local_host(VALUE self);
 static VALUE m_local_ip(VALUE self);
+static VALUE m_local_port(VALUE self);
 static VALUE m_remote_host(VALUE self);
 static VALUE m_remote_ip(VALUE self);
+static VALUE m_remote_port(VALUE self);
 static VALUE m_remote_logname(VALUE self);
-
 
 }
 
@@ -60,8 +61,10 @@ void init_connection(VALUE module)
     rb_define_method(cls, "keepalive",      (fn)m_keepalive, 0);
     rb_define_method(cls, "local_host",     (fn)m_local_host, 0);
     rb_define_method(cls, "local_ip",       (fn)m_local_ip, 0);
+    rb_define_method(cls, "local_port",     (fn)m_local_port, 0);
     rb_define_method(cls, "remote_host",    (fn)m_remote_host, 0);
     rb_define_method(cls, "remote_ip",      (fn)m_remote_ip, 0);
+    rb_define_method(cls, "remote_port",    (fn)m_remote_port, 0);
     rb_define_method(cls, "remote_logname", (fn)m_remote_ip, 0);
 }
 
@@ -134,6 +137,13 @@ VALUE m_local_ip(VALUE self)
     return rb_str_new2(obj->local_ip());
 }
 
+VALUE m_local_port(VALUE self)
+{
+    apache::Connection* obj = get_object(self);
+
+    return INT2FIX(obj->local_port());
+}
+
 VALUE m_remote_host(VALUE self)
 {
     apache::Connection* obj = get_object(self);
@@ -151,6 +161,13 @@ VALUE m_remote_ip(VALUE self)
     apache::Connection* obj = get_object(self);
 
     return rb_str_new2(obj->remote_ip());
+}
+
+VALUE m_remote_port(VALUE self)
+{
+    apache::Connection* obj = get_object(self);
+
+    return INT2FIX(obj->remote_port());
 }
 
 VALUE m_remote_logname(VALUE self)

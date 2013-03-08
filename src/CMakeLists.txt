@@ -5,7 +5,7 @@ endif(COMMAND cmake_policy)
 IF(UNIX)
 
 # Generate source code in src/ directory
-EXECUTE_PROCESS( COMMAND flex -olex.yy.cpp rhtml.lex
+EXECUTE_PROCESS( COMMAND flex -R -P Rhtml -orhtml.yy.cpp rhtml.lex
                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
 
 # Add optimzation flags only in release
@@ -62,7 +62,7 @@ TARGET_LINK_LIBRARIES( shared_lib -L${CMAKE_LIBRARY_PATH} ${SYSTEM_LINK_FLAGS}
                        crypto bz2 ${QT_QTCORE_LIBRARY} ${RUBY_LIBRARY} )
 
 # 1. RHTML Shared Library
-ADD_LIBRARY( rhtml_lib SHARED rhtml.cpp ruby_rhtml.cpp lex.yy.cpp 
+ADD_LIBRARY( rhtml_lib SHARED rhtml.cpp ruby_rhtml.cpp rhtml.yy.cpp 
              library.cpp object.cpp )
 SET_TARGET_PROPERTIES( rhtml_lib PROPERTIES
 

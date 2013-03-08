@@ -87,8 +87,10 @@ module Debug
     log 'Connection::KeepAlive', c.keepalive
     log 'Connection::LocalIP', c.local_ip
     log 'Connection::LocalHost', c.local_host
+    log 'Connection::LocalPort', c.local_port
     log 'Connection::RemoteIP', c.remote_ip
     log 'Connection::RemoteHost', c.remote_host
+    log 'Connection::RemotePort', c.remote_port
     log 'Connection::RemoteLogname', c.remote_logname
   end
 

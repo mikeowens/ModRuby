@@ -1,8 +1,8 @@
-#ifndef MODRUBY_RHTML_DECLARE
-#define MODRUBY_RHTML_DECLARE
+#ifndef MODRUBY_RHTMLPARSER_DECLARE
+#define MODRUBY_RHTMLPARSER_DECLARE
 
-#include <QString>
-#include <QTextStream>
+#include <string>
+#include <sstream>
 
 #include "object.h"
 #include "library.h"
@@ -28,8 +28,15 @@ does this correctly.
 Therefore, this rhtml is modeled after eRuby.
 */
 
-class rhtml
+class RhtmlParser
 {
+    // Disallow assignment operator and default copy ctor
+    const RhtmlParser &operator=(const RhtmlParser &old); 
+    RhtmlParser(const RhtmlParser &old);
+
+    // A handle to the scanner
+    void* scanner;
+
   public:
 
     enum state_t
@@ -40,8 +47,8 @@ class rhtml
         TEXT_STATE    = 4
     };
 
-    QString text;
-    QString line;
+    std::string text;
+    std::string line;
 
   private:
 
@@ -54,7 +61,7 @@ class rhtml
 
   public:
 
-    rhtml();
+    RhtmlParser();
 
     /** Process file contents */
     bool compile_file(const char* filename);

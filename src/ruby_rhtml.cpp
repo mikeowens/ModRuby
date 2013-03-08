@@ -35,11 +35,11 @@ VALUE rhtml_eval(int args, VALUE* argv, VALUE self)
         binding = argv[1];
     }
 
-    ruby::rhtml s;
+    ruby::RhtmlParser parser;
 
-    s.compile_text(StringValuePtr(text));
+    parser.compile_text(StringValuePtr(text));
 
-    return rb_str_new(s.text.toAscii().data(), s.text.size());
+    return rb_str_new(parser.text.data(), parser.text.size());
 }
 
 VALUE rhtml_compile(int args, VALUE* argv, VALUE self)
@@ -72,9 +72,9 @@ VALUE rhtml_compile(int args, VALUE* argv, VALUE self)
         rb_raise(rb_eIOError, msg.toAscii().data());
     }
     
-    ruby::rhtml s;
+    ruby::RhtmlParser parser;
 
-    s.compile_file(info.absoluteFilePath().toAscii().data());
+    parser.compile_file(info.absoluteFilePath().toAscii().data());
     
-    return rb_str_new(s.text.toAscii().data(), s.text.size());
+    return rb_str_new(parser.text.data(), parser.text.size());
 }

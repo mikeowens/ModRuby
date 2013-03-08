@@ -1,26 +1,47 @@
-#include <QString>
+#include <string>
 
 #include "library.h"
 #include "rhtml.h"
 
+using namespace std;
 using namespace ruby;
+
+template<class T>
+int inline replace(T& source, const char* find, const char* replace)
+{
+    int num=0;
+    size_t fLen = strlen(find);
+    size_t rLen = strlen(replace);
+    for(typename T::size_type pos=0; (pos=source.find(find, pos))!=T::npos; pos+=rLen)
+    {
+        num++;
+        source.replace(pos, fLen, replace);
+    }
+
+    return num;
+}
 
 // _context is a generic Ruby Object using the C++ ruby::Object class. We then
 // get its binding. We use the binding as the global context for the RHTML
 // document. We do this by passing it in for every call to eval() below.
 
-rhtml::rhtml() : _context("Object"), _current_line(1), 
-                 _block_start_line(1), _state(TEXT_STATE), _binding(Qnil)
+// Note: do NOT initialize scanner(NULL) here. It will cause a segfault. This
+// has something to do with flex code.
+
+RhtmlParser::RhtmlParser() 
+    : text(), line(), _context("Object"), _binding(Qnil), 
+      _state(TEXT_STATE), _block_start_line(1), _current_line(1),
+      _file_name(NULL)
 {    
 
 }
 
-void rhtml::append(const char* t)
+void RhtmlParser::append(const char* t)
 {
     line += t;
 }
 
-void rhtml::read(const char* t)
+void RhtmlParser::read(const char* t)
 {
     switch (_state)
     {
@@ -33,10 +54,10 @@ void rhtml::read(const char* t)
                 line += "print \"";
             }
 
-            QString tmp = t;
-            tmp.replace("\\", "\\\\");
-            tmp.replace("\"", "\\\"");
-            tmp.replace("#", "\\#");
+            string tmp = t;
+            replace(tmp, "\\", "\\\\");
+            replace(tmp, "\"", "\\\"");
+            replace(tmp, "#", "\\#");
             line += tmp;
 
             break;
@@ -49,7 +70,7 @@ void rhtml::read(const char* t)
     }
 }
 
-const char* rhtml::content_name()
+const char* RhtmlParser::content_name()
 {
     switch (_state)
     {
@@ -73,9 +94,11 @@ const char* rhtml::content_name()
             return "var";
         }
     }
+
+    return NULL;
 }
 
-void rhtml::change(state_t s)
+void RhtmlParser::change(state_t s)
 {
     switch (_state)
     {
@@ -114,7 +137,7 @@ void rhtml::change(state_t s)
     _block_start_line = _current_line;
 }
 
-void rhtml::end_line()
+void RhtmlParser::end_line()
 {
     _current_line++;
 
@@ -156,18 +179,18 @@ void rhtml::end_line()
     line.clear();
 }
 
-int rhtml::current_line()
+int RhtmlParser::current_line()
 {
     return _current_line;
 }
 
-int rhtml::block_start_line()
+int RhtmlParser::block_start_line()
 {
     return _block_start_line;
 }
 
 
-bool rhtml::eval(VALUE b)
+bool RhtmlParser::eval(VALUE b)
 {
     //> Setup Ruby binding (global scope for eval())
     VALUE binding = Qnil;
@@ -183,7 +206,7 @@ bool rhtml::eval(VALUE b)
 
     try
     {
-        ruby::eval(text.toAscii().data(), _file_name, _block_start_line, _binding);
+        ruby::eval(text.c_str(), _file_name, _block_start_line, _binding);
     }
     catch(const ruby::Exception &e)
     {
@@ -197,13 +220,12 @@ bool rhtml::eval(VALUE b)
         
         return false;
     }
-    
-
-    ruby::method( rb_stdout, rb_intern("write"), 1, 
-                  rb_str_new(text.toAscii().data(), text.size()) );
+        
+    //ruby::method( rb_stdout, rb_intern("write"), 1, 
+    //              rb_str_new(text.c_str(), text.size()) );
 
     // Flush Ruby standard output.
-    ruby::method(rb_stdout, rb_intern("flush"), 0);
+    //ruby::method(rb_stdout, rb_intern("flush"), 0);
 
     if(b == Qnil)
     {
@@ -214,14 +236,16 @@ bool rhtml::eval(VALUE b)
     return true;
 }
 
-bool rhtml::eval_file(const char* filename, VALUE binding)
+bool RhtmlParser::eval_file(const char* filename, VALUE binding)
 {
     compile_file(filename);
-    eval(binding);
+
+    return eval(binding);
 }
 
-bool rhtml::eval_text(const char* str, VALUE binding)
+bool RhtmlParser::eval_text(const char* str, VALUE binding)
 {
     compile_text(str);
-    eval(binding);
+
+    return eval(binding);
 }
