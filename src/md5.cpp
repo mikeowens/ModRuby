@@ -12,10 +12,15 @@
  * the digest.
  */
 
-#include <QString>
+#include <stdio.h>
+#include <string.h>
+
+#include <string>
 
 #include "common.h"
 #include "md5.h"
+
+using std::string;
 
 namespace modruby
 {
@@ -34,7 +39,7 @@ md5::md5(const char* path)
 
     if(access(path, R_OK) != 0)
     {
-        QString msg = (QString)"md5() : No such file: " + path;
+        string msg = (string)"md5() : No such file: " + path;
 
         // TODO:
         //throw runtime_error(msg.string());
@@ -280,7 +285,7 @@ void md5::final()
     memset(ctx, 0, sizeof(ctx));    /* In case it's sensitive */
 }
 
-QString md5::debug()
+string md5::debug()
 {
     unsigned char in[64];
     char out[129];

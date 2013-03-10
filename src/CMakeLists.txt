@@ -2,30 +2,48 @@ if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-IF(UNIX)
-
 # Generate source code in src/ directory
-EXECUTE_PROCESS( COMMAND flex -R -P Rhtml -orhtml.yy.cpp rhtml.lex
+execute_process( COMMAND flex -R -P Rhtml -orhtml.yy.cpp rhtml.lex
                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
 
 # Add optimzation flags only in release
-IF( CMAKE_BUILD_TYPE STREQUAL "Release")
- ADD_DEFINITIONS( "-O2" )
-ENDIF()
+if( CMAKE_BUILD_TYPE STREQUAL "Release")
+ add_definitions( "-O2" )
+endif()
 
 # Require proper C++
-ADD_DEFINITIONS( "-pedantic -Wno-long-long" ) # skip -ansi
+add_definitions( "-pedantic -Wno-long-long" ) # skip -ansi
 
 # Needed for APR
-# "-fPIC -fno-strict-aliasing -g -fpic"
-ADD_DEFINITIONS( -D UNIX -D_REENTRANT -fPIC -W -DLINUX=2 -D_REENTRANT 
-                 -D_GNU_SOURCE -D_LARGEFILE64_SOURCE )
+add_definitions( -fPIC -W -D_GNU_SOURCE -D_LARGEFILE64_SOURCE )
 
-IF(${unittest})
-ADD_DEFINITIONS( "-DUNIT_TEST=1" )
-ENDIF(${unittest})
+#-------------------------------------------------------------------------------
+# Compilation
+#-------------------------------------------------------------------------------
 
-ENDIF(UNIX)
+# Common libraries.
+
+add_library(libruby_ex STATIC IMPORTED)
+set_property(TARGET libruby_ex PROPERTY
+             IMPORTED_LOCATION ${RUBY_STATIC_LIBRARY})
+
+set(CMAKE_INSTALL_PREFIX ${PREFIX})
+set(CMAKE_INCLUDE_PATH ${PREFIX}/include ${ALTERNATE_PREFIX/include})
+set(CMAKE_LIBRARY_PATH ${PREFIX}/lib ${ALTERNATE_PREFIX/lib})
+
+include_directories( -I ${CMAKE_INCLUDE_PATH} 
+                     -I ${CMAKE_INCLUDE_PATH}/${APR_ROOT} 
+                     -I ${RUBY_INCLUDE_PATH}  
+                     -I ${RUBY_INCLUDE_PATH}/${RUBY_SITE_ARCH}  
+                     -I "${PROJECT_SOURCE_DIR}/include" )
+
+set(CMAKE_BUILD_TYPE Debug)
+
+# Add debug definitions
+if( CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo" )
+ add_definitions( "-DDEBUG -ggdb" )
+ set(CMAKE_CXX_FLAGS "")
+endif()
 
 #-------------------------------------------------------------------------------
 # Project / Files
@@ -34,17 +52,17 @@ ENDIF(UNIX)
 set(PROJECT_NAME ruby)
 
 # Create configuration file from .in file
-CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in 
                 ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 # List of source files
-AUX_SOURCE_DIRECTORY( . library_sources )
+aux_source_directory( . library_sources )
 
 # Library targets
 
 # 1. Shared Library
-ADD_LIBRARY( shared_lib SHARED ${library_sources} )
-SET_TARGET_PROPERTIES( shared_lib PROPERTIES
+add_library( shared_lib SHARED ${library_sources} )
+set_target_properties( shared_lib PROPERTIES
 
   # For Unix style library versions + symbolic links
   #VERSION   ${VERSION}
@@ -58,13 +76,19 @@ SET_TARGET_PROPERTIES( shared_lib PROPERTIES
   # Avoid conflicts between library and binary target names
   OUTPUT_NAME mod_${PROJECT_NAME} )
 
-TARGET_LINK_LIBRARIES( shared_lib -L${CMAKE_LIBRARY_PATH} ${SYSTEM_LINK_FLAGS}
-                       crypto bz2 ${QT_QTCORE_LIBRARY} ${RUBY_LIBRARY} )
+target_link_libraries( shared_lib -L${CMAKE_LIBRARY_PATH} ${SYSTEM_LINK_FLAGS}
+                       crypto bz2 ${RUBY_LIBRARY} )
 
-# 1. RHTML Shared Library
-ADD_LIBRARY( rhtml_lib SHARED rhtml.cpp ruby_rhtml.cpp rhtml.yy.cpp 
+# 2. Static library for testing
+add_library( static_lib STATIC ${library_sources} )
+
+set_target_properties( static_lib PROPERTIES OUTPUT_NAME ${PROJECT_NAME} )
+
+# 3. RHTML Shared Library
+add_library( rhtml_lib SHARED rhtml.cpp ruby_rhtml.cpp rhtml.yy.cpp 
              library.cpp object.cpp )
-SET_TARGET_PROPERTIES( rhtml_lib PROPERTIES
+
+set_target_properties( rhtml_lib PROPERTIES
 
   # For Unix style library versions + symbolic links
   VERSION   ${VERSION}
@@ -78,18 +102,18 @@ SET_TARGET_PROPERTIES( rhtml_lib PROPERTIES
   # Avoid conflicts between library and binary target names
   OUTPUT_NAME librhtml )
 
-TARGET_LINK_LIBRARIES( rhtml_lib -L${CMAKE_LIBRARY_PATH} ${SYSTEM_LINK_FLAGS}
-  bz2 ${RUBY_LIBRARY} ${QT_QTCORE_LIBRARY} )
+target_link_libraries( rhtml_lib -L${CMAKE_LIBRARY_PATH} ${SYSTEM_LINK_FLAGS}
+  bz2 ${RUBY_LIBRARY} )
 
 #-------------------------------------------------------------------------------
 # Compilation
 #-------------------------------------------------------------------------------
 
 # Add debug definitions
-IF( CMAKE_BUILD_TYPE STREQUAL "Debug" OR
+if( CMAKE_BUILD_TYPE STREQUAL "Debug" OR
  CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo" )
- ADD_DEFINITIONS( "-DDEBUG" )
-ENDIF()
+ add_definitions( "-DDEBUG" )
+endif()
 
 #-------------------------------------------------------------------------------
 # Linking
@@ -97,9 +121,9 @@ ENDIF()
 
 # Set default build type to (None Debug Release RelWithDebInfo MinSizeRel)
 
-IF( NOT CMAKE_BUILD_TYPE )
-SET( CMAKE_BUILD_TYPE "RelWithDebInfo" )
-ENDIF()
+if( NOT CMAKE_BUILD_TYPE )
+set( CMAKE_BUILD_TYPE "RelWithDebInfo" )
+endif()
 
 #-------------------------------------------------------------------------------
 # Installation
@@ -107,22 +131,19 @@ ENDIF()
 
 # Install library
 
-file(GLOB HEADERS . *.h)
-SET_PROPERTY(TARGET shared_lib PROPERTY PUBLIC_HEADER ${HEADERS})
-
-SET(APACHE_MODULES_DIR "/usr/lib/apache2/modules")
+set(APACHE_MODULES_DIR "/usr/lib/apache2/modules")
 
 # Install Ruby library
-INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ruby/ DESTINATION ${RUBY_RUBY_LIB_DIR} COMPONENT)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ruby/ DESTINATION ${RUBY_RUBY_LIB_DIR} COMPONENT)
 
-INSTALL( TARGETS shared_lib
+install( TARGETS shared_lib
   LIBRARY DESTINATION ${APACHE_MODULES_DIR} PERMISSIONS
   ARCHIVE DESTINATION lib PERMISSIONS
   OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE
   WORLD_READ WORLD_EXECUTE )
 
-INSTALL( TARGETS rhtml_lib
+install( TARGETS rhtml_lib
   LIBRARY DESTINATION lib PERMISSIONS
   ARCHIVE DESTINATION lib PERMISSIONS
   OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -130,8 +151,13 @@ INSTALL( TARGETS rhtml_lib
   WORLD_READ WORLD_EXECUTE )
 
 # Export build settings
-INCLUDE( CMakeExportBuildSettings )
+include( CMakeExportBuildSettings )
 
-CMAKE_EXPORT_BUILD_SETTINGS( "config/BuildSettings.cmake" )
+cmake_export_build_settings( "config/BuildSettings.cmake" )
 # Export library dependencies (keep this as the last line in the file)
-EXPORT_LIBRARY_DEPENDENCIES( "config/LibDeps.cmake" )
+export_library_dependencies( "config/LibDeps.cmake" )
+
+# Enable with cmake -Ddev=1 .
+if(${dev})
+add_subdirectory(test)
+endif(${dev})

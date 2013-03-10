@@ -1,7 +1,7 @@
 #ifndef MODRUBY_APR_POOL_DECLARE
 #define MODRUBY_APR_POOL_DECLARE
 
-#include <QString>
+#include <string>
 
 #include "../include/apr.h"
 #include "common.h"
@@ -43,7 +43,7 @@ void destroy();
 apr_pool_t* pool();
 
 // Error functions
-QString str_error(apr_status_t rv);
+std::string str_error(apr_status_t rv);
 apr_status_t last_error();
 
 /* This class abstracts an APR subpool -- a child of a pool. */
@@ -68,10 +68,10 @@ int rm(const char* source_path);
 int mkdir(const char* path, i32 perms = -1);
 int rmdir(const char* path);
 
-QString cwd();
+std::string cwd();
 bool path_is_relative(const char* path);
-QString path_merge(const char* root_path, const char* addpath);
-QString path_root(const char* path);
+std::string path_merge(const char* root_path, const char* addpath);
+std::string path_root(const char* path);
 
 // Wrapper for APR apr_finfo_t struct used in stat() function
 class file_info
@@ -134,8 +134,8 @@ class file_info
      */
     const char* name() const;
 
-    QString md5();
-    QString sha1();
+    std::string md5();
+    std::string sha1();
 };
 
 file_info stat( apr_file_t* file, apr_pool_t* pool, 

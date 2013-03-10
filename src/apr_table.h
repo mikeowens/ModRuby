@@ -71,8 +71,8 @@ class table
    
     const apr_array_header_t* begin();
 
-    QString join(const char* sep);
-    QString& join(const char* sep, QString& b);
+    std::string join(const char* sep);
+    std::string& join(const char* sep, std::string& b);
 
     u32 size() const;
     void clear();

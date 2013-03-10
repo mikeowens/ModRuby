@@ -1,6 +1,6 @@
 #include <ruby.h>
 #include <ruby/encoding.h>
-#include <QTextStream>
+#include <sstream>
 
 #include "library.h"
 
@@ -46,7 +46,7 @@ void Objects::free_object(VALUE object)
 
 void Objects::free_all()
 {
-    if(singleton == NULL)
+    if(singleton != NULL)
     {
         delete singleton;
         singleton = NULL;
@@ -114,7 +114,7 @@ void startup(const char* script_name)
 void shutdown(int exit_code)
 {
     free_all();
-    rb_exit(exit_code);
+    ruby_cleanup(0);
 
     if(running == false)
     {
@@ -128,7 +128,7 @@ void shutdown(int exit_code)
 // Exceptions
 //------------------------------------------------------------------------------
 
-Exception::Exception(const char* msg)
+Exception::Exception(const char* msg) : _msg(), _backtrace(), _type()
 {
     if(msg != NULL)
     {
@@ -136,7 +136,7 @@ Exception::Exception(const char* msg)
     }    
 }
 
-Exception::Exception(const Exception& e)
+Exception::Exception(const Exception& e) : _msg(), _backtrace(), _type()
 {
     *this = e;
 }
@@ -313,7 +313,7 @@ VALUE vm_method(VALUE recv, ID id, int n, va_list ar)
     arg.recv = recv;
     arg.id   = id;
     arg.n    = n;
-    arg.argv = argv;    
+    arg.argv = argv;
 
     int error = 0;
     VALUE result = rb_protect(method_wrap, reinterpret_cast<VALUE>(&arg), &error);
@@ -334,8 +334,6 @@ VALUE vm_method(VALUE recv, ID id, int n, va_list ar)
 
 void eval(const char* code, const char* filename, int sl, VALUE binding)
 {
-    int error = 0;
-
     const char* fn = filename;
 
     if(fn == NULL)
@@ -366,7 +364,7 @@ void eval(const char* code, const char* filename, int sl, VALUE binding)
 
     if(error)
     {
-        modruby::buffer msg;
+        linterra::buffer msg;
 
         throw Exception();
     }
@@ -381,6 +379,37 @@ VALUE require_protect(VALUE arg)
     return Qnil;
 }
 
+bool call_function(const char* method, int n, ...)
+{
+    VALUE ret;
+    va_list ar;
+
+    if(n > 0) 
+    {
+        va_start(ar, n);
+    }
+
+    try
+    {  
+        ret = ruby::vm_method(Qnil, rb_intern(method), n, ar);
+    }
+    catch(const ::ruby::Exception &e)
+    {
+        // User needs to see this error on command line, so will we pipe it to
+        // stdout.
+        fprintf(stdout, "%s\n", e.what());
+        
+        ret = Qfalse;
+    }
+
+    if(n > 0) 
+    {
+        va_end(ar);
+    } 
+
+    return ret;
+}
+
 void require(const char* filename)
 {
     int error = 0;
@@ -388,12 +417,11 @@ void require(const char* filename)
 
     if(error)
     {
-        QString msg;
-        QTextStream strm(&msg);
+        std::stringstream strm;
 
         strm << "error loading " << filename << ".rb";
 
-        Exception e(msg.toAscii().data());
+        Exception e(strm.str().c_str());
         e.backtrace();
         throw e;
     }
@@ -448,11 +476,10 @@ VALUE create_object(const char* class_name)
 
     if(error)
     {
-        QString msg;
-        QTextStream strm(&msg);
+        std::stringstream strm;
         strm << "Error creating Ruby class '" << class_name << "'";
 
-        Exception e(msg.toAscii().data());
+        Exception e(strm.str().c_str());
         e.backtrace();
         throw e;
     }
@@ -467,7 +494,8 @@ void require_class(VALUE x, VALUE cls)
         rb_raise( rb_eRuntimeError, 
                   "wrong argument type %s (expected %s)",
                   rb_obj_classname(x),
-                  rb_class2name(cls) );
+                  rb_class2name(cls)
+            );
     }
 }
 

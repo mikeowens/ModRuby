@@ -1,13 +1,17 @@
 #define EXPORT_MODCPP
 
-#include <QTextStream>
-#include <QUrl>
+#include <string>
+#include <sstream>
 
 #include "request.h"
 #include "apr.h"
 #include "apr_table.h"
 #include "connection.h"
+#include "util.hpp"
 
+using std::string;
+using std::vector;
+using std::stringstream;
 using namespace apache;
 using namespace modruby;
 
@@ -25,7 +29,7 @@ Request::~Request()
     
 }
 
-QString format_pair(const char* key, const char* value)
+string format_pair(const char* key, const char* value)
 {
     char buf[256];
     i32 len = snprintf(buf, 255, "    %-24s: %s\n", key, value);
@@ -33,7 +37,7 @@ QString format_pair(const char* key, const char* value)
     return buf;    
 }
 
-QString format_pair(const char* key, i32 value)
+string format_pair(const char* key, i32 value)
 {
     char buf[256];
     i32 len = snprintf(buf, 255, "    %-24s: %i\n", key, value);
@@ -41,10 +45,9 @@ QString format_pair(const char* key, i32 value)
     return buf;    
 }
 
-QString Request::repr() const
+string Request::repr() const
 {
-    QString data;
-    QTextStream out(&data);
+    stringstream out;
 
     const apache::Connection c = connection();
 
@@ -110,18 +113,17 @@ QString Request::repr() const
             << table_string(this->err_headers_out()) << "\n";
     }
 
-    return data;
+    return out.str();
 }
 
 void Request::dump() const
 {
-    this->rputs(repr().toAscii());
+    this->rputs(repr().c_str());
 }
 
-QString Request::table_string(const modruby::apr::table& t) const
+string Request::table_string(const modruby::apr::table& t) const
 {
-    QString data;
-    QTextStream out(&data);
+    stringstream out;
     char buf[256];
 
     modruby::apr::table::iterator i(t);
@@ -135,12 +137,12 @@ QString Request::table_string(const modruby::apr::table& t) const
         out << buf;
     }
 
-    return data;
+    return out.str();
 }
 
 void Request::dump(const modruby::apr::table& pTable) const
 {
-    rputs(table_string(pTable).toAscii());
+    rputs(table_string(pTable).c_str());
 }
 
 apr_table_t* Request::queries() const
@@ -157,16 +159,8 @@ apr_table_t* Request::queries() const
     {
         apr::table t(pool());
 
-        QUrl url(_req->unparsed_uri);
-        QList<QPair<QString, QString> > items = url.queryItems();
-        QList<QPair<QString, QString> >::iterator i;
-
-        for(i=items.begin(); i != items.end(); i++)
-        {
-            t.merge( i->first.toAscii().constData(), 
-                     i->second.replace("+"," ").toAscii().constData() );
-        }
-
+        parse_query_string(_req->args, t);
+        
         _queries = t.handle;
     }
     else
@@ -193,9 +187,9 @@ bool Request::has_form_data() const
         return false;
     }
 
-    QString x = headers_in().get("Content-Type");
+    string x = headers_in().get("Content-Type");
 
-    if(x.indexOf("application/x-www-form-urlencoded") != -1)
+    if(x.find("application/x-www-form-urlencoded") != string::npos)
     {
         return true;
     }
@@ -229,7 +223,7 @@ bool Request::setup_client_read() const
     return true;
 }
 
-const QString& Request::content(read_content fn, void* user_data) const
+const vector<unsigned char>& Request::content(read_content fn, void* user_data) const
 {
     if(has_read_content == true)
     {
@@ -243,10 +237,12 @@ const QString& Request::content(read_content fn, void* user_data) const
     {
         _error.clear();
 
-        QTextStream strm(&_error);
+        stringstream strm;
 
         strm << "Request::form_data(): exceded bytes_sent: " 
              << max_content_length;
+
+        _error = strm.str();
     }
 
     // Set things up in Apache to get ready to read data from client.
@@ -271,7 +267,12 @@ const QString& Request::content(read_content fn, void* user_data) const
         {
             // Caller wants to collect it all in a buffer
             // Append
-            _content.append(QByteArray(buff, len));
+
+            // Grow the buffer
+            _content.reserve(_content.size() + len);
+
+            // Append data
+            memcpy(&_content[_content.size()], buff, len);
         }
     }
 
@@ -281,7 +282,7 @@ const QString& Request::content(read_content fn, void* user_data) const
     return _content;
 }
 
-QString Request::read_line() const
+string Request::read_line() const
 {
     if(has_read_content == true)
     {
@@ -293,7 +294,7 @@ QString Request::read_line() const
 
     //> Copy data out
 
-    QString content;
+    string content;
     content.reserve(100);
     char buff[2];
     int len = 0;
@@ -354,6 +355,26 @@ i32 Request::read(char** buff, i32 len) const
     return n;
 }
 
+bool Request::parse_query_string(const char* in, modruby::apr::table& t)
+{
+    vector<string> pairs;
+    split(in, '&', pairs);
+
+    std::vector<std::string>::iterator i;
+    for(i = pairs.begin(); i != pairs.end(); i++)
+    {
+        unsigned found = i->find("=");
+
+        if(found != string::npos)
+        {
+            t.merge( url_decode(i->substr(0, found).c_str()).c_str(),
+                     url_decode(i->substr(found+1, i->size() - 1).c_str()).c_str() );
+        }
+    }
+
+    return true;
+}
+
 apr_table_t* Request::form_data() const
 {
     // If we have copied this out before
@@ -362,10 +383,18 @@ apr_table_t* Request::form_data() const
         // Return the table
         return _form_data;
     }
-    
-    QString content_type = headers_in().get("Content-Type");
 
-    if(content_type.indexOf("application/x-www-form-urlencoded") == -1)
+    // Guard against passing NULL into string
+    const char* value = headers_in().get("Content-Type");
+
+    if(value == NULL)
+    {
+        return NULL;
+    }
+
+    string content_type = value;
+
+    if(content_type.find("application/x-www-form-urlencoded") == string::npos)
     {
         _error = "Request::form_data(): unsupported content type";
 
@@ -377,7 +406,7 @@ apr_table_t* Request::form_data() const
         apr::table t(pool());
 
         t.merge( "content-type", 
-                 content_type.toAscii().constData());
+                 content_type.c_str());
    
         // Get reference to apr_table_t. We will just return this if this function
         // is ever called again.
@@ -390,18 +419,14 @@ apr_table_t* Request::form_data() const
 
     apr::table t(pool());
 
-    QUrl url;
-    url.setEncodedQuery(content().toAscii());
-    QList<QPair<QString, QString> > items = url.queryItems();
-    QList<QPair<QString, QString> >::iterator i;
-    
-    for(i=items.begin(); i != items.end(); i++)
-    {   
-        // Filter out '+' char in value
-        t.merge( i->first.toAscii().constData(), 
-                 i->second.replace("+"," ").toAscii().constData());
-    }
-    
+    // Read in all data
+    content();
+
+    // Null-terminate it
+    _content.push_back(char(0));
+
+    parse_query_string((const char*)_content.data(), t);
+
     // Get reference to apr_table_t. We will just return this if this function
     // is ever called again.
     _form_data = t.handle;

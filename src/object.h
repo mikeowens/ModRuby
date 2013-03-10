@@ -1,8 +1,8 @@
-#ifndef MODRUBY_RUBY_BASE_OBJECT
-#define MODRUBY_RUBY_BASE_OBJECT
+#ifndef RSP_RUBY_BASE_OBJECT
+#define RSP_RUBY_BASE_OBJECT
 
 #include <ruby.h>
-#include <QString>
+#include <string>
 
 namespace ruby
 {
@@ -23,7 +23,7 @@ class Object
 {
   private:
 
-    Object(){}
+    Object();
 
   protected:
 
@@ -38,6 +38,8 @@ class Object
     VALUE method(const char* name, int n=0, ...);
 
     const char* class_name();
+
+    inline VALUE value() { return self; }
 };
 
 } // end namespace ruby

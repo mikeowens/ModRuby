@@ -1,10 +1,14 @@
 #include <stdlib.h>
 
-#include <QTextStream>
+#include <string>
+#include <sstream>
 
 #include "apr.h"
 #include "md5.h"
 #include "sha1.h"
+
+using std::string;
+using std::stringstream;
 
 namespace modruby
 {
@@ -15,7 +19,7 @@ static apr_pool_t* apr_pool    = NULL;
 static apr_status_t apr_status = APR_SUCCESS;
 static unsigned int refcount   = 0;
 
-static QString error;
+static string error;
 
 void init()
 {
@@ -60,7 +64,7 @@ subpool::~subpool()
     apr_pool_destroy(handle);
 }
 
-QString str_error(apr_status_t rv)
+string str_error(apr_status_t rv)
 {
     char buf[256];
 
@@ -69,9 +73,9 @@ QString str_error(apr_status_t rv)
 
 apr_file_t* tempfile(const char* name, apr_pool_t* pool, i32 flags)
 {
-    QString filename = (QString)name + "XXXXXX";
+    string filename = (string)name + "XXXXXX";
     apr_file_t *fp;
-    apr_file_mktemp(&fp, (char*)filename.toAscii().constData(), flags, pool);
+    apr_file_mktemp(&fp, (char*)filename.c_str(), flags, pool);
 
     return fp;
 }
@@ -148,7 +152,7 @@ int rmdir(const char* path)
 
     if(apr_status)
     {
-        QString err = (QString)"Can't open directory " + path + ".";
+        string err = (string)"Can't open directory " + path + ".";
         
         // TODO
         //log(err);
@@ -184,8 +188,7 @@ int rmdir(const char* path)
                 fullpath = entry;
             }
             
-            QString tmp;
-            QTextStream strm(&tmp);
+            stringstream strm;
 
             if(entry == NULL)
             {
@@ -197,9 +200,8 @@ int rmdir(const char* path)
             }
             else
             {
-                tmp.clear();
                 strm << path << "/" << entry;
-                fullpath = tmp.toAscii().constData();
+                fullpath = strm.str().c_str();
             }
             
             if(this_entry.filetype == APR_DIR)
@@ -217,7 +219,7 @@ int rmdir(const char* path)
 
                 if(apr_status)
                 {
-                    QString err = (QString)"Can't remove  " + fullpath + ".";
+                    string err = (string)"Can't remove  " + fullpath + ".";
                     
                     // TODO
                     //log(err);
@@ -237,7 +239,7 @@ int rmdir(const char* path)
 
     if (!APR_STATUS_IS_ENOENT(apr_status))
     {
-        QString err = (QString)"Can't read directory  " + path + ".";
+        string err = (string)"Can't read directory  " + path + ".";
         // TODO
         //log(err);
 
@@ -248,7 +250,7 @@ int rmdir(const char* path)
 
     if(apr_status)
     {
-        QString err = (QString)"Error closing directory  " + path + ".";
+        string err = (string)"Error closing directory  " + path + ".";
         // log(err);
 
         return apr_status;
@@ -261,7 +263,7 @@ int rmdir(const char* path)
 
     if(apr_status)
     {
-        QString err = (QString)"Can't remove  " + path + ".";
+        string err = (string)"Can't remove  " + path + ".";
         // log(err);
 
         return apr_status;
@@ -270,7 +272,7 @@ int rmdir(const char* path)
     return APR_SUCCESS;
 }
 
-QString cwd()
+string cwd()
 {
     char* path;
     subpool s;
@@ -292,7 +294,7 @@ bool path_is_relative(const char* path)
     return rc == APR_ERELATIVE;
 }
 
-QString path_merge(const char* root_path, const char* add_path)
+string path_merge(const char* root_path, const char* add_path)
 {
     char* new_path;
     subpool s;
@@ -309,7 +311,7 @@ QString path_merge(const char* root_path, const char* add_path)
     return new_path;
 }
 
-QString path_root(const char* path)
+string path_root(const char* path)
 {
     const char* rootpath = "";
     subpool s;
@@ -449,14 +451,14 @@ const char* file_info::fname() const
     return _stat.fname;
 }
 
-QString file_info::md5()
+string file_info::md5()
 {
     modruby::md5 md5h(_stat.fname);
     
     return md5h.result();
 }
 
-QString file_info::sha1()
+string file_info::sha1()
 {
     modruby::sha1 sha;
     sha.hashfile(_stat.fname);

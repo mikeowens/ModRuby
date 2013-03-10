@@ -5,6 +5,10 @@
 #include "ruby_apr_table.h"
 #include "ruby_apr_pool.h"
 
+#include <string>
+
+using std::string;
+
 typedef VALUE (*fn)(...);
 
 #define CLASS_NAME "Table"
@@ -267,7 +271,7 @@ VALUE m_join(VALUE self, VALUE delimiter)
 
     modruby::apr::table* table = get_object(self);
 
-    QString str = table->join(StringValuePtr(delimiter));
+    string str = table->join(StringValuePtr(delimiter));
 
-    return rb_str_new2(str.toAscii().constData());
+    return rb_str_new2(str.c_str());
 }

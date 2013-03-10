@@ -1,11 +1,15 @@
 #include <ruby.h>
 #include <sqlite3.h>
 
+#include <string>
+
 #include "apr.h"
 #include "apr_table.h"
 #include "ruby_apr.h"
 #include "ruby_apr_file_info.h"
 #include "ruby_apr_pool.h"
+
+using std::string;
 
 typedef VALUE (*fn)(...);
 
@@ -154,7 +158,7 @@ VALUE m_rmdir(VALUE cls, VALUE dir)
 
 VALUE m_cwd(VALUE self)
 {
-    return rb_str_new2(modruby::apr::cwd().toAscii().constData());
+    return rb_str_new2(modruby::apr::cwd().c_str());
 }
 
 VALUE m_filepath_is_relative(VALUE self, VALUE path)
@@ -171,29 +175,29 @@ VALUE m_filepath_merge(VALUE self, VALUE root_path, VALUE add_path)
     Check_Type(root_path, T_STRING);
     Check_Type(add_path, T_STRING);
 
-    QString path = modruby::apr::path_merge( StringValuePtr(root_path),
-                                              StringValuePtr(add_path) );
+    string path = modruby::apr::path_merge( StringValuePtr(root_path),
+                                             StringValuePtr(add_path) );
     
     if(path.length() == 0)
     {
         return Qnil;
     }
 
-    return rb_str_new2(path.toAscii().constData());
+    return rb_str_new2(path.c_str());
 }
 
 VALUE m_filepath_root(VALUE self, VALUE path)
 {
     Check_Type(path, T_STRING);
     
-    QString root_path = modruby::apr::path_root(StringValuePtr(path));
+    string root_path = modruby::apr::path_root(StringValuePtr(path));
     
     if(root_path.length() == 0)
     {
         return Qnil;
     }
 
-    return rb_str_new2(root_path.toAscii().constData());
+    return rb_str_new2(root_path.c_str());
 }
 
 VALUE m_stat(int args, VALUE* argv, VALUE self)

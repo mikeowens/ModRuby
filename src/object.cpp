@@ -4,6 +4,7 @@
 using namespace ruby;
 
 Object::Object(const char* name)
+    : self(Qnil), _class_name()
 {
     self = ruby::create_object(name);
     ruby::register_object(self);
@@ -45,7 +46,7 @@ VALUE Object::method(const char* name, int n, ...)
     arg.id   = rb_intern(name);
     arg.n    = n;
     arg.argv = argv;
-    
+
     int error = 0;
     VALUE result = rb_protect(ruby::method_wrap, reinterpret_cast<VALUE>(&arg), &error);
 

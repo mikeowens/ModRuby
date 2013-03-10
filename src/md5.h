@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-class QString;
+#include <string>
 
 namespace modruby
 {
@@ -73,7 +73,7 @@ class md5
     void update(const char *buf, unsigned int len);
 
     /** Generates intermediate values between updates for debugging. */
-    QString debug();
+    std::string debug();
 
     /** Final wrapup - pad to 64-byte boundary with the bit pattern 1 0* (64-bit
      * count of bits processed, MSB-first)

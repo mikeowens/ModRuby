@@ -17,9 +17,6 @@ namespace modruby
 
 class Handler
 {
-    // Have to use std::string here because QString seems to get corrupted
-    // somewhere when exceptions are thrown.
-
     std::string _module;
     std::string _klass;
     std::string _method;

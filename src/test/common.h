@@ -1,0 +1,6 @@
+#ifndef MODRUBY_TEST_COMMON
+#define MODRUBY_TEST_COMMON
+
+
+
+#endif

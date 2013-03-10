@@ -6,6 +6,10 @@
 #include "ruby_apr_file_info.h"
 #include "ruby_apr_pool.h"
 
+#include <string>
+
+using std::string;
+
 typedef VALUE (*fn)(...);
 
 #define CLASS_NAME "FileInfo"
@@ -296,14 +300,14 @@ VALUE m_md5(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    QString result = f->md5();
+    string result = f->md5();
 
     if(result.length() == 0)
     {
         return rb_str_new2("");
     }
 
-    return rb_str_new2(result.toAscii().constData());
+    return rb_str_new2(result.c_str());
 }
 
 VALUE m_mtime(VALUE self)
@@ -363,14 +367,14 @@ VALUE m_sha1(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    QString result = f->sha1();
+    string result = f->sha1();
 
     if(result.length() == 0)
     {
         return rb_str_new2("");
     }
 
-    return rb_str_new2(result.toAscii().constData());
+    return rb_str_new2(result.c_str());
 }
 
 VALUE m_size(VALUE self)

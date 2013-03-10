@@ -2,24 +2,12 @@
 
 #include "library.h"
 #include "rhtml.h"
+#include "util.hpp"
 
 using namespace std;
 using namespace ruby;
 
-template<class T>
-int inline replace(T& source, const char* find, const char* replace)
-{
-    int num=0;
-    size_t fLen = strlen(find);
-    size_t rLen = strlen(replace);
-    for(typename T::size_type pos=0; (pos=source.find(find, pos))!=T::npos; pos+=rLen)
-    {
-        num++;
-        source.replace(pos, fLen, replace);
-    }
-
-    return num;
-}
+using modruby::replace;
 
 // _context is a generic Ruby Object using the C++ ruby::Object class. We then
 // get its binding. We use the binding as the global context for the RHTML

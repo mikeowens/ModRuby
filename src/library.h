@@ -1,9 +1,9 @@
-#ifndef MODRUBY_RUBY_LIBRARY_H
-#define MODRUBY_RUBY_LIBRARY_H
+#ifndef RSP_EMBEDRUBY_LIBRARY_H
+#define RSP_EMBEDRUBY_LIBRARY_H
 
 #include <stdexcept>
 #include <ruby.h>
-#include <QString>
+#include <string>
 
 namespace ruby {
 
@@ -48,7 +48,6 @@ class Objects
 void register_object(VALUE object);
 void free_object(VALUE object);
 void free_all();
-
 
 //------------------------------------------------------------------------------
 // Exceptions
@@ -122,6 +121,8 @@ void eval(const char* code, const char* filename=NULL, int sl=0, VALUE binding=Q
 
 // Require a ruby-file in a safe way
 void require(const char* filename);
+
+bool call_function(const char* method, int n, ...);
 
 // Load a ruby-file in a safe way. If anonymous == 1, the loaded script will be
 // executed under an anonymous module, protecting the calling program's global

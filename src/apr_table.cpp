@@ -1,8 +1,12 @@
 #include <stdlib.h>
 
-#include <QTextStream>
+#include <string>
+#include <sstream>
 
 #include "apr_table.h"
+
+using std::string;
+using std::stringstream;
 
 namespace modruby
 {
@@ -116,16 +120,16 @@ void table::unset(const char* key)
     apr_table_unset(handle, key);
 }
 
-QString table::join(const char* sep)
+string table::join(const char* sep)
 {
-    QString x;
+    string x;
 
     return join(sep, x);
 }
 
-QString& table::join(const char* sep, QString& data)
+string& table::join(const char* sep, string& data)
 {
-    QTextStream b(&data);
+    stringstream strm;
 
     apr::table::iterator i(*this);
 
@@ -133,13 +137,15 @@ QString& table::join(const char* sep, QString& data)
 
     while(i.next())
     {
-        b << i.key() << "=" << i.data();
+        strm << i.key() << "=" << i.data();
 
         if(i.index() < len - 1)
         {
-            b << sep;
+            strm << sep;
         }
     }
+
+    data = strm.str();
 
     return data;
 }

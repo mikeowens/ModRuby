@@ -8,7 +8,8 @@
 #include <apache2/http_protocol.h>
 #include <apache2/util_script.h>
 
-#include <QString>
+#include <vector>
+#include <string>
 
 #include "apr_table.h"
 #include "server.h"
@@ -26,8 +27,8 @@ class Request
     Server* _server;
     mutable apr_table_t* _form_data;
     mutable apr_table_t* _queries;
-    mutable QString _error;
-    mutable QString _content;
+    mutable std::string _error;
+    mutable std::vector<unsigned char> _content;
     mutable bool has_read_content;
     mutable bool _has_setup_client_read;
     mutable apr_table_t* _module_config;
@@ -69,7 +70,7 @@ class Request
     inline int assbackwards() const { return _req->assbackwards; }
 
     /** \return The last error string **/
-    inline const char* error() const { return _error.toAscii(); }
+    inline const char* error() const { return _error.c_str(); }
 
     /** \return A proxy request (calculated during
      * post_read_request/translate_name) possible values PROXYREQ_NONE,
@@ -84,10 +85,11 @@ class Request
     bool setup_cgi() const;
 
     /** \return Returns raw content (in request) **/
-    const QString& content(read_content fn = NULL, void* user_data = NULL) const;
+    const std::vector<unsigned char>& 
+    content(read_content fn = NULL, void* user_data = NULL) const;
 
     /** \return Returns raw content (in request) length **/
-    modruby::i32 content_length() const { return _content.length(); }
+    modruby::i32 content_length() const { return _content.size(); }
 
     /** Sets things up in Apache to read content from client. Only needs to be
      * called once per request. 
@@ -95,7 +97,7 @@ class Request
     bool setup_client_read() const;
 
     /** \return Returns a single line of content **/
-    QString read_line() const;
+    std::string read_line() const;
 
     /** Fills buffer buff with len bytes of data. **/
     /** \return The number of bytes of data read into the buffer **/
@@ -520,10 +522,14 @@ class Request
     {
         ap_parse_uri(_req, uri);
     }
+
+    /// Parses a query argument string, url-decodes key/values, and merges into table.
+    /// @return Returns true on success, failure otherwise.
+    static bool parse_query_string(const char* in, modruby::apr::table& out);
     
     void dump() const;
-    QString repr() const;
-    QString table_string(const modruby::apr::table& pTable) const;
+    std::string repr() const;
+    std::string table_string(const modruby::apr::table& pTable) const;
     void dump(const modruby::apr::table& pTable) const;
     request_rec *get_request_rec() { return _req; }
 };

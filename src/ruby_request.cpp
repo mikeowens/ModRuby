@@ -1,6 +1,7 @@
 #include <apache2/httpd.h>
 #include <apache2/http_log.h>
 
+#include "util.hpp"
 #include "library.h"
 #include "request.h"
 #include "server.h"
@@ -11,9 +12,14 @@
 #include "ruby_server.h"
 #include "ruby_connection.h"
 
+#include <ruby/encoding.h>
+
 typedef VALUE (*fn)(...);
 
 #define CLASS_NAME "Request"
+
+using std::string;
+using modruby::to_upper;
 
 extern "C" {
 
@@ -432,7 +438,7 @@ VALUE m_content(VALUE self)
     if(rb_block_given_p() == Qfalse)
     {
         // Caller wants one big blob
-        const char* content = req->content().toAscii().data();
+        const char* content = (const char*)req->content().data();
 
         if(content == NULL)
         {
@@ -935,26 +941,23 @@ VALUE m_read_line(VALUE self)
     apache::Request* req = get_object(self);
 
     // Check content type
-    QString content_type = req->headers_in().get("Accept-Charset");
+    string content_type = to_upper(req->headers_in().get("Accept-Charset"));
 
-    // Create string with proper encoding
-    if(content_type.indexOf("ISO-8859-1", 0, Qt::CaseInsensitive) != -1)
+    // Search for matching encoding
+    int index = rb_enc_find_index(content_type.c_str());
+    if(index > 0)
     {
-        return rb_str_new2(req->read_line().toLatin1());
-    }
+        rb_encoding* encoding = rb_enc_from_index(index);
 
-    if(content_type.indexOf("utf-8", 0, Qt::CaseInsensitive) != -1)
-    {
-        return rb_str_new2(req->read_line().toUtf8());
+        return rb_enc_str_new( req->read_line().c_str(), 
+                               req->read_line().size(), 
+                               encoding );
     }
-
-    if(content_type.indexOf("utf-16", 0, Qt::CaseInsensitive) != -1)
-    {
-        return rb_str_new2((const char*)req->read_line().utf16());
+    else
+    {    
+        // Default UTF8
+        return rb_external_str_new_cstr(req->read_line().c_str());
     }
-    
-    // Default ASCII
-    return rb_str_new2(req->read_line().toAscii());
 }
 
 VALUE m_read(VALUE self, VALUE bytes)

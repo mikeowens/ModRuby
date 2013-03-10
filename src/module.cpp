@@ -1,8 +1,9 @@
 #include <apache2/httpd.h>
 #include <apache2/http_log.h>
 
-#include <QMap>
-#include <QTextStream>
+#include <map>
+#include <string>
+#include <sstream>
 
 #include "library.h"
 #include "object.h"
@@ -25,26 +26,27 @@
 
 typedef VALUE (*fn)(...);
 
+using namespace std;
+
 // Generic Ruby object to hold the the handler instance. A handler is a Ruby
 // class which works as the persistent Ruby server environment that handles all
 // requests. All Apache requests are sent in to it, and it can set up the
 // respective VHost environments for all sites, loads the config files, and
 // handle the respective requests.
 
-static QMap<QString, ruby::Object*> handlers;
+static map<string, ruby::Object*> handlers;
 static ruby::Object* ruby_handler;
 
 using namespace modruby;
 
 void log_message(apr_pool_t* pool, int level, const char* message)
 {
-    QString msg;
-    QTextStream strm(&msg);
+    stringstream strm;
 
     strm << "mod_ruby[" << getpid() << "]: "
          << message ;
 
-    ap_log_perror(APLOG_MARK, level, 0, pool, msg.toAscii().constData());
+    ap_log_perror(APLOG_MARK, level, 0, pool, strm.str().c_str());
 }
 
 void log_error(apr_pool_t* pool, const char* message)
@@ -167,10 +169,9 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
     {
         fprintf(stderr, "Ruby Exception: %s", e.what());
 
-        QString msg;
-        QTextStream strm(&msg);
+        stringstream strm;
         strm << "FATAL ERROR: " << e.what();
-        log_error(p, msg.toAscii().constData());
+        log_error(p, strm.str().c_str());
 
         return 1;
     }
@@ -178,10 +179,9 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
     {
         fprintf(stderr, "C++ Exception: %s\n", e.what());
 
-        QString msg;
-        QTextStream strm(&msg);
+        stringstream strm;
         strm << "FATAL ERROR: " << e.what();
-        log_error(p, msg.toAscii().constData());
+        log_error(p, strm.str().c_str());
         
         return 1;
     }
@@ -214,17 +214,16 @@ int ruby_log_error(request_rec* r, int level, const char* msg)
     apache::Request request(r);
     
     // Create the error message
-    QString info;
-    QTextStream strm(&info);
+    stringstream strm;
     strm << "ModRuby: " << msg;
     
     // Print error to content
-    request.rputs(info.toAscii().constData());
+    request.rputs(strm.str().c_str());
     
     // Log error 
     ap_log_error( APLOG_MARK, level, 0, r->server, 
                   "mod_ruby[%i] : %s", 
-                  getpid(), info.toAscii().constData() );
+                  getpid(), strm.str().c_str() );
 }
 
 
@@ -269,7 +268,7 @@ int ruby_request_init_configuration(request_rec* r)
     apache::Request req(r);
 
     // Pass in module config params
-    apr::table notes        = req.notes();
+    apr::table notes         = req.notes();
     ruby_config* cfg         = ruby_server_config(r->server->module_config);
     ruby_dir_config* dir_cfg = ruby_directory_config(r);
     
@@ -363,7 +362,7 @@ modruby::Handler ruby_request_load_handler( request_rec* r,
     ruby::require(handler.module());
     
     // Look up the handler (Ruby) opject's name by id()
-    QMap<QString, ruby::Object*>::iterator i = handlers.find(handler.id());
+    map<string, ruby::Object*>::iterator i = handlers.find(handler.id());
 
     // If not created
     if(i == handlers.end())
@@ -378,15 +377,14 @@ modruby::Handler ruby_request_load_handler( request_rec* r,
         }
         catch(const ruby::Exception &e)
         {
-            QString info;
-            QTextStream strm(&info);
+            stringstream strm;
             strm << e.what() << "\n"
                  << "Module  : " << module   << "\n"
                  << "Class   : " << cls      << "\n"
                  << "Method  : " << method   << "\n"
                  << e.stackdump();
 
-            ruby::Exception better(info.toAscii().constData());
+            ruby::Exception better(strm.str().c_str());
             throw better;
         }
 
@@ -395,7 +393,7 @@ modruby::Handler ruby_request_load_handler( request_rec* r,
     else
     {
         // Get it from storage
-        handler.object = i.value();
+        handler.object = i->second;
     }
     
     return handler;
@@ -579,7 +577,7 @@ int ruby_request_handler(request_rec* r)
 
         // Check the exception type. If it is a redirect or RequestTermination,
         // then we need to do special handling.
-        QString exception_type = e.type();
+        string exception_type = e.type();
 
         if(exception_type == "ModRuby::Redirect")
         {
@@ -606,18 +604,17 @@ int ruby_request_handler(request_rec* r)
         // Else it's a bonified exception. Get the message and stacktrace.
 
         // Create the error message
-        QString info;
-        QTextStream strm(&info);
+        stringstream strm;
         strm << "ModRuby FATAL ERROR: Ruby Exception: " << e.what() << "\n"
              << e.stackdump();
 
         // Print error to content
-        request.rputs(info.toAscii().constData());
+        request.rputs(strm.str().c_str());
 
         // Log error (critical)
         ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server, 
                       "mod_ruby[%i] : %s", 
-                      getpid(), info.toAscii().constData() );
+                      getpid(), strm.str().c_str() );
 
         // The unit test function should pick up on this, even though we return
         // HTTP OK. By convention, the HTTP response status is not what matters
@@ -625,6 +622,7 @@ int ruby_request_handler(request_rec* r)
 
         return OK;
     }
+    /*
     catch(const std::exception &e)
     {
         // Create a C++ request object, for convenience
@@ -640,7 +638,7 @@ int ruby_request_handler(request_rec* r)
 
         return OK;
     }
-
+    */
     // If the status changed, use its value
     if(r->status != rc)
     {
@@ -695,7 +693,7 @@ int ruby_generic_handler( request_rec* r,
 
         // Check the exception type. If it is a redirect or RequestTermination,
         // then we need to do special handling.
-        QString exception_type = e.type();
+        string exception_type = e.type();
 
         if(exception_type == "ModRuby::Redirect")
         {
@@ -722,18 +720,17 @@ int ruby_generic_handler( request_rec* r,
         // Else it's a bonified exception. Get the message and stacktrace.
 
         // Create the error message
-        QString info;
-        QTextStream strm(&info);
+        stringstream strm;
         strm << "ModRuby FATAL ERROR: Ruby Exception: " << e.what() << "\n"
              << e.stackdump();
 
         // Print error to content
-        request.rputs(info.toAscii().constData());
+        request.rputs(strm.str().c_str());
 
         // Log error (critical)
         ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server, 
                       "mod_ruby[%i] : %s", 
-                      getpid(), info.toAscii().constData() );
+                      getpid(), strm.str().c_str() );
 
         // The unit test function should pick up on this, even though we return
         // HTTP OK. By convention, the HTTP response status is not what matters

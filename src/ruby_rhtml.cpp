@@ -1,10 +1,14 @@
-#include <QTextStream>
-#include <QFileInfo>
+#include <string>
+#include <sstream>
 
 #include "library.h"
 #include "object.h"
 #include "rhtml.h"
 #include "ruby_rhtml.h"
+#include "apr.h"
+
+using std::stringstream;
+using namespace modruby;
 
 typedef VALUE (*fn)(...);
 
@@ -61,20 +65,17 @@ VALUE rhtml_compile(int args, VALUE* argv, VALUE self)
 
     const char* filename = StringValuePtr(argv[0]);
 
-    QFileInfo info(filename);
-
-    if((info.exists() == false) || (info.isReadable() == false))
+    if(access(filename, R_OK) != 0)
     {
-        QString msg;
-        QTextStream strm(&msg);
-        strm << "File does not exist: " << info.absoluteFilePath();
+        stringstream strm;
+        strm << "File does not exist: " << filename;
         
-        rb_raise(rb_eIOError, msg.toAscii().data());
+        rb_raise(rb_eIOError, strm.str().c_str());
     }
     
     ruby::RhtmlParser parser;
 
-    parser.compile_file(info.absoluteFilePath().toAscii().data());
+    parser.compile_file(filename);
     
     return rb_str_new(parser.text.data(), parser.text.size());
 }

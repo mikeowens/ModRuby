@@ -19,9 +19,8 @@ works exactly like eRuby.
 This was developed on Ubuntu Linux, FreeBSD, and Mac OSX. It has not been ported
 to Windows. To build, you need to the following packages:
 
-  * Ruby 1.9 or 2.0
-  * Qt4 or Qt5
-  * Apache source code
+  * Ruby 1.9 or 2.0. (Ruby header files also needed).
+  * Apache, APR and APR Util headers
   * CMake
 
 On Ubuntu, you can build as follows:
