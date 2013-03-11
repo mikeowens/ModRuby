@@ -367,6 +367,13 @@ bool Request::parse_query_string(const char* in, modruby::apr::table& t)
 
         if(found != string::npos)
         {
+            // Guard against empty/NULL value. In theory this should never
+            // happen. But if it ever did it might cause problems.
+            if( (found + 1) == (i->size() - 1))
+            {
+                continue;
+            }
+
             t.merge( url_decode(i->substr(0, found).c_str()).c_str(),
                      url_decode(i->substr(found+1, i->size() - 1).c_str()).c_str() );
         }

@@ -941,7 +941,15 @@ VALUE m_read_line(VALUE self)
     apache::Request* req = get_object(self);
 
     // Check content type
-    string content_type = to_upper(req->headers_in().get("Accept-Charset"));
+    const char* value = req->headers_in().get("Content-Type");
+
+    if(value == NULL)
+    {
+        // Use default encoding
+        return rb_external_str_new_cstr(req->read_line().c_str());
+    }
+
+    string content_type = to_upper(value);
 
     // Search for matching encoding
     int index = rb_enc_find_index(content_type.c_str());

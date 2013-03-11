@@ -364,7 +364,7 @@ void eval(const char* code, const char* filename, int sl, VALUE binding)
 
     if(error)
     {
-        linterra::buffer msg;
+        string msg;
 
         throw Exception();
     }
