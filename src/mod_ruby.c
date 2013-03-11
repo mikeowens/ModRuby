@@ -32,7 +32,7 @@ static void ruby_child_init_hook(apr_pool_t* child_pool, server_rec* s)
                                apr_pool_cleanup_null );
 }
 
-/* RUBY handler */
+/* Ruby handler */
 static int ruby_handler(request_rec *r)
 {
     return ruby_request_handler(r);
@@ -106,7 +106,7 @@ set_ruby_default_handler_module( cmd_parms *parms,
     }
 
     ruby_dir_config* dir_config = (ruby_dir_config*)config;
-    apr_table_set(dir_config->options, "RUBYHandlerModule", (char*)arg);
+    apr_table_set(dir_config->options, "RubyHandlerModule", (char*)arg);
     
     /* Success */
     return NULL;
@@ -134,7 +134,7 @@ set_ruby_default_handler_class( cmd_parms *parms,
     }
 
     ruby_dir_config* dir_config = (ruby_dir_config*)config;
-    apr_table_set(dir_config->options, "RUBYHandlerClass", (char*)arg);
+    apr_table_set(dir_config->options, "RubyHandlerClass", (char*)arg);
     
     /* Success */
     return NULL;
@@ -162,7 +162,7 @@ set_ruby_default_handler_method( cmd_parms *parms,
     }
     
     ruby_dir_config* dir_config = (ruby_dir_config*)config;
-    apr_table_set(dir_config->options, "RUBYHandlerMethod", (char*)arg);
+    apr_table_set(dir_config->options, "RubyHandlerMethod", (char*)arg);
     
     /* Success */
     return NULL;
@@ -256,7 +256,7 @@ set_ruby_handler(cmd_parms *parms, void* config, const char* arg)
     }
     
     ruby_dir_config* dir_config = (ruby_dir_config*)config;
-    apr_table_set(dir_config->options, "RUBYHandler", (char*)arg);
+    apr_table_set(dir_config->options, "RubyHandler", (char*)arg);
 
     /* Success */
     return NULL;
@@ -348,7 +348,7 @@ static const char*
 set_ruby_handler_module( cmd_parms *parms, void* config, 
                         const char* arg1, const char* arg2 )
 {
-    return ruby_handler_set_params( parms, "RUBYHandlerModule",
+    return ruby_handler_set_params( parms, "RubyHandlerModule",
                                    arg1, arg2 );
 }
 
@@ -356,7 +356,7 @@ static const char*
 set_ruby_handler_class( cmd_parms *parms, void* config, 
                               const char* arg1, const char* arg2 )
 {
-    return ruby_handler_set_params( parms, "RUBYHandlerClass",
+    return ruby_handler_set_params( parms, "RubyHandlerClass",
                                    arg1, arg2 );
 }
 
@@ -364,108 +364,108 @@ static const char*
 set_ruby_handler_method( cmd_parms *parms, void* config,
                                const char* arg1, const char* arg2 )
 {
-    return ruby_handler_set_params( parms, "RUBYHandlerMethod",
+    return ruby_handler_set_params( parms, "RubyHandlerMethod",
                                    arg1, arg2 );
 }
 
 static const command_rec mod_ruby_cmds[] =
 {
     AP_INIT_TAKE1(
-        "RUBYDefaultHandlerModule",
+        "RubyDefaultHandlerModule",
         set_ruby_default_handler_module,
         NULL,
         RSRC_CONF | OR_ALL,
-        "RUBYHandlerModule <string> "
+        "RubyHandlerModule <string> "
         "-- set default Ruby module for Apache handler."
     ),
 
     AP_INIT_TAKE1(
-        "RUBYDefaultHandlerClass",
+        "RubyDefaultHandlerClass",
         set_ruby_default_handler_class,
         NULL,
         RSRC_CONF | OR_ALL,
-        "RUBYHandlerClass <string> "
+        "RubyHandlerClass <string> "
         "-- set default Ruby class for Apache handler."
     ),
 
     AP_INIT_TAKE1(
-        "RUBYDefaultHandlerMethod",
+        "RubyDefaultHandlerMethod",
         set_ruby_default_handler_method,
         NULL,
         RSRC_CONF | OR_ALL,
-        "RUBYHandlerMethod <string> "
+        "RubyHandlerMethod <string> "
         "-- set default Ruby method for Apache handler."
     ),
 
     AP_INIT_TAKE1(
-        "RUBYHandler",
+        "RubyHandler",
         set_ruby_handler,
         NULL,
         RSRC_CONF | OR_ALL,
-        "RUBYHandler {name} "
-        "-- set a RUBY handler."
+        "RubyHandler {name} "
+        "-- set a Ruby handler."
     ),
 
     AP_INIT_TAKE2(
-        "RUBYConfig",
+        "RubyConfig",
         set_ruby_config_var,
         NULL,
         RSRC_CONF | OR_ALL,
-        "RUBYConfig {key} {value} "
+        "RubyConfig {key} {value} "
         "-- set server/per-directory variable for Apache handler."
     ),
 
     AP_INIT_TAKE2(
-        "RUBYEnv",
+        "RubyEnv",
         set_ruby_env_var,
         NULL,
         RSRC_CONF | OR_ALL,
-        "RUBYEnv {key} {value} "
+        "RubyEnv {key} {value} "
         "-- set ENV variable for Apache handler."
     ),
 
     AP_INIT_TAKE1(
-        "RUBYHandlerDeclare",
+        "RubyHandlerDeclare",
         set_ruby_handler_declare,
         NULL,
         RSRC_CONF,
-        "RUBYHandlerDeclare {name} "
-        "-- declare a custom RUBY handler."
+        "RubyHandlerDeclare {name} "
+        "-- declare a custom Ruby handler."
     ),
 
     AP_INIT_TAKE2(
-        "RUBYHandlerModule",
+        "RubyHandlerModule",
         set_ruby_handler_module,
         NULL,
         RSRC_CONF,
-        "RUBYHandlerModule {handler} {module} "
+        "RubyHandlerModule {handler} {module} "
         "-- set Ruby module for custom handler."
     ),
 
     AP_INIT_TAKE2(
-        "RUBYHandlerClass",
+        "RubyHandlerClass",
         set_ruby_handler_class,
         NULL,
         RSRC_CONF,
-        "RUBYHandlerClass {handler} {class} "
+        "RubyHandlerClass {handler} {class} "
         "-- set Ruby class for custom handler."
     ),
 
     AP_INIT_TAKE2(
-        "RUBYHandlerMethod",
+        "RubyHandlerMethod",
         set_ruby_handler_method,
         NULL,
         RSRC_CONF,
-        "RUBYHandlerMethod {handler} {method} "
+        "RubyHandlerMethod {handler} {method} "
         "-- set Ruby method for custom handler."
     ),
 
     AP_INIT_TAKE3(
-        "RUBYHandlerConfig",
+        "RubyHandlerConfig",
         set_ruby_handler_config,
         NULL,
         RSRC_CONF,
-        "RUBYHandlerConfig {handler} {key} {value}"
+        "RubyHandlerConfig {handler} {key} {value}"
         " -- define key/value config setting for handler."
     ),
 
@@ -520,7 +520,7 @@ static void* merge_dir_conf(apr_pool_t* pool, void* current_config, void* new_co
     apr_table_compress(dir_merged->options, APR_OVERLAP_TABLES_SET);
 
     /* Debugging
-    const char* handler = apr_table_get(dir_merged->options, "RUBYHandler");
+    const char* handler = apr_table_get(dir_merged->options, "RubyHandler");
 
     ap_log_perror(APLOG_MARK, APLOG_WARNING, 
                   0, pool, "Dir %x %s->%s Handler: %s ", 
