@@ -265,14 +265,8 @@ const vector<unsigned char>& Request::content(read_content fn, void* user_data) 
         }
         else
         {
-            // Caller wants to collect it all in a buffer
-            // Append
-
-            // Grow the buffer
-            _content.reserve(_content.size() + len);
-
-            // Append data
-            memcpy(&_content[_content.size()], buff, len);
+            // Caller wants to collect it all in a buffer. Append.
+            _content.insert(_content.end(), &buff[0], &buff[len]);
         }
     }
 
@@ -412,8 +406,7 @@ apr_table_t* Request::form_data() const
         // Create an empty table
         apr::table t(pool());
 
-        t.merge( "content-type", 
-                 content_type.c_str());
+        t.merge( "content-type", content_type.c_str());
    
         // Get reference to apr_table_t. We will just return this if this function
         // is ever called again.

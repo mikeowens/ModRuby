@@ -21,10 +21,3 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, apache2-mpm-prefork, libqt4-core, libqtcore4, curl
 Description: Ruby web framework for the Apache web server.
  Development install.
-
-Package: mod-ruby-doc
-Section: doc
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: RUBY Documentation
- HTML Documentation for RUBY. RUBY is a compact, modular Ruby web framework for Apache.
