@@ -363,7 +363,7 @@ bool Request::parse_query_string(const char* in, modruby::apr::table& t)
         {
             // Guard against empty/NULL value. In theory this should never
             // happen. But if it ever did it might cause problems.
-            if( (found + 1) == (i->size() - 1))
+            if(found == (i->size() - 1))
             {
                 continue;
             }
