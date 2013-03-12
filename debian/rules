@@ -51,9 +51,9 @@ install: build
 	# mod-ruby-git
 	#---------------------------------------------------------------------------
 
-	cd $(CURDIR)/debian/mod-ruby-git && \
+	cd $(CURDIR)/debian/mod-ruby-git &&    \
        $(CURDIR)/debian/scripts/gitlink.sh \
-       $(CURDIR)/debian/mod_ruby-git.gitmap mod-ruby
+       $(CURDIR)/debian/mod_ruby-git.gitmap mod_ruby
 
 	dh_installdocs
 
