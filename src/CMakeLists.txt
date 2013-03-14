@@ -76,8 +76,8 @@ set_target_properties( shared_lib PROPERTIES
   # Avoid conflicts between library and binary target names
   OUTPUT_NAME mod_${PROJECT_NAME} )
 
-target_link_libraries( shared_lib -L${CMAKE_LIBRARY_PATH} ${SYSTEM_LINK_FLAGS}
-                       crypto bz2 ${RUBY_LIBRARY} )
+target_link_libraries( shared_lib -L${CMAKE_LIBRARY_PATH} 
+   ${SYSTEM_LINK_FLAGS} ${RUBY_LIBRARY} )
 
 # 2. Static library for testing
 add_library( static_lib STATIC ${library_sources} )
@@ -102,8 +102,8 @@ set_target_properties( rhtml_lib PROPERTIES
   # Avoid conflicts between library and binary target names
   OUTPUT_NAME librhtml )
 
-target_link_libraries( rhtml_lib -L${CMAKE_LIBRARY_PATH} ${SYSTEM_LINK_FLAGS}
-  bz2 ${RUBY_LIBRARY} )
+target_link_libraries( rhtml_lib -L${CMAKE_LIBRARY_PATH} 
+  ${SYSTEM_LINK_FLAGS} ${RUBY_LIBRARY} )
 
 #-------------------------------------------------------------------------------
 # Compilation

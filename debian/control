@@ -2,22 +2,20 @@ Source: mod-ruby
 Priority: optional
 Maintainer: Michael Owens <mike@mikeowens.ws>
 Build-Depends: debhelper (>= 5), apache2-mpm-prefork, apache2-prefork-dev, 
- qt4-qmake, libqt4-dev, libqt4-core, libqt4-test, xsltproc, libxml2-dev, 
- libapr1-dev, libaprutil1-dev, openssl, libpcre3-dev, zlib1g-dev, libbz2-dev, 
- libxml2, libxml2-utils, flex, cmake (>= 2.6.2)
+ libapr1-dev, libaprutil1-dev, flex, cmake (>= 2.6.2)
 Standards-Version: 3.8.0
 Section: libs
 
 Package: mod-ruby
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, apache2-mpm-prefork, libqt4-core, libqtcore4
+Depends: ${shlibs:Depends}, ${misc:Depends}, apache2-mpm-prefork
 Description: Ruby web framework for the Apache web server.
  A compact, modular Ruby web framework for Apache web server.
 
 Package: mod-ruby-git
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, apache2-mpm-prefork, libqt4-core, libqtcore4, curl
+Depends: ${shlibs:Depends}, ${misc:Depends}, apache2-mpm-prefork
 Description: Ruby web framework for the Apache web server.
  Development install.
