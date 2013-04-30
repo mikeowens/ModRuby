@@ -44,8 +44,8 @@ install: build
 
 	cd src && $(MAKE) DESTDIR=$(CURDIR)/debian/mod-ruby install
 	mkdir -p $(CURDIR)/debian/mod-ruby/etc/apache2/mods-available
-	cp debian/mod_ruby.conf $(CURDIR)/debian/mod-ruby/etc/apache2/mods-available/ 
-	cp debian/mod_ruby.load $(CURDIR)/debian/mod-ruby/etc/apache2/mods-available/
+	cp debian/mod_ruby.conf $(CURDIR)/debian/mod-ruby/etc/apache2/mods-available/ruby.conf
+	cp debian/mod_ruby.load $(CURDIR)/debian/mod-ruby/etc/apache2/mods-available/ruby.load
 
 	#---------------------------------------------------------------------------
 	# mod-ruby-git

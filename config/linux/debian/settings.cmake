@@ -4,7 +4,7 @@ MESSAGE( STATUS "SYSTEM: ${SYSTEM} (linux/debian/settings.cmake)" )
 SET(PREFIX "/usr")
 SET(APR_ROOT "apr-1.0")
 SET(APACHE_MODULES_DIR "/usr/lib/apache/modules")
-SET(SYSTEM_LINK_FLAGS -Wl,--as-needed -Wl -Wl,-z,relro)
+SET(SYSTEM_LINK_FLAGS -Wl,--as-needed -Wl,-z,relro)
 
 # System commands
 SET(DATE_COMMAND date -R)

@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "sha1.h"
 
 namespace modruby

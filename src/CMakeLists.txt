@@ -12,7 +12,7 @@ if( CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 # Require proper C++
-add_definitions( "-pedantic -Wno-long-long" ) # skip -ansi
+add_definitions( "-pedantic -Wno-long-long " ) # skip -ansi
 
 # Needed for APR
 add_definitions( -fPIC -W -D_GNU_SOURCE -D_LARGEFILE64_SOURCE )

@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <apache2/httpd.h>
 #include <apache2/http_log.h>
 
