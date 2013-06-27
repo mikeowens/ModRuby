@@ -2,7 +2,7 @@
 
 #include "apr.h"
 #include "apr_table.h"
-#include "library.h"
+#include "ruby.hpp"
 #include "ruby_apr_array.h"
 #include "ruby_apr_pool.h"
 

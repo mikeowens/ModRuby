@@ -2,8 +2,7 @@
 #include <string>
 #include <sstream>
 
-#include "library.h"
-#include "object.h"
+#include "ruby.hpp"
 #include "rhtml.h"
 #include "ruby_rhtml.h"
 #include "apr.h"

@@ -6,8 +6,7 @@
 #include <string>
 #include <sstream>
 
-#include "library.h"
-#include "object.h"
+#include "ruby.hpp"
 #include "request.h"
 #include "server.h"
 #include "ruby_apr.h"

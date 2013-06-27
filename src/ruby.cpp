@@ -2,9 +2,87 @@
 #include <ruby/encoding.h>
 #include <sstream>
 
-#include "library.h"
+#include "ruby.hpp"
+
+using std::string;
 
 namespace ruby {
+
+Object::Object(const char* name, int n, ...)
+    : self(Qnil), _class_name()
+{
+    va_list vl;
+    va_start(vl, n);
+    
+    /*
+    for(int i=0;i<count;i++)
+    {
+    
+    }
+    */
+
+    self = ruby::create_object(name, n, vl);
+
+    va_end(vl);
+
+    ruby::register_object(self);
+
+    _class_name = name;
+}
+
+Object::~Object()
+{
+    ruby::free_object(self);
+}
+
+const char* Object::class_name()
+{
+    return _class_name.c_str();
+}
+
+VALUE Object::method(const char* name, int n, ...)
+{
+    VALUE *argv = 0;
+
+    if (n > 0) 
+    {
+        argv = ALLOCA_N(VALUE, n);
+        va_list ar;
+        va_start(ar, n);
+
+        int i;
+        for(i=0; i<n ;i++)
+        {
+            argv[i] = va_arg(ar, VALUE);
+        }
+
+        va_end(ar);
+    } 
+
+    Arguments arg;
+    arg.recv = self;
+    arg.id   = rb_intern(name);
+    arg.n    = n;
+    arg.argv = argv;
+
+    int error = 0;
+    VALUE result = rb_protect(ruby::method_wrap, reinterpret_cast<VALUE>(&arg), &error);
+
+    if(error)
+    {
+        std::string msg;
+        msg = "ruby::Object::method() invoking " 
+              + _class_name + (std::string)"::" 
+              + name + (std::string)"()" ;
+        
+        Exception e(msg.c_str());
+        e.backtrace();
+
+        throw e;
+    }
+
+    return result;
+}
 
 //------------------------------------------------------------------------------
 // Memory Management 
@@ -90,8 +168,10 @@ void startup(const char* script_name)
     // Initialize Ruby itself
     RUBY_INIT_STACK;    
     ruby_init();
-
+   
     ruby_init_loadpath();
+    //Init_prelude();
+    //ruby_init_gems();
 
     // To load prelude.rb
     static char* args[] = { "ruby", "/dev/null" };
@@ -226,6 +306,78 @@ void Exception::backtrace() throw()
 //------------------------------------------------------------------------------
 // Function Calls
 //------------------------------------------------------------------------------
+
+extern "C" {
+static int collect_hash_vals(VALUE key, VALUE value, VALUE data);
+}
+
+static int collect_hash_vals(VALUE key, VALUE value, VALUE data)
+{
+    std::map<string, string>* values = (std::map<string, string>*)data;
+
+    std::stringstream strm;
+    
+    string key_str;
+
+    switch(TYPE(key))
+    {
+        case T_STRING:
+        {
+            strm << StringValuePtr(key);
+            break;
+        }
+        
+        case T_FIXNUM:
+        {
+            strm << NUM2INT(key);
+        }
+
+        default:
+        {
+
+        }
+    }
+
+    key_str = strm.str();
+
+    strm.str(std::string());
+
+    string value_str;
+
+    switch(TYPE(value))
+    {
+        case T_STRING:
+        {
+            strm << StringValuePtr(value);
+            break;
+        }
+        
+        case T_FIXNUM:
+        {
+            strm << NUM2INT(value);
+        }
+
+        default:
+        {
+
+        }
+    }
+
+    value_str = strm.str();
+
+    (*values)[key_str] = value_str;
+
+    return ST_CONTINUE;
+}
+
+typedef int (*iterfn)(...);
+
+bool copy_hash(VALUE hash, std::map<std::string, std::string>& values)
+{
+    rb_hash_foreach(hash, (iterfn)collect_hash_vals, (VALUE)&values);
+
+    return true;
+}
 
 VALUE method_wrap(VALUE arg)
 {
@@ -364,7 +516,7 @@ void eval(const char* code, const char* filename, int sl, VALUE binding)
 
     if(error)
     {
-        string msg;
+        linterra::buffer msg;
 
         throw Exception();
     }
@@ -467,9 +619,25 @@ VALUE create_object_protect(VALUE arg)
     return self;
 }
 
-VALUE create_object(const char* class_name)
+VALUE create_object(const char* class_name, int n, va_list ar)
 {
+    VALUE *argv = 0;
+
+    if (n > 0) 
+    {
+        argv = ALLOCA_N(VALUE, n);
+
+        int i;
+        for(i=0; i<n ;i++)
+        {
+            argv[i] = va_arg(ar, VALUE);
+        }
+    } 
+
     NewArguments arg(class_name, 0, 0);
+
+    arg.n    = n;
+    arg.argv = argv;
 
     int error = 0;
     VALUE self = rb_protect(create_object_protect, reinterpret_cast<VALUE>(&arg), &error);

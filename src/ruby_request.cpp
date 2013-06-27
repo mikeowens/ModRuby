@@ -2,7 +2,7 @@
 #include <apache2/http_log.h>
 
 #include "util.hpp"
-#include "library.h"
+#include "ruby.hpp"
 #include "request.h"
 #include "server.h"
 #include "ruby_apr_table.h"

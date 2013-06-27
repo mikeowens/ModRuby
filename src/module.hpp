@@ -1,8 +1,7 @@
 #ifndef MODRUBY_APACHE_MODULE_HPP_DECL
 #define MODRUBY_APACHE_MODULE_HPP_DECL
 
-#include "library.h"
-#include "object.h"
+#include "ruby.hpp"
 #include "request.h"
 #include "server.h"
 #include "module.h"

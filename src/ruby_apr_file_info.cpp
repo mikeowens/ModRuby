@@ -2,7 +2,7 @@
 #include <sqlite3.h>
 
 #include "apr.h"
-#include "library.h"
+#include "ruby.hpp"
 #include "ruby_apr_file_info.h"
 #include "ruby_apr_pool.h"
 

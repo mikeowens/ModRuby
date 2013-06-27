@@ -1,6 +1,6 @@
 #include <string>
 
-#include "library.h"
+#include "ruby.hpp"
 #include "rhtml.h"
 #include "util.hpp"
 
