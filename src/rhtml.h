@@ -4,8 +4,7 @@
 #include <string>
 #include <sstream>
 
-#include "object.h"
-#include "library.h"
+#include "ruby.hpp"
 
 namespace ruby
 {

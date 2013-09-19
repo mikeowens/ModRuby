@@ -2,7 +2,7 @@
 #include <apache2/http_log.h>
 
 #include "util.hpp"
-#include "library.h"
+#include "ruby.hpp"
 #include "request.h"
 #include "server.h"
 #include "ruby_apr_table.h"
@@ -239,7 +239,7 @@ void init_request(VALUE module)
     rb_define_method(cls, "the_request", (fn)m_the_request, 0);
     rb_define_method(cls, "unparsed_uri", (fn)m_unparsed_uri, 0);
     rb_define_method(cls, "uri", (fn)m_uri, 0);
-    rb_define_method(cls, "m_user", (fn)m_user, 0);
+    rb_define_method(cls, "user", (fn)m_user, 0);
     rb_define_method(cls, "vlist_validator", (fn)m_vlist_validator, 0);
     rb_define_method(cls, "write", (fn)m_write, 2);
 }

@@ -1,7 +1,7 @@
 #include <ruby.h>
 
 #include "apr_table.h"
-#include "library.h"
+#include "ruby.hpp"
 #include "ruby_apr_table.h"
 #include "ruby_apr_pool.h"
 
