@@ -149,20 +149,16 @@ int RhtmlParser::finalize()
 
 bool RhtmlParser::compile_file(const char* filename)
 {
-    // Check to see if file exists
-    if(access(filename, R_OK) != 0)
-    {
-        return false;
-    }
-
-    init();
-
-    yylex_init(&scanner);
-
     FILE* in;
 
     if(filename != NULL)
     {
+        // Check to see if file exists
+        if(access(filename, R_OK) != 0)
+        {
+            return false;
+        }
+ 
         in = fopen(filename, "r");
 
         _file_name = filename;
@@ -172,6 +168,8 @@ bool RhtmlParser::compile_file(const char* filename)
         in = stdin;
     }
 
+    init();
+    yylex_init(&scanner);
     yyset_in(in, scanner);
 
     int ret = lexscan(*this, scanner);

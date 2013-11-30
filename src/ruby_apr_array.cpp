@@ -73,8 +73,6 @@ VALUE m_size(VALUE self)
 {
     apr_array_header_t* h = get_object(self);
 
-    printf("%x\n", h);
-
     return INT2FIX(h->nelts);
 }
 

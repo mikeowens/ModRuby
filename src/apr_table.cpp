@@ -49,7 +49,7 @@ const table& table::operator=(const table& t)
 
 table::iterator table::operator[](i32 idx) const
 {
-    const apr_array_header_t* h = apr_table_elts(handle);
+    // const apr_array_header_t* h = apr_table_elts(handle);
 
     iterator i(*this);
 
@@ -232,6 +232,8 @@ const char* table::iterator::data() const
 bool table::iterator::rewind() const
 {
     _i = -1;
+
+    return true;
 }
 
 bool table::iterator::first() const

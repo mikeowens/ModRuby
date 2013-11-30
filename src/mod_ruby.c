@@ -550,3 +550,13 @@ module AP_MODULE_DECLARE_DATA ruby_module = {
     mod_ruby_cmds,     /* config file cmds         */
     register_hooks     /* register hooks           */
 };
+
+module AP_MODULE_DECLARE_DATA _module = {
+    STANDARD20_MODULE_STUFF, 
+    create_dir_conf,   /* create per-dir config    */
+    merge_dir_conf,    /* merge per-dir config     */
+    create_config,     /* create per-server config */
+    NULL,              /* merge per-server config  */
+    mod_ruby_cmds,     /* config file cmds         */
+    register_hooks     /* register hooks           */
+};

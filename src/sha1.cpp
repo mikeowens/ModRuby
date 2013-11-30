@@ -6,7 +6,7 @@ namespace modruby
 
 sha1::sha1()
 {
-
+    
 }
 
 bool sha1::hashdata(const char* data, unsigned int len)
@@ -39,6 +39,8 @@ bool sha1::hashfile(const char* path)
     if(in == 0)
     {
         printf("sha1_test : cannot open file %s", path);
+
+        return false;
     }
     
     for(;;)

@@ -1,4 +1,5 @@
 #include <apache2/httpd.h>
+#include <apache2/http_config.h>
 #include <apache2/http_log.h>
 
 #include "util.hpp"
@@ -13,6 +14,10 @@
 #include "ruby_connection.h"
 
 #include <ruby/encoding.h>
+
+#if AP_SERVER_MINORVERSION_NUMBER >= 4
+APLOG_USE_MODULE();
+#endif
 
 typedef VALUE (*fn)(...);
 
@@ -37,7 +42,11 @@ static VALUE m_content(VALUE self);
 static VALUE m_content_encoding(VALUE self);
 static VALUE m_content_languages(VALUE self);
 static VALUE m_content_type(VALUE self);
+
+#if AP_SERVER_MINORVERSION_NUMBER < 4
 static VALUE m_default_type(VALUE self);
+#endif
+
 static VALUE m_discard_request_body(VALUE self);
 static VALUE m_document_root(VALUE self);
 static VALUE m_err_headers_out(VALUE self);
@@ -164,7 +173,11 @@ void init_request(VALUE module)
     rb_define_method(cls, "content_encoding", (fn)m_content_encoding, 0);
     rb_define_method(cls, "content_languages", (fn)m_content_languages, 0);
     rb_define_method(cls, "content_type", (fn)m_content_type, 0);
+
+#if AP_SERVER_MINORVERSION_NUMBER < 4
     rb_define_method(cls, "default_type", (fn)m_default_type, 0);
+#endif
+
     rb_define_method(cls, "discard_request_body", (fn)m_discard_request_body, 0);
     rb_define_method(cls, "document_root", (fn)m_document_root, 0);
     rb_define_method(cls, "err_headers_out", (fn)m_err_headers_out, 0);
@@ -429,6 +442,8 @@ VALUE m_connection(VALUE self)
 bool yield_content(const void* content, modruby::i32 len, void* ud = NULL)
 {
     rb_yield(rb_str_new((const char*)content, len));
+
+    return true;
 }
 
 VALUE m_content(VALUE self)
@@ -492,6 +507,7 @@ VALUE m_content_type(VALUE self)
     return rb_str_new2(req->content_type());
 }
 
+#if AP_SERVER_MINORVERSION_NUMBER < 4
 VALUE m_default_type(VALUE self)
 {
     apache::Request* req = get_object(self);
@@ -503,6 +519,7 @@ VALUE m_default_type(VALUE self)
 
     return rb_str_new2(req->default_type());
 }
+#endif
 
 VALUE m_discard_request_body(VALUE self)
 {
@@ -822,7 +839,7 @@ VALUE m_params(VALUE self)
 // TODO: Wrap apr_uri_t
 VALUE m_parsed_uri(VALUE self)
 {
-    apache::Request* req = get_object(self);
+    // apache::Request* req = get_object(self);
 
     //return rb_str_new2(req->parsed_uri());
     return Qnil;

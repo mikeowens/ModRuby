@@ -32,8 +32,9 @@ set(CMAKE_INCLUDE_PATH ${PREFIX}/include ${ALTERNATE_PREFIX/include})
 set(CMAKE_LIBRARY_PATH ${PREFIX}/lib ${ALTERNATE_PREFIX/lib})
 
 include_directories( -I ${CMAKE_INCLUDE_PATH} 
-                     -I ${CMAKE_INCLUDE_PATH}/${APR_ROOT} 
+                     -I ${CMAKE_INCLUDE_PATH}/${APR_ROOT}                     
                      -I ${RUBY_INCLUDE_PATH}  
+                     -I ${RUBY_INCLUDE_ARCH_PATH} 
                      -I ${RUBY_INCLUDE_PATH}/${RUBY_SITE_ARCH}  
                      -I "${PROJECT_SOURCE_DIR}/include" )
 

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+coverity_dir=cov-int
+
+rm -rf $coverity_dir
+mkdir $coverity_dir
+make clean
+/opt/cov-analysis-linux64-6.6.1/bin/cov-build --dir $coverity_dir make
+tar czvf mod_ruby.tgz $coverity_dir
+
