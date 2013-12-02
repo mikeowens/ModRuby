@@ -1,7 +1,7 @@
 Source: mod-ruby
 Priority: optional
 Maintainer: Michael Owens <mike@mikeowens.ws>
-Build-Depends: debhelper (>= 5), apache2-mpm-prefork, apache2-prefork-dev, 
+Build-Depends: debhelper (>= 5), apache2-dev, 
  libapr1-dev, libaprutil1-dev, flex, cmake (>= 2.6.2)
 Standards-Version: 3.8.0
 Section: libs
@@ -9,13 +9,13 @@ Section: libs
 Package: mod-ruby
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, apache2-mpm-prefork
+Depends: ${shlibs:Depends}, ${misc:Depends}, apache2
 Description: Ruby web framework for the Apache web server.
  A compact, modular Ruby web framework for Apache web server.
 
 Package: mod-ruby-git
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, apache2-mpm-prefork
+Depends: ${shlibs:Depends}, ${misc:Depends}, apache2
 Description: Ruby web framework for the Apache web server.
  Development install.
