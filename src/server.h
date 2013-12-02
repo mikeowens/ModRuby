@@ -37,7 +37,15 @@ class Server
     
     char* error_fname() { return _sr->error_fname; }
     apr_file_t* error_log() { return _sr->error_log; }
-    int loglevel() { return _sr->loglevel; }
+
+    int loglevel() {
+#if AP_SERVER_MINORVERSION_NUMBER >= 4
+        return _sr->log.level;
+#else
+        return _sr->loglevel;
+#endif
+    }
+
     int is_virtual() { return _sr->is_virtual; }
     
     ap_conf_vector_t* lookup_defaults() { return _sr->lookup_defaults; }

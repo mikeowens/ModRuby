@@ -375,8 +375,10 @@ class Request
     /** \return bitmask of the allowoverrides for this request **/
     inline int allow_overrides() const { return ap_allow_overrides(_req); }
 
+#if AP_SERVER_MINORVERSION_NUMBER < 4
     /** \return default type from the configuration, or text/plain if not set **/
     inline const char* default_type() const { return ap_default_type(_req); } 
+#endif
 
     /**
      * \brief WARNING: This is in to be backward compatible, but is not always 

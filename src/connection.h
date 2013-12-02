@@ -88,12 +88,20 @@ class MODCPP_API Connection
 
     inline const char* remote_ip() const
     {
+#if AP_SERVER_MINORVERSION_NUMBER < 4
         return _c->remote_ip;
+#else
+        return _c->client_ip;
+#endif
     }
 
     inline int remote_port() const
     {
+#if AP_SERVER_MINORVERSION_NUMBER < 4
         return _c->remote_addr->port;
+#else
+        return _c->client_addr->port;
+#endif
     }
 
     inline const char* remote_logname() const

@@ -24,6 +24,10 @@
 
 #include "module.hpp"
 
+#if AP_SERVER_MINORVERSION_NUMBER >= 4
+APLOG_USE_MODULE();
+#endif
+
 typedef VALUE (*fn)(...);
 
 using namespace std;
