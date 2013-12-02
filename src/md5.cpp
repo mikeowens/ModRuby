@@ -36,8 +36,6 @@ md5::md5(const char* path)
     FILE *in;
     char zBuf[10240];
 
-    init();
-
     if(access(path, R_OK) != 0)
     {
         string msg = (string)"md5() : No such file: " + path;
@@ -48,11 +46,15 @@ md5::md5(const char* path)
         return;
     }
 
+    init();
+
     in = fopen(path,"rb");
 
     if(in == 0)
     {
         printf("md5_test : cannot open file %s", path);
+
+        return;
     }
     
     for(;;)
@@ -283,7 +285,7 @@ void md5::final()
     memcpy(_hash, ctx->buf, 16);
     DigestToBase16(_hash, _hash_str);
 
-    memset(ctx, 0, sizeof(ctx));    /* In case it's sensitive */
+    memset(ctx, 0, sizeof(*ctx));    /* In case it's sensitive */
 }
 
 string md5::debug()

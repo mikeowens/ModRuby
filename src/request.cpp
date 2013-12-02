@@ -18,8 +18,8 @@ using namespace modruby;
 i32 Request::max_content_length = 20*1024*1024;
 
 Request::Request(request_rec* r)
-    : _form_data(NULL), _queries(NULL), has_read_content(false),
-      _has_setup_client_read(false)
+    : _server(NULL), _form_data(NULL), _queries(NULL), has_read_content(false),
+      _has_setup_client_read(false), _module_config(NULL)
 {
     _req = r;
 }
@@ -178,6 +178,8 @@ bool Request::setup_cgi() const
 {
     ap_add_cgi_vars(_req);
     ap_add_common_vars(_req);
+
+    return true;
 }
 
 bool Request::has_form_data() const
@@ -357,7 +359,7 @@ bool Request::parse_query_string(const char* in, modruby::apr::table& t)
     std::vector<std::string>::iterator i;
     for(i = pairs.begin(); i != pairs.end(); i++)
     {
-        unsigned found = i->find("=");
+        std::size_t found = i->find("=");
 
         if(found != string::npos)
         {

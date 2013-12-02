@@ -41,7 +41,7 @@ static void deallocator(void* x)
 
 static VALUE allocator(VALUE cls)
 {
-
+    return Qnil;
 }
 
 static VALUE cls;

@@ -284,7 +284,7 @@ VALUE m_process(VALUE self)
     apache::Server* obj = get_object(self);
 
     // Get the Apache server_rec pointer.
-    const process_rec* p = obj->process();
+    // const process_rec* p = obj->process();
 
     // Create a new Ruby Process object
     VALUE process = make_process(obj->get_server_rec());

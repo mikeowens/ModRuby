@@ -182,17 +182,16 @@ int rmdir(const char* path)
             const char *fullpath, *entry;
           
             entry = this_entry.name;
-
-            if(*entry == '/')
-            {
-                fullpath = entry;
-            }
             
             stringstream strm;
 
             if(entry == NULL)
             {
                 fullpath = path;
+            }
+            else if(*entry == '/')
+            {
+                fullpath = entry;
             }
             else if(path == NULL)
             {

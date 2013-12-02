@@ -429,6 +429,8 @@ VALUE m_connection(VALUE self)
 bool yield_content(const void* content, modruby::i32 len, void* ud = NULL)
 {
     rb_yield(rb_str_new((const char*)content, len));
+
+    return true;
 }
 
 VALUE m_content(VALUE self)
@@ -822,7 +824,7 @@ VALUE m_params(VALUE self)
 // TODO: Wrap apr_uri_t
 VALUE m_parsed_uri(VALUE self)
 {
-    apache::Request* req = get_object(self);
+    // apache::Request* req = get_object(self);
 
     //return rb_str_new2(req->parsed_uri());
     return Qnil;

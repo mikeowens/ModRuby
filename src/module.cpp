@@ -77,7 +77,7 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
     int x = getpid();
 
     //> Get the module configuration
-    ruby_config* cfg = ruby_server_config(server->module_config);
+    // ruby_config* cfg = ruby_server_config(server->module_config);
 
     // Initialize the Ruby VM and load C extensions
     try
@@ -224,6 +224,8 @@ int ruby_log_error(request_rec* r, int level, const char* msg)
     ap_log_error( APLOG_MARK, level, 0, r->server, 
                   "mod_ruby[%i] : %s", 
                   getpid(), strm.str().c_str() );
+
+    return 0;
 }
 
 
@@ -738,10 +740,10 @@ int ruby_generic_handler( request_rec* r,
 
 int ruby_request_rhtml_handler(request_rec* r)
 {
-    ruby_generic_handler(r,"ruby-rhtml-handler", "rhtml"); 
+    return ruby_generic_handler(r,"ruby-rhtml-handler", "rhtml"); 
 }
 
 int ruby_request_script_handler(request_rec* r)
 {
-    ruby_generic_handler(r,"ruby-script-handler", "script"); 
+    return ruby_generic_handler(r,"ruby-script-handler", "script"); 
 }

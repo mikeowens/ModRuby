@@ -128,7 +128,7 @@ class Request
     inline int status() const { return _req->status; }
 
     /** \return Status line **/
-    inline int set_status(int s) const { _req->status = s; }
+    inline int set_status(int s) const { _req->status = s; return s;}
 
     /** \return Request method (eg. GET, HEAD, POST, etc.) **/
     inline const char* method() const { return _req->method; }
