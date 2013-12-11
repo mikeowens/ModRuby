@@ -1,8 +1,8 @@
 #ifndef MODRUBY_APACHE_SERVER_DECL
 #define MODRUBY_APACHE_SERVER_DECL
 
-#include <apache2/httpd.h>
-#include <apache2/http_config.h>
+#include <httpd.h>
+#include <http_config.h>
 
 #include "process.h"
 

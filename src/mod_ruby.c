@@ -1,9 +1,9 @@
-#include <apache2/httpd.h>
-#include <apache2/http_config.h>
-#include <apache2/http_protocol.h>
-#include <apache2/http_log.h>
+#include <httpd.h>
+#include <http_config.h>
+#include <http_protocol.h>
+#include <http_log.h>
 
-#include <apache2/ap_config.h>
+#include <ap_config.h>
 
 #include "common.h"
 #include "module.h"

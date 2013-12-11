@@ -3,6 +3,7 @@ MESSAGE( STATUS "SYSTEM: ${SYSTEM} (linux/debian/settings.cmake)" )
 # Paths, compiler and linker settings
 SET(PREFIX "/usr")
 SET(APR_ROOT "apr-1.0")
+SET(APACHE_INCLUDE_ROOT "apache2")
 SET(APACHE_MODULES_DIR "/usr/lib/apache/modules")
 SET(SYSTEM_LINK_FLAGS -Wl,--as-needed -Wl,-z,relro)
 

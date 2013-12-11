@@ -1,5 +1,4 @@
 #include <ruby.h>
-#include <sqlite3.h>
 
 #include "apr.h"
 #include "ruby.hpp"

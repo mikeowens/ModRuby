@@ -1,6 +1,6 @@
 #include <unistd.h>
-#include <apache2/httpd.h>
-#include <apache2/http_log.h>
+#include <httpd.h>
+#include <http_log.h>
 
 #include <map>
 #include <string>
