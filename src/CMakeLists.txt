@@ -79,7 +79,7 @@ set_target_properties( shared_lib PROPERTIES
   OUTPUT_NAME mod_${PROJECT_NAME} )
 
 target_link_libraries( shared_lib -L${CMAKE_LIBRARY_PATH} 
-   ${SYSTEM_LINK_FLAGS} ${RUBY_LIBRARY} )
+   ${SYSTEM_LINK_FLAGS} ${PREFIX}/lib/${RUBY_LIBRARY} )
 
 # 2. Static library for testing
 add_library( static_lib STATIC ${library_sources} )
@@ -104,7 +104,7 @@ set_target_properties( rhtml_lib PROPERTIES
   OUTPUT_NAME librhtml )
 
 target_link_libraries( rhtml_lib -L${CMAKE_LIBRARY_PATH} 
-  ${SYSTEM_LINK_FLAGS} ${RUBY_LIBRARY} )
+  ${SYSTEM_LINK_FLAGS} ${PREFIX}/lib/${RUBY_LIBRARY} )
 
 #-------------------------------------------------------------------------------
 # Compilation
