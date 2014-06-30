@@ -2,19 +2,10 @@
 # default does not work well finding ruby.h with ruby 1.9.
 
 FIND_PROGRAM( RUBY_EXECUTABLE 
-              NAMES ruby2.1 ruby2.0 ruby1.9.3 ruby1.9 ruby19 ruby
-              PATHS /usr/bin /usr/local/bin /usr/pkg/bin )
+              NAMES ruby2.1 ruby2.0 ruby ruby.exe
+              PATHS /usr/bin /usr/local/bin /usr/pkg/bin e:/usr/local/bin )
 
-IF(RUBY_EXECUTABLE  AND NOT  RUBY_ARCH_DIR)
-
-   EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['arch']"
-      OUTPUT_VARIABLE RUBY_ARCH)
-
-   EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['sitearch']"
-      OUTPUT_VARIABLE RUBY_SITE_ARCH)
-
-   EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['archdir']"
-      OUTPUT_VARIABLE RUBY_ARCH_DIR)
+IF(RUBY_EXECUTABLE AND NOT RUBY_ARCH_DIR)
 
    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['libdir']"
       OUTPUT_VARIABLE RUBY_POSSIBLE_LIB_DIR)
@@ -22,18 +13,11 @@ IF(RUBY_EXECUTABLE  AND NOT  RUBY_ARCH_DIR)
    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['rubylibdir']"
       OUTPUT_VARIABLE RUBY_RUBY_LIB_DIR)
 
-   # site_ruby
-   EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['sitearchdir']"
-      OUTPUT_VARIABLE RUBY_SITEARCH_DIR)
-
-   EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['rubyarchhdrdir']"
-      OUTPUT_VARIABLE RUBY_INCLUDE_ARCH_PATH)
-
    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['sitelibdir']"
       OUTPUT_VARIABLE RUBY_SITELIB_DIR)
 
    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['LIBRUBY']"
-      OUTPUT_VARIABLE RUBY_LIBRARY)
+      OUTPUT_VARIABLE RUBY_LIBRARY_NAME)
 
    # vendor_ruby available ?
    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r vendor-specific -e "print 'true'"
@@ -47,21 +31,37 @@ IF(RUBY_EXECUTABLE  AND NOT  RUBY_ARCH_DIR)
          OUTPUT_VARIABLE RUBY_VENDORARCH_DIR)
    ENDIF(RUBY_HAS_VENDOR_RUBY)
 
-   # save the results in the cache so we don't have to run ruby the next time again
-   SET(RUBY_ARCH              ${RUBY_ARCH}              CACHE PATH "The Ruby arch")
-   SET(RUBY_SITE_ARCH         ${RUBY_SITE_ARCH}         CACHE PATH "The Ruby site arch")
-   SET(RUBY_ARCH_DIR          ${RUBY_ARCH_DIR}          CACHE PATH "The Ruby arch dir")
-   SET(RUBY_INCLUDE_ARCH_PATH ${RUBY_INCLUDE_ARCH_PATH} CACHE PATH "The Ruby arch include dir")
    SET(RUBY_POSSIBLE_LIB_DIR  ${RUBY_POSSIBLE_LIB_DIR}  CACHE PATH "The Ruby lib dir")
-   SET(RUBY_LIBRARY           ${RUBY_LIBRARY}           CACHE PATH "The Ruby library")
+   SET(RUBY_LIBRARY_NAME      ${RUBY_LIBRARY_NAME}      CACHE PATH "The Ruby library name")
    SET(RUBY_RUBY_LIB_DIR      ${RUBY_RUBY_LIB_DIR}      CACHE PATH "The Ruby ruby-lib dir")
-   SET(RUBY_SITEARCH_DIR      ${RUBY_SITEARCH_DIR}      CACHE PATH "The Ruby site arch dir")
    SET(RUBY_SITELIB_DIR       ${RUBY_SITELIB_DIR}       CACHE PATH "The Ruby site lib dir")
    SET(RUBY_HAS_VENDOR_RUBY   ${RUBY_HAS_VENDOR_RUBY}   CACHE BOOL "Vendor Ruby is available")
    SET(RUBY_VENDORARCH_DIR    ${RUBY_VENDORARCH_DIR}    CACHE PATH "The Ruby vendor arch dir")
    SET(RUBY_VENDORLIB_DIR     ${RUBY_VENDORLIB_DIR}     CACHE PATH "The Ruby vendor lib dir")
 
-ENDIF(RUBY_EXECUTABLE  AND NOT  RUBY_ARCH_DIR)
+ENDIF(RUBY_EXECUTABLE AND NOT RUBY_ARCH_DIR)
+
+EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['arch']"
+  OUTPUT_VARIABLE RUBY_ARCH)
+
+EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['rubyarchhdrdir']"
+  OUTPUT_VARIABLE RUBY_INCLUDE_ARCH_PATH)
+
+EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['archlibdir']"
+  OUTPUT_VARIABLE RUBY_ARCH_LIB_DIR)
+
+EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['sitearch']"
+  OUTPUT_VARIABLE RUBY_SITE_ARCH)
+
+EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['archdir']"
+  OUTPUT_VARIABLE RUBY_ARCH_DIR)
+
+# save the results in the cache so we don't have to run ruby the next time again
+SET(RUBY_ARCH              ${RUBY_ARCH}              CACHE PATH "The Ruby arch")
+SET(RUBY_ARCH_DIR          ${RUBY_ARCH_DIR}          CACHE PATH "The Ruby arch dir")
+SET(RUBY_SITE_ARCH         ${RUBY_SITE_ARCH}         CACHE PATH "The Ruby site arch")
+SET(RUBY_INCLUDE_ARCH_PATH ${RUBY_INCLUDE_ARCH_PATH} CACHE PATH "The Ruby arch include dir")
+SET(RUBY_ARCH_LIB_DIR       ${RUBY_ARCH_LIB_DIR}       CACHE PATH "The Ruby arch lib dir")
 
 # for compatibility
 SET(RUBY_POSSIBLE_LIB_PATH ${RUBY_POSSIBLE_LIB_DIR})
@@ -73,16 +73,16 @@ FIND_PATH(RUBY_INCLUDE_PATH
    ${RUBY_ARCH_DIR}
    ${RUBY_POSSIBLE_INCLUDE_PATHS} )
 
-# Find ruby library
-IF(PLATFORM STREQUAL "darwin")
-FIND_FILE( RUBY_LIBRARY
-           NAMES libruby-1.9.3.dylib libruby1.9.dylib libruby.dylib
-           PATHS /opt/local/lib/ )
-ELSE(PLATFORM STREQUAL "darwin")
+#FIND_PATH(RUBY_INCLUDE_ARCH_PATH
+#   NAMES ruby/config.h
+#   PATHS ${RUBY_POSSIBLE_INCLUDE_ARCH_PATHS}
+#   ${RUBY_ARCH_DIR} )
+
 FIND_LIBRARY( RUBY_LIBRARY
-  NAMES ruby-2.1 ruby-2.0 ruby-1.9.3 libruby193.so ruby1.9 ruby19 ruby msvcrt-ruby19 msvcrt-ruby19-static
-  PATHS ${RUBY_POSSIBLE_LIB_DIR} ${RUBY_ARCH_DIR} /usr/local/lib )
-ENDIF()
+  NAMES ${RUBY_LIBRARY_NAME}
+  PATHS ${RUBY_ARCH_LIB_DIR} ${RUBY_POSSIBLE_LIB_DIR} ${RUBY_ARCH_DIR} /usr/local/lib e:/usr/local/lib )
+
+SET(RUBY_LIBRARY ${RUBY_LIBRARY}   CACHE BOOL "Vendor Ruby library full path")
 
 MARK_AS_ADVANCED(
   RUBY_EXECUTABLE
@@ -102,4 +102,5 @@ MARK_AS_ADVANCED(
 MESSAGE( STATUS "RUBY_INCLUDE_ARCH_PATH: ${RUBY_INCLUDE_ARCH_PATH}" )
 MESSAGE( STATUS "RUBY_INCLUDE_PATH: ${RUBY_INCLUDE_PATH}" )
 MESSAGE( STATUS "RUBY_ARCH_DIR: ${RUBY_ARCH_DIR}" )
-MESSAGE( STATUS "RUBY_LIBRARY : ${RUBY_LIBRARY}" )
+MESSAGE( STATUS "RUBY_LIBRARY: ${RUBY_LIBRARY}" )
+MESSAGE( STATUS "RUBY_ARCH_LIB_DIR : ${RUBY_ARCH_LIB_DIR}" )
