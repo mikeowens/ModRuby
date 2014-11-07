@@ -15,40 +15,35 @@
 #
 # For example, say you have a file with the following contents:
 #
-#   debian/r4a.conf etc/apache2/mods-available/
-#   debian/r4a.load etc/apache2/mods-available/
-#   util/4ra usr/bin/
+#   debian/ruby.conf etc/apache2/mods-available/
+#   debian/ruby.load etc/apache2/mods-available/
 #   apache/librhtml.so usr/lib/
-#   apache/mod_r4a.so usr/lib/apache2/modules/
-#   debian/r4a-dev/usr/lib/r4a/test usr/lib/r4a/test
-#   lib/core/r4a usr/lib/ruby/1.9.1/
-#   lib/core/r4a.rb usr/lib/ruby/1.9.1/
-#   rsp/src/rsp.rb usr/lib/ruby/1.9.1/
-#   rsp/src/rsp usr/lib/ruby/1.9.1/
+#   apache/mod_ruby.so usr/lib/apache2/modules/
+#   debian/ruby-dev/usr/lib/ruby/test usr/lib/ruby/test
 #
 # This script will create the following directory structure in the current directory:
 #
 # etc
 # etc/apache2
 # etc/apache2/mods-available
-# etc/apache2/mods-available/r4a.conf -> /var/data/dev/source/r4a/debian/r4a.conf
-# etc/apache2/mods-available/r4a.load -> /var/data/dev/source/r4a/debian/r4a.load
+# etc/apache2/mods-available/ruby.conf -> /var/data/dev/source/ruby/debian/ruby.conf
+# etc/apache2/mods-available/ruby.load -> /var/data/dev/source/ruby/debian/ruby.load
 # usr
 # usr/bin
-# usr/bin/4ra -> /var/data/dev/source/r4a/util/4ra
+# usr/bin/4ra -> /var/data/dev/source/ruby/util/4ra
 # usr/lib
-# usr/lib/librhtml.so -> /var/data/dev/source/r4a/apache/librhtml.so
+# usr/lib/librhtml.so -> /var/data/dev/source/ruby/apache/librhtml.so
 # usr/lib/apache2
-# usr/lib/apache2/modules/mod_r4a.so -> /var/data/dev/source/r4a/apache/mod_r4a.so
-# usr/lib/r4a
-# usr/lib/r4a/test
-# usr/lib/r4a/test/test -> /var/data/dev/source/r4a/debian/r4a-dev/usr/lib/r4a/test
+# usr/lib/apache2/modules/mod_ruby.so -> /var/data/dev/source/ruby/apache/mod_ruby.so
+# usr/lib/ruby
+# usr/lib/ruby/test
+# usr/lib/ruby/test/test -> /var/data/dev/source/ruby/debian/ruby-dev/usr/lib/ruby/test
 # usr/lib/ruby
 # usr/lib/ruby/1.9.1
-# usr/lib/ruby/1.9.1/r4a -> /var/data/dev/source/r4a/lib/core/r4a
-# usr/lib/ruby/1.9.1/r4a.rb -> /var/data/dev/source/r4a/lib/core/r4a.rb
-# usr/lib/ruby/1.9.1/rsp -> /var/data/dev/source/r4a/rsp/src/rsp
-# usr/lib/ruby/1.9.1/rsp.rb -> /var/data/dev/source/r4a/rsp/src/rsp.rb
+# usr/lib/ruby/1.9.1/ruby -> /var/data/dev/source/ruby/lib/core/ruby
+# usr/lib/ruby/1.9.1/ruby.rb -> /var/data/dev/source/ruby/lib/core/ruby.rb
+# usr/lib/ruby/1.9.1/rsp -> /var/data/dev/source/ruby/rsp/src/rsp
+# usr/lib/ruby/1.9.1/rsp.rb -> /var/data/dev/source/ruby/rsp/src/rsp.rb
 
 ARGS=2        # Number of arguments expected.
 E_BADARGS=65  # Exit value if incorrect number of args passed.
@@ -88,8 +83,6 @@ while read curline; do
         # Doesn't. So make it.
         mkdir -p $dir
     fi
-
-    ls usr/lib/r4a/test/
 
     # Create symlink
     ln -sf $source_dir/$1 $2

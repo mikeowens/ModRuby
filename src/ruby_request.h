@@ -1,7 +1,7 @@
 #ifndef MODRUBY_RUBY_APACHE_REQUEST_DECL
 #define MODRUBY_RUBY_APACHE_REQUEST_DECL
 
-#include <apache2/http_request.h>
+#include <http_request.h>
 
 #include "request.h"
 

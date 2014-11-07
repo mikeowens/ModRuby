@@ -1,12 +1,12 @@
 #ifndef MODRUBY_APACHE_REQUEST_DECL
 #define MODRUBY_APACHE_REQUEST_DECL
 
-#include <apache2/httpd.h>
-#include <apache2/http_request.h>
-#include <apache2/http_config.h>
-#include <apache2/http_core.h>
-#include <apache2/http_protocol.h>
-#include <apache2/util_script.h>
+#include <httpd.h>
+#include <http_request.h>
+#include <http_config.h>
+#include <http_core.h>
+#include <http_protocol.h>
+#include <util_script.h>
 
 #include <vector>
 #include <string>

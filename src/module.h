@@ -1,12 +1,12 @@
 #ifndef MODRUBY_MODULE_DECL
 #define MODRUBY_MODULE_DECL
 
-#include <apache2/http_protocol.h>
-#include <apache2/http_config.h>
+#include <http_protocol.h>
+#include <http_config.h>
 
 #include "common.h"
 
-#include <apr-1.0/apr_hash.h>
+#include <apr_hash.h>
 
 BEGIN_DECL
 
