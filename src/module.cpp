@@ -232,7 +232,6 @@ int ruby_log_error(request_rec* r, int level, const char* msg)
     return 0;
 }
 
-
 bool merge_var( request_rec* r, ruby_dir_config* dir_cfg, apr::table& t, 
                 const char* var_name, const char* server_config)
 {

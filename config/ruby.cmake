@@ -2,7 +2,7 @@
 # default does not work well finding ruby.h with ruby 1.9.
 
 FIND_PROGRAM( RUBY_EXECUTABLE 
-              NAMES ruby2.0 ruby1.9.3 ruby1.9 ruby19 ruby
+              NAMES ruby2.1 ruby1.9.3 ruby1.9 ruby19 ruby
               PATHS /usr/bin /usr/local/bin /usr/pkg/bin )
 
 IF(RUBY_EXECUTABLE  AND NOT  RUBY_ARCH_DIR)
@@ -81,7 +81,7 @@ FIND_FILE( RUBY_LIBRARY
            PATHS /opt/local/lib/ )
 ELSE(PLATFORM STREQUAL "darwin")
 FIND_LIBRARY( RUBY_LIBRARY
-  NAMES ruby-2.0 ruby-1.9.3 libruby193.so ruby1.9 ruby19 ruby msvcrt-ruby19 msvcrt-ruby19-static
+  NAMES ruby-2.1 ruby-1.9.3 libruby193.so ruby1.9 ruby19 ruby msvcrt-ruby19 msvcrt-ruby19-static
   PATHS ${RUBY_POSSIBLE_LIB_DIR} ${RUBY_ARCH_DIR} /usr/local/lib )
 ENDIF()
 
