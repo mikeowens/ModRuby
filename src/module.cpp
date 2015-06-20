@@ -89,6 +89,17 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
         // Start up VM
         ruby::startup("ModRuby Ruby VM");
 
+        //> Set default encoding to UTF-8.
+        //
+        // Ruby docs say not to do this within Ruby. So we do it here
+        // immediately on startup. Could do it this way:
+        //
+        //     rb_eval_string("Encoding.default_external='UTF-8'");
+        //
+        // But this is more 3733t
+        VALUE encoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
+        rb_funcall(encoding, rb_intern("default_external="), 1, rb_str_new_cstr("UTF-8"));
+
         // Apache log constants for log() in ruby_request.cpp
         rb_define_global_const("APLOG_EMERG",        INT2NUM(APLOG_EMERG));
         rb_define_global_const("APLOG_ALERT",        INT2NUM(APLOG_ALERT));
