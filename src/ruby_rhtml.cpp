@@ -23,9 +23,9 @@ void init_rhtml()
 
 VALUE rhtml_eval(int args, VALUE* argv, VALUE self)
 {
-    if(args == 0)
+    if (args == 0)
     {
-        rb_raise( rb_eRuntimeError, 
+        rb_raise( rb_eRuntimeError,
                   "At lease one argument is required." );
     }
 
@@ -34,7 +34,7 @@ VALUE rhtml_eval(int args, VALUE* argv, VALUE self)
 
     Check_Type(text, T_STRING);
 
-    if(args == 2)
+    if (args == 2)
     {
         binding = argv[1];
     }
@@ -48,9 +48,9 @@ VALUE rhtml_eval(int args, VALUE* argv, VALUE self)
 
 VALUE rhtml_compile(int args, VALUE* argv, VALUE self)
 {
-    if(args == 0)
+    if (args == 0)
     {
-        rb_raise( rb_eRuntimeError, 
+        rb_raise( rb_eRuntimeError,
                   "At lease one argument is required." );
     }
 
@@ -58,24 +58,24 @@ VALUE rhtml_compile(int args, VALUE* argv, VALUE self)
 
     VALUE binding = Qnil;
 
-    if(args == 2)
+    if (args == 2)
     {
         binding = argv[1];
     }
 
     const char* filename = StringValuePtr(argv[0]);
 
-    if(access(filename, R_OK) != 0)
+    if (access(filename, R_OK) != 0)
     {
         stringstream strm;
         strm << "File does not exist: " << filename;
-        
+
         rb_raise(rb_eIOError, strm.str().c_str());
     }
-    
+
     ruby::RhtmlParser parser;
 
     parser.compile_file(filename);
-    
+
     return rb_str_new(parser.text.data(), parser.text.size());
 }

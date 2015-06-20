@@ -16,18 +16,18 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-static VALUE m_chmod(VALUE cls, VALUE path, VALUE perms);
-static VALUE m_cp(VALUE cls, VALUE source_path, VALUE dest_path);
-static VALUE m_cwd(VALUE cls);
-static VALUE m_mkdir(VALUE cls, VALUE dir);
-static VALUE m_mv(VALUE cls, VALUE source_path, VALUE dest_path);
-static VALUE m_rm(VALUE cls, VALUE dir);
-static VALUE m_rmdir(VALUE cls, VALUE dir);
-static VALUE m_stat(int args, VALUE* argv, VALUE self);
-static VALUE m_filepath_is_relative(VALUE self, VALUE path);
-static VALUE m_filepath_merge(VALUE self, VALUE root_path, VALUE add_path);
-static VALUE m_filepath_root(VALUE self, VALUE path);
-static VALUE m_init(VALUE self, VALUE file);
+    static VALUE m_chmod(VALUE cls, VALUE path, VALUE perms);
+    static VALUE m_cp(VALUE cls, VALUE source_path, VALUE dest_path);
+    static VALUE m_cwd(VALUE cls);
+    static VALUE m_mkdir(VALUE cls, VALUE dir);
+    static VALUE m_mv(VALUE cls, VALUE source_path, VALUE dest_path);
+    static VALUE m_rm(VALUE cls, VALUE dir);
+    static VALUE m_rmdir(VALUE cls, VALUE dir);
+    static VALUE m_stat(int args, VALUE* argv, VALUE self);
+    static VALUE m_filepath_is_relative(VALUE self, VALUE path);
+    static VALUE m_filepath_merge(VALUE self, VALUE root_path, VALUE add_path);
+    static VALUE m_filepath_root(VALUE self, VALUE path);
+    static VALUE m_init(VALUE self, VALUE file);
 
 }
 
@@ -78,7 +78,7 @@ void init_apr(VALUE module)
     rb_define_global_const("APR_ENOTHDKEY",    INT2FIX(APR_ENOTHDKEY));
     rb_define_global_const("APR_ENOSHMAVAIL",  INT2FIX(APR_ENOSHMAVAIL));
     rb_define_global_const("APR_EDSOOPEN",     INT2FIX(APR_EDSOOPEN));
-    rb_define_global_const("APR_EGENERAL",     INT2FIX(APR_EGENERAL));  
+    rb_define_global_const("APR_EGENERAL",     INT2FIX(APR_EGENERAL));
     rb_define_global_const("APR_EBADIP",       INT2FIX(APR_EBADIP));
     rb_define_global_const("APR_EBADMASK",     INT2FIX(APR_EBADMASK));
     rb_define_global_const("APR_ESYMNOTFOUND", INT2FIX(APR_ESYMNOTFOUND));
@@ -113,7 +113,7 @@ VALUE m_chmod(VALUE cls, VALUE path, VALUE perms)
     Check_Type(perms, T_FIXNUM);
 
     return INT2FIX(modruby::apr::chmod( StringValuePtr(path),
-                                         NUM2INT(perms) ));
+                                        NUM2INT(perms) ));
 }
 
 VALUE m_cp(VALUE cls, VALUE source_path, VALUE dest_path)
@@ -122,7 +122,7 @@ VALUE m_cp(VALUE cls, VALUE source_path, VALUE dest_path)
     Check_Type(dest_path, T_STRING);
 
     return INT2FIX(modruby::apr::cp( StringValuePtr(source_path),
-                                      StringValuePtr(dest_path) ) );
+                                     StringValuePtr(dest_path) ) );
 }
 
 VALUE m_mkdir(VALUE cls, VALUE dir)
@@ -145,7 +145,7 @@ VALUE m_mv(VALUE cls, VALUE source_path, VALUE dest_path)
     Check_Type(dest_path, T_STRING);
 
     return INT2FIX(modruby::apr::mv( StringValuePtr(source_path),
-                                      StringValuePtr(dest_path) ) );
+                                     StringValuePtr(dest_path) ) );
 }
 
 VALUE m_rmdir(VALUE cls, VALUE dir)
@@ -175,9 +175,9 @@ VALUE m_filepath_merge(VALUE self, VALUE root_path, VALUE add_path)
     Check_Type(add_path, T_STRING);
 
     string path = modruby::apr::path_merge( StringValuePtr(root_path),
-                                             StringValuePtr(add_path) );
-    
-    if(path.length() == 0)
+                                            StringValuePtr(add_path) );
+
+    if (path.length() == 0)
     {
         return Qnil;
     }
@@ -188,10 +188,10 @@ VALUE m_filepath_merge(VALUE self, VALUE root_path, VALUE add_path)
 VALUE m_filepath_root(VALUE self, VALUE path)
 {
     Check_Type(path, T_STRING);
-    
+
     string root_path = modruby::apr::path_root(StringValuePtr(path));
-    
-    if(root_path.length() == 0)
+
+    if (root_path.length() == 0)
     {
         return Qnil;
     }
@@ -201,17 +201,17 @@ VALUE m_filepath_root(VALUE self, VALUE path)
 
 VALUE m_stat(int args, VALUE* argv, VALUE self)
 {
-    if(args == 0)
+    if (args == 0)
     {
         rb_raise( rb_eRuntimeError,
                   "At lease one argument is required." );
     }
 
-    Check_Type(argv[0], T_STRING);   
+    Check_Type(argv[0], T_STRING);
 
     VALUE want_flags;
 
-    if(args == 2)
+    if (args == 2)
     {
         Check_Type(argv[1], T_FIXNUM);
         want_flags = argv[1];

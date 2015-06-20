@@ -15,7 +15,7 @@ using std::stringstream;
 using namespace apache;
 using namespace modruby;
 
-i32 Request::max_content_length = 20*1024*1024;
+i32 Request::max_content_length = 20 * 1024 * 1024;
 
 Request::Request(request_rec* r)
     : _server(NULL), _form_data(NULL), _queries(NULL), has_read_content(false),
@@ -26,7 +26,7 @@ Request::Request(request_rec* r)
 
 Request::~Request()
 {
-    
+
 }
 
 string format_pair(const char* key, const char* value)
@@ -34,7 +34,7 @@ string format_pair(const char* key, const char* value)
     char buf[256];
     i32 len = snprintf(buf, 255, "    %-24s: %s\n", key, value);
 
-    return buf;    
+    return buf;
 }
 
 string format_pair(const char* key, i32 value)
@@ -42,7 +42,7 @@ string format_pair(const char* key, i32 value)
     char buf[256];
     i32 len = snprintf(buf, 255, "    %-24s: %i\n", key, value);
 
-    return buf;    
+    return buf;
 }
 
 string Request::repr() const
@@ -58,36 +58,36 @@ string Request::repr() const
         << format_pair("Request", this->the_request())
         << format_pair("Method", this->method())
         << format_pair("Status", this->status())
-        << format_pair("URI", this->uri()) 
+        << format_pair("URI", this->uri())
         << format_pair("Args", this->args())
         << format_pair("Filename", this->filename())
-        << format_pair("Path", this->path_info()) 
+        << format_pair("Path", this->path_info())
         << format_pair("Bytes Sent", this->bytes_sent())
         << format_pair("Content Type", this->content_type())
-        << format_pair("Remote Host", c.remote_host()) 
-        << format_pair("Remote IP", c.remote_ip()) 
+        << format_pair("Remote Host", c.remote_host())
+        << format_pair("Remote IP", c.remote_ip())
         << format_pair("Protocol", this->protocol())
         << format_pair("Proto Number", this->proto_num())
         << format_pair("Status Line", this->status_line())
         << format_pair("Method Number", this->method_number())
-        << format_pair("Handler", this->handler()) 
-        << format_pair("User", this->user()) 
-        << format_pair("Local Host", c.local_host()) 
-        << format_pair("Local IP", c.local_ip()) 
+        << format_pair("Handler", this->handler())
+        << format_pair("User", this->user())
+        << format_pair("Local Host", c.local_host())
+        << format_pair("Local IP", c.local_ip())
         << format_pair("Assbackwards", this->assbackwards())
         << format_pair("Proxy Req", this->proxyreq())
         << format_pair("Header Only", this->header_only())
         << format_pair("Allowed", this->allowed()) << "\n"
-    
-        << "Headers in:\n\n" 
+
+        << "Headers in:\n\n"
         << table_string(this->headers_in()) << "\n"
 
-        << "Environment Variables:\n\n" 
+        << "Environment Variables:\n\n"
         << table_string(this->subprocess_env()) << "\n";
 
     apr_table_t* params = form_data();
 
-    if(params != NULL)
+    if (params != NULL)
     {
         apr::table t(params);
 
@@ -95,21 +95,21 @@ string Request::repr() const
         out << table_string(t);
     }
 
-    if(this->notes().size() > 0)
+    if (this->notes().size() > 0)
     {
         out << "Notes:\n\n"
             << table_string(this->notes());
     }
 
-    if(this->headers_out().size() > 0)
+    if (this->headers_out().size() > 0)
     {
-        out << "Headers out:\n\n" 
+        out << "Headers out:\n\n"
             << table_string(this->headers_out()) << "\n";
     }
 
-    if(this->err_headers_out().size() > 0)
+    if (this->err_headers_out().size() > 0)
     {
-        out << "Error Headers_out:\n\n" 
+        out << "Error Headers_out:\n\n"
             << table_string(this->err_headers_out()) << "\n";
     }
 
@@ -128,7 +128,7 @@ string Request::table_string(const modruby::apr::table& t) const
 
     modruby::apr::table::iterator i(t);
 
-    while(i.next())
+    while (i.next())
     {
         // Format
         i32 len = snprintf(buf, 255, "  %3i %-22s: %s\n", i.index(), i.key(), i.data());
@@ -148,19 +148,19 @@ void Request::dump(const modruby::apr::table& pTable) const
 apr_table_t* Request::queries() const
 {
     // If we have copied this out before
-    if(_queries != NULL)
+    if (_queries != NULL)
     {
         // Return the table
         return _queries;
     }
 
     //> Parse query string to table
-    if(_req->args != NULL)
+    if (_req->args != NULL)
     {
         apr::table t(pool());
 
         parse_query_string(_req->args, t);
-        
+
         _queries = t.handle;
     }
     else
@@ -184,14 +184,14 @@ bool Request::setup_cgi() const
 
 bool Request::has_form_data() const
 {
-    if(strcmp(method(), "POST") != 0)
+    if (strcmp(method(), "POST") != 0)
     {
         return false;
     }
 
     string x = headers_in().get("Content-Type");
 
-    if(x.find("application/x-www-form-urlencoded") != string::npos)
+    if (x.find("application/x-www-form-urlencoded") != string::npos)
     {
         return true;
     }
@@ -201,21 +201,21 @@ bool Request::has_form_data() const
 
 bool Request::setup_client_read() const
 {
-    if(_has_setup_client_read == true)
+    if (_has_setup_client_read == true)
     {
         return true;
     }
 
     _has_setup_client_read = true;
 
-    if(setup_client_block(REQUEST_CHUNKED_DECHUNK) != OK)
+    if (setup_client_block(REQUEST_CHUNKED_DECHUNK) != OK)
     {
         _error = "Request::form_data(): setup_client_block failed.";
 
         return false;
     }
 
-    if(should_client_block() == 0)
+    if (should_client_block() == 0)
     {
         _error = "Request::form_data(): should_client_block failed.";
 
@@ -227,7 +227,7 @@ bool Request::setup_client_read() const
 
 const vector<unsigned char>& Request::content(read_content fn, void* user_data) const
 {
-    if(has_read_content == true)
+    if (has_read_content == true)
     {
         _content;
     }
@@ -235,13 +235,13 @@ const vector<unsigned char>& Request::content(read_content fn, void* user_data) 
     // If send more than max_post_bytes, forget it. If max_post_bytes == -1,
     // check is not performed.
 
-    if((max_content_length != -1) && (bytes_sent() > max_content_length))
+    if ((max_content_length != -1) && (bytes_sent() > max_content_length))
     {
         _error.clear();
 
         stringstream strm;
 
-        strm << "Request::form_data(): exceded bytes_sent: " 
+        strm << "Request::form_data(): exceded bytes_sent: "
              << max_content_length;
 
         _error = strm.str();
@@ -254,13 +254,13 @@ const vector<unsigned char>& Request::content(read_content fn, void* user_data) 
 
     char buff[4096];
     int len = 0;
-    
-    while((len=get_client_block(buff, sizeof(buff)-1)) > 0)
+
+    while ((len = get_client_block(buff, sizeof(buff) - 1)) > 0)
     {
         // NULL terminate
         buff[len] = 0;
 
-        if(fn != NULL)
+        if (fn != NULL)
         {
             // Caller wants it fed to them.
             fn(&buff[0], len, user_data);
@@ -280,7 +280,7 @@ const vector<unsigned char>& Request::content(read_content fn, void* user_data) 
 
 string Request::read_line() const
 {
-    if(has_read_content == true)
+    if (has_read_content == true)
     {
         return "";
     }
@@ -299,18 +299,18 @@ string Request::read_line() const
     {
         int len = get_client_block(buff, 1);
 
-        if(len > 0)
+        if (len > 0)
         {
             // NULL terminate
             buff[len] = 0;
-            
+
             // Copy
             content += buff;
-            
+
             // Check for CRLF
-            if(buff[0] == '\n')
+            if (buff[0] == '\n')
             {
-                if(content[content.length()-2] == '\r')
+                if (content[content.length() - 2] == '\r')
                 {
                     break;
                 }
@@ -330,7 +330,7 @@ string Request::read_line() const
 
 i32 Request::read(char** buff, i32 len) const
 {
-    if(has_read_content == true)
+    if (has_read_content == true)
     {
         return -1;
     }
@@ -342,7 +342,7 @@ i32 Request::read(char** buff, i32 len) const
 
     int n = get_client_block(*buff, len);
 
-    if(n <= 0)
+    if (n <= 0)
     {
         // Flag that we've read all the content, so we don't try this again.
         has_read_content = true;
@@ -357,21 +357,21 @@ bool Request::parse_query_string(const char* in, modruby::apr::table& t)
     split(in, '&', pairs);
 
     std::vector<std::string>::iterator i;
-    for(i = pairs.begin(); i != pairs.end(); i++)
+    for (i = pairs.begin(); i != pairs.end(); i++)
     {
         std::size_t found = i->find("=");
 
-        if(found != string::npos)
+        if (found != string::npos)
         {
             // Guard against empty/NULL value. In theory this should never
             // happen. But if it ever did it might cause problems.
-            if(found == (i->size() - 1))
+            if (found == (i->size() - 1))
             {
                 continue;
             }
 
             t.merge( url_decode(i->substr(0, found).c_str()).c_str(),
-                     url_decode(i->substr(found+1, i->size() - 1).c_str()).c_str() );
+                     url_decode(i->substr(found + 1, i->size() - 1).c_str()).c_str() );
         }
     }
 
@@ -381,7 +381,7 @@ bool Request::parse_query_string(const char* in, modruby::apr::table& t)
 apr_table_t* Request::form_data() const
 {
     // If we have copied this out before
-    if(_form_data != NULL)
+    if (_form_data != NULL)
     {
         // Return the table
         return _form_data;
@@ -390,14 +390,14 @@ apr_table_t* Request::form_data() const
     // Guard against passing NULL into string
     const char* value = headers_in().get("Content-Type");
 
-    if(value == NULL)
+    if (value == NULL)
     {
         return NULL;
     }
 
     string content_type = value;
 
-    if(content_type.find("application/x-www-form-urlencoded") == string::npos)
+    if (content_type.find("application/x-www-form-urlencoded") == string::npos)
     {
         _error = "Request::form_data(): unsupported content type";
 
@@ -409,14 +409,14 @@ apr_table_t* Request::form_data() const
         apr::table t(pool());
 
         t.merge( "content-type", content_type.c_str());
-   
+
         // Get reference to apr_table_t. We will just return this if this function
         // is ever called again.
         _form_data = t.handle;
 
         return _form_data;
     }
-        
+
     //> Parse query string to table
 
     apr::table t(pool());
@@ -432,7 +432,7 @@ apr_table_t* Request::form_data() const
     // Get reference to apr_table_t. We will just return this if this function
     // is ever called again.
     _form_data = t.handle;
-    
+
     return t.handle;
 }
 
@@ -493,27 +493,27 @@ int Request::send_file(const char* path)
     apr::file_info stat = apr::stat(path, pool.handle);
 
     // Ensure that the file exists
-    if(stat.valid() != true)
+    if (stat.valid() != true)
     {
         return -1;
     }
 
     // Should be a regular file
-    if(stat.type() != APR_REG)
+    if (stat.type() != APR_REG)
     {
         return -1;
     }
 
-    // Open the file. 
+    // Open the file.
     apr_file_t* file;
-    apr_status_t rc = apr_file_open( &file, path, APR_READ, 
+    apr_status_t rc = apr_file_open( &file, path, APR_READ,
                                      APR_OS_DEFAULT, pool.handle );
 
-    if(rc != APR_SUCCESS)
+    if (rc != APR_SUCCESS)
     {
         return -1;
     }
-   
+
     // Send it
     apr_size_t sent;
     rc = ap_send_fd(file, _req, 0, stat.size(), &sent);

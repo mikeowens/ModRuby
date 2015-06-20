@@ -14,31 +14,31 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-static VALUE m_init(VALUE self);
-static VALUE m_addrs(VALUE self);
-static VALUE m_defn_line_number(VALUE self);
-static VALUE m_defn_name(VALUE self);
-static VALUE m_error_log(VALUE self);
-static VALUE m_error_fname(VALUE self);
-static VALUE m_is_virtual(VALUE self);
-static VALUE m_keep_alive(VALUE self);
-static VALUE m_keep_alive_max(VALUE self);
-static VALUE m_keep_alive_timeout(VALUE self);
-static VALUE m_limit_req_fields(VALUE self);
-static VALUE m_limit_req_fieldsize(VALUE self);
-static VALUE m_limit_req_line(VALUE self);
-static VALUE m_loglevel(VALUE self);
-static VALUE m_lookup_defaults(VALUE self);
-static VALUE m_names(VALUE self);
-static VALUE m_next(VALUE self);
-static VALUE m_path(VALUE self);
-static VALUE m_pathlen(VALUE self);
-static VALUE m_port(VALUE self);
-static VALUE m_process(VALUE self);
-static VALUE m_server_admin(VALUE self);
-static VALUE m_server_hostname(VALUE self);
-static VALUE m_timeout(VALUE self);
-static VALUE m_wild_names(VALUE self);
+    static VALUE m_init(VALUE self);
+    static VALUE m_addrs(VALUE self);
+    static VALUE m_defn_line_number(VALUE self);
+    static VALUE m_defn_name(VALUE self);
+    static VALUE m_error_log(VALUE self);
+    static VALUE m_error_fname(VALUE self);
+    static VALUE m_is_virtual(VALUE self);
+    static VALUE m_keep_alive(VALUE self);
+    static VALUE m_keep_alive_max(VALUE self);
+    static VALUE m_keep_alive_timeout(VALUE self);
+    static VALUE m_limit_req_fields(VALUE self);
+    static VALUE m_limit_req_fieldsize(VALUE self);
+    static VALUE m_limit_req_line(VALUE self);
+    static VALUE m_loglevel(VALUE self);
+    static VALUE m_lookup_defaults(VALUE self);
+    static VALUE m_names(VALUE self);
+    static VALUE m_next(VALUE self);
+    static VALUE m_path(VALUE self);
+    static VALUE m_pathlen(VALUE self);
+    static VALUE m_port(VALUE self);
+    static VALUE m_process(VALUE self);
+    static VALUE m_server_admin(VALUE self);
+    static VALUE m_server_hostname(VALUE self);
+    static VALUE m_timeout(VALUE self);
+    static VALUE m_wild_names(VALUE self);
 
 }
 
@@ -46,7 +46,7 @@ static apache::Server* get_object(VALUE self);
 
 static void deallocator(void* x)
 {
-    if(x != NULL)
+    if (x != NULL)
     {
         delete (apache::Server*)x;
         x = NULL;
@@ -57,7 +57,7 @@ static VALUE allocator(VALUE cls)
 {
     apache::Server* x = NULL;
 
-    rb_raise( rb_eRuntimeError, 
+    rb_raise( rb_eRuntimeError,
               "Cannot create a Apache::Server object this way" );
 
     return Data_Wrap_Struct(cls, NULL, deallocator, x);
@@ -142,7 +142,7 @@ VALUE m_defn_name(VALUE self)
 {
     apache::Server* obj = get_object(self);
 
-    if(obj->defn_name() == NULL)
+    if (obj->defn_name() == NULL)
     {
         return Qnil;
     }
@@ -159,7 +159,7 @@ VALUE m_error_fname(VALUE self)
 {
     apache::Server* obj = get_object(self);
 
-    if(obj->error_fname() == NULL)
+    if (obj->error_fname() == NULL)
     {
         return Qnil;
     }
@@ -232,7 +232,7 @@ VALUE m_names(VALUE self)
 {
     apache::Server* obj = get_object(self);
 
-    if(obj->names() == NULL)
+    if (obj->names() == NULL)
     {
         return Qnil;
     }
@@ -244,7 +244,7 @@ VALUE m_next(VALUE self)
 {
     apache::Server* obj = get_object(self);
 
-    if(obj->next() == NULL)
+    if (obj->next() == NULL)
     {
         return Qnil;
     }
@@ -256,7 +256,7 @@ VALUE m_path(VALUE self)
 {
     apache::Server* server = get_object(self);
 
-    if(server->path() == NULL)
+    if (server->path() == NULL)
     {
         return Qnil;
     }
@@ -292,7 +292,7 @@ VALUE m_process(VALUE self)
     // Assign the Ruby request instance to server::request to keep a reference
     // count on request.
     rb_ivar_set(process, rb_intern("server"), self);
-    
+
     return process;
 }
 
@@ -300,7 +300,7 @@ VALUE m_server_admin(VALUE self)
 {
     apache::Server* obj = get_object(self);
 
-    if(obj->server_admin())
+    if (obj->server_admin())
     {
         return Qnil;
     }
@@ -312,7 +312,7 @@ VALUE m_server_hostname(VALUE self)
 {
     apache::Server* obj = get_object(self);
 
-    if(obj->server_hostname())
+    if (obj->server_hostname())
     {
         return Qnil;
     }
@@ -331,7 +331,7 @@ VALUE m_wild_names(VALUE self)
 {
     apache::Server* obj = get_object(self);
 
-    if(obj->wild_names() == NULL)
+    if (obj->wild_names() == NULL)
     {
         return Qnil;
     }

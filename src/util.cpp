@@ -14,8 +14,8 @@ namespace modruby
 string to_lower(string x)
 {
     //locale utfFile("en_US.UTF-8");
-    transform( x.begin(), x.end(), x.begin(), 
-               bind2nd( ptr_fun(&std::tolower<char>), 
+    transform( x.begin(), x.end(), x.begin(),
+               bind2nd( ptr_fun(&std::tolower<char>),
                         locale("") ) );
 
     return x;
@@ -24,19 +24,19 @@ string to_lower(string x)
 string to_upper(string x)
 {
     //locale utfFile("en_US.UTF-8");
-    transform( x.begin(), x.end(), x.begin(), 
-               bind2nd( ptr_fun(&std::toupper<char>), 
+    transform( x.begin(), x.end(), x.begin(),
+               bind2nd( ptr_fun(&std::toupper<char>),
                         locale("") ) );
 
     return x;
 }
 
 std::vector<std::string>&
-split(const std::string &s, char delim, std::vector<std::string> &elems)
+split(const std::string& s, char delim, std::vector<std::string>& elems)
 {
     std::stringstream ss(s);
     std::string item;
-    while(std::getline(ss, item, delim))
+    while (std::getline(ss, item, delim))
     {
         elems.push_back(item);
     }
@@ -75,14 +75,18 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-static char hex2int(unsigned char hex) {
+static char hex2int(unsigned char hex)
+{
     hex = hex - '0';
-    if (hex > 9) {
+    if (hex > 9)
+    {
         hex = (hex + '0' - 1) | 0x20;
         hex = hex - 'a' + 11;
     }
     if (hex > 15)
+    {
         hex = 0xFF;
+    }
 
     return hex;
 }
@@ -91,18 +95,21 @@ string url_decode(const char* url, int is_query)
 {
     unsigned char high, low;
 
-    if(!url) return "";
+    if (!url)
+    {
+        return "";
+    }
 
     char* str       = (char*)strdup(url);
     const char* src = (const char*)str;
     char* dst       = (char*)str;
 
-    while((*src) != '\0')
+    while ((*src) != '\0')
     {
-        if(is_query && *src == '+')
+        if (is_query && *src == '+')
         {
             *dst = ' ';
-        } 
+        }
         else if (*src == '%')
         {
             *dst = '%';
@@ -112,7 +119,8 @@ string url_decode(const char* url, int is_query)
             if (high != 0xFF)
             {
                 low = hex2int(*(src + 2));
-                if (low != 0xFF) {
+                if (low != 0xFF)
+                {
                     high = (high << 4) | low;
 
                     /* map control-characters out */
@@ -179,17 +187,17 @@ string url_encode(const char* url)
 {
     // Get the srouce string
     const char* src = url;
-    const char* str = (const char*)malloc(strlen(url)*3);
+    const char* str = (const char*)malloc(strlen(url) * 3);
     char* dst       = (char*)str;
 
-    while(*src != '\0')
+    while (*src != '\0')
     {
-        if(isalnum(*src) || (*src == '.') || (*src == '_') || (*src == '-'))
+        if (isalnum(*src) || (*src == '.') || (*src == '_') || (*src == '-'))
         {
             *dst = *src;
             dst++;
         }
-        else if(*src == ' ')
+        else if (*src == ' ')
         {
             *dst = '+';
             dst++;
@@ -199,7 +207,7 @@ string url_encode(const char* url)
             sprintf(dst, "%%%2X", *src);
             dst = &dst[3];
         }
-        
+
         ++src;
     }
 

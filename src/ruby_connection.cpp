@@ -13,17 +13,17 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-static VALUE m_aborted(VALUE self);
-static VALUE m_init(VALUE self);
-static VALUE m_id(VALUE self);
-static VALUE m_keepalive(VALUE self);
-static VALUE m_local_host(VALUE self);
-static VALUE m_local_ip(VALUE self);
-static VALUE m_local_port(VALUE self);
-static VALUE m_remote_host(VALUE self);
-static VALUE m_remote_ip(VALUE self);
-static VALUE m_remote_port(VALUE self);
-static VALUE m_remote_logname(VALUE self);
+    static VALUE m_aborted(VALUE self);
+    static VALUE m_init(VALUE self);
+    static VALUE m_id(VALUE self);
+    static VALUE m_keepalive(VALUE self);
+    static VALUE m_local_host(VALUE self);
+    static VALUE m_local_ip(VALUE self);
+    static VALUE m_local_port(VALUE self);
+    static VALUE m_remote_host(VALUE self);
+    static VALUE m_remote_ip(VALUE self);
+    static VALUE m_remote_port(VALUE self);
+    static VALUE m_remote_logname(VALUE self);
 
 }
 
@@ -31,7 +31,7 @@ static apache::Connection* get_object(VALUE self);
 
 static void deallocator(void* x)
 {
-    if(x != NULL)
+    if (x != NULL)
     {
         delete (apache::Connection*)x;
         x = NULL;
@@ -42,7 +42,7 @@ static VALUE allocator(VALUE cls)
 {
     apache::Connection* x = NULL;
 
-    rb_raise( rb_eRuntimeError, 
+    rb_raise( rb_eRuntimeError,
               "Cannot create a Apache::Server object this way" );
 
     return Data_Wrap_Struct(cls, NULL, deallocator, x);
@@ -122,7 +122,7 @@ VALUE m_local_host(VALUE self)
 {
     apache::Connection* obj = get_object(self);
 
-    if(obj->local_host() == NULL)
+    if (obj->local_host() == NULL)
     {
         return Qnil;
     }
@@ -148,7 +148,7 @@ VALUE m_remote_host(VALUE self)
 {
     apache::Connection* obj = get_object(self);
 
-    if(obj->remote_host() == NULL)
+    if (obj->remote_host() == NULL)
     {
         return Qnil;
     }
@@ -191,6 +191,6 @@ VALUE m_server(VALUE self)
     // Assign the Ruby request instance to server::request to keep a reference
     // count on request.
     rb_ivar_set(server, rb_intern("connection"), self);
-    
+
     return server;
 }

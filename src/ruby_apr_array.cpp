@@ -12,10 +12,10 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-static VALUE m_init(VALUE self);
-static VALUE m_each(VALUE self);
-static VALUE m_keys(VALUE self);
-static VALUE m_size(VALUE self);
+    static VALUE m_init(VALUE self);
+    static VALUE m_each(VALUE self);
+    static VALUE m_keys(VALUE self);
+    static VALUE m_size(VALUE self);
 
 }
 
@@ -23,12 +23,12 @@ static apr_array_header_t* get_object(VALUE self);
 
 static void deallocator(void* x)
 {
-    
+
 }
 
 static VALUE allocator(VALUE cls)
 {
-    rb_raise( rb_eRuntimeError, 
+    rb_raise( rb_eRuntimeError,
               "Cannot create a ARP::array object from Ruby" );
 }
 
@@ -81,7 +81,7 @@ VALUE m_each(VALUE self)
     apr_array_header_t* h = get_object(self);
 
     int i;
-    for(i=0; i < h->nelts; i++)
+    for (i = 0; i < h->nelts; i++)
     {
         const char* e = ((const char**)h->elts)[i];
 

@@ -75,7 +75,7 @@ VALUE ruby_release_date(VALUE self)
 
 int ruby_init_module(apr_pool_t* p, server_rec* server)
 {
-    ap_log_perror( APLOG_MARK, APLOG_NOTICE, 0, p, 
+    ap_log_perror( APLOG_MARK, APLOG_NOTICE, 0, p,
                    "mod_ruby[%i]: startup_module", getpid() );
 
     int x = getpid();
@@ -88,7 +88,7 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
     {
         // Start up VM
         ruby::startup("ModRuby Ruby VM");
-        
+
         // Apache log constants for log() in ruby_request.cpp
         rb_define_global_const("APLOG_EMERG",        INT2NUM(APLOG_EMERG));
         rb_define_global_const("APLOG_ALERT",        INT2NUM(APLOG_ALERT));
@@ -132,7 +132,7 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
         rb_define_global_const("M_MERGE",            INT2NUM(M_MERGE));
         rb_define_global_const("M_INVALID",          INT2NUM(M_INVALID));
         rb_define_global_const("M_METHODS",          INT2NUM(64));
-        
+
         // The following modules are registered under the Apache
         // namespace.
 
@@ -169,7 +169,7 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
         // Create the global Ruby handler instance.
         ruby_handler = new ruby::Object("ModRuby::Handler");
     }
-    catch(const ruby::Exception &e)
+    catch (const ruby::Exception& e)
     {
         fprintf(stderr, "Ruby Exception: %s", e.what());
 
@@ -179,14 +179,14 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
 
         return 1;
     }
-    catch(const std::exception &e)
+    catch (const std::exception& e)
     {
         fprintf(stderr, "C++ Exception: %s\n", e.what());
 
         stringstream strm;
         strm << "FATAL ERROR: " << e.what();
         log_error(p, strm.str().c_str());
-        
+
         return 1;
     }
 
@@ -195,10 +195,10 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
 
 int ruby_shutdown_module()
 {
-    if(ruby_handler != NULL)
+    if (ruby_handler != NULL)
     {
         delete ruby_handler;
-        
+
         ruby_handler = NULL;
     }
 
@@ -213,45 +213,45 @@ int ruby_log_error(request_rec* r, int level, const char* msg)
     // Something in the Ruby failed. Report it. This should not be an
     // application error, as all of those should (in theory) be caught in
     // ruby_handler. This error will have to something within the ruby_handler.
-    
+
     // Create a C++ request object, for convenience
     apache::Request request(r);
-    
+
     // Create the error message
     stringstream strm;
     strm << "ModRuby: " << msg;
-    
+
     // Print error to content
     request.rputs(strm.str().c_str());
-    
-    // Log error 
-    ap_log_error( APLOG_MARK, level, 0, r->server, 
-                  "mod_ruby[%i] : %s", 
+
+    // Log error
+    ap_log_error( APLOG_MARK, level, 0, r->server,
+                  "mod_ruby[%i] : %s",
                   getpid(), strm.str().c_str() );
 
     return 0;
 }
 
-bool merge_var( request_rec* r, ruby_dir_config* dir_cfg, apr::table& t, 
+bool merge_var( request_rec* r, ruby_dir_config* dir_cfg, apr::table& t,
                 const char* var_name, const char* server_config)
 {
     // Look for existence of value in dir_config
-    if(apr_table_get(dir_cfg->options, var_name) != NULL)
+    if (apr_table_get(dir_cfg->options, var_name) != NULL)
     {
         t.set(var_name, apr_table_get(dir_cfg->options, var_name));
     }
     else
     {
         // If not there, set from server_config, if exists.
-        if(server_config != NULL)
+        if (server_config != NULL)
         {
             t.set(var_name, server_config);
         }
     }
-    
+
     // Now check to see if it was set in either case. If not, return false
     // signifying that the value was NOT set.
-    if(t.get(var_name) == NULL)
+    if (t.get(var_name) == NULL)
     {
         return false;
     }
@@ -276,71 +276,71 @@ int ruby_request_init_configuration(request_rec* r)
     apr::table notes         = req.notes();
     ruby_config* cfg         = ruby_server_config(r->server->module_config);
     ruby_dir_config* dir_cfg = ruby_directory_config(r);
-    
+
     // Merge in user-defined options from server and dir configurations
     apr::table server_options(cfg->options);
     apr::table dir_options(dir_cfg->options);
 
     // Copy in the settings from the server config.
     apr::table::iterator ti(server_options);
-    while(ti.next())
+    while (ti.next())
     {
         notes.set(ti.key(), ti.data());
     }
-    
+
     // Now copy in the settings from directory config.
     ti = dir_options.begin();
-    
-    while(ti.next())
+
+    while (ti.next())
     {
         notes.set(ti.key(), ti.data());
-    }    
-    
+    }
+
     // ---------------------------------------------------------------------
     // Check for modules configuration variables
-    // ---------------------------------------------------------------------   
+    // ---------------------------------------------------------------------
 
     // These check for the server_config value and then the dir_config. If the
     // dir_config exists, it will overwrite the server_config.
 
     // Module
-    if(!merge_var(r, dir_cfg, notes, "RubyDefaultHandlerModule", cfg->default_handler_module))
+    if (!merge_var(r, dir_cfg, notes, "RubyDefaultHandlerModule", cfg->default_handler_module))
     {
         //ruby_log_error(r, APLOG_CRIT, "RubyDefaultHandlerModule not defined.");
         //return -1;
     }
-    
+
     // Class
-    if(!merge_var(r, dir_cfg, notes, "RubyDefaultHandlerClass", cfg->default_handler_class))
+    if (!merge_var(r, dir_cfg, notes, "RubyDefaultHandlerClass", cfg->default_handler_class))
     {
         //ruby_log_error(r, APLOG_CRIT, "RubyDefaultHandlerClass not defined.");
         //return -1;
     }
-    
+
     // Method
-    if(!merge_var(r, dir_cfg, notes, "RubyDefaultHandlerMethod", cfg->default_handler_method))
+    if (!merge_var(r, dir_cfg, notes, "RubyDefaultHandlerMethod", cfg->default_handler_method))
     {
         //ruby_log_error(r, APLOG_CRIT, "RubyDefaultHandlerMethod not defined.");
         //return -1;
     }
 
     // RubyHandler is optional.
-    if(merge_var(r, dir_cfg, notes, "RubyHandler", cfg->handler))
+    if (merge_var(r, dir_cfg, notes, "RubyHandler", cfg->handler))
     {
         // It is defined. So merge all of the handler's settings into the notes
         // table.
         apr_hash_t* h_config = ruby_handler_config(r, notes.get("RubyHandler"));
 
-        if(h_config != NULL)
+        if (h_config != NULL)
         {
-            apr_hash_index_t *hi;
-            char *key;
+            apr_hash_index_t* hi;
+            char* key;
             apr_ssize_t klen;
             char* data;
-            
-            for(hi = apr_hash_first(r->pool, h_config); hi; hi=apr_hash_next(hi))
+
+            for (hi = apr_hash_first(r->pool, h_config); hi; hi = apr_hash_next(hi))
             {
-                apr_hash_this(hi, (const void **)&key, &klen, (void **)&data);                
+                apr_hash_this(hi, (const void**)&key, &klen, (void**)&data);
                 notes.set(key, data);
             }
         }
@@ -350,10 +350,10 @@ int ruby_request_init_configuration(request_rec* r)
 }
 
 // Loads a handler
-modruby::Handler ruby_request_load_handler( request_rec* r, 
-                                            const char* module, 
-                                            const char* cls, 
-                                            const char* method )
+modruby::Handler ruby_request_load_handler( request_rec* r,
+        const char* module,
+        const char* cls,
+        const char* method )
 {
     /* Handler resolution. Look for RubyHandler directive in dir_config or
     ** server_config. Handler must be a registered CustomHandler. If not
@@ -365,12 +365,12 @@ modruby::Handler ruby_request_load_handler( request_rec* r,
     modruby::Handler handler(module, cls, method);
 
     ruby::require(handler.module());
-    
+
     // Look up the handler (Ruby) opject's name by id()
     map<string, ruby::Object*>::iterator i = handlers.find(handler.id());
 
     // If not created
-    if(i == handlers.end())
+    if (i == handlers.end())
     {
         // Create and register the Ruby Object
 
@@ -380,7 +380,7 @@ modruby::Handler ruby_request_load_handler( request_rec* r,
         {
             handler.object = new ruby::Object(cls);
         }
-        catch(const ruby::Exception &e)
+        catch (const ruby::Exception& e)
         {
             stringstream strm;
             strm << e.what() << "\n"
@@ -400,15 +400,15 @@ modruby::Handler ruby_request_load_handler( request_rec* r,
         // Get it from storage
         handler.object = i->second;
     }
-    
+
     return handler;
 }
 
-modruby::Handler::Handler( const char* module, const char* klass, 
-                           const char* method ) 
+modruby::Handler::Handler( const char* module, const char* klass,
+                           const char* method )
 
 {
-    if((module==NULL) || (klass==NULL) || (method==NULL))
+    if ((module == NULL) || (klass == NULL) || (method == NULL))
     {
         std::logic_error e("Handler is not defined.");
         throw e;
@@ -444,16 +444,16 @@ modruby::Handler ruby_request_get_handler(request_rec* r)
     const char* method = cfg->default_handler_method;
 
     // Check for RubyHandler
-    if(notes.get("RubyHandler") != NULL)
+    if (notes.get("RubyHandler") != NULL)
     {
         apr_hash_t* h_config;
         h_config = ruby_handler_config(r, notes.get("RubyHandler"));
 
         // If it doesn't exist
-        if(h_config != NULL)
+        if (h_config != NULL)
         {
-            module = (const char*)apr_hash_get( h_config, 
-                                                "RubyHandlerModule", 
+            module = (const char*)apr_hash_get( h_config,
+                                                "RubyHandlerModule",
                                                 APR_HASH_KEY_STRING );
 
             cls    = (const char*)apr_hash_get( h_config,
@@ -461,7 +461,7 @@ modruby::Handler ruby_request_get_handler(request_rec* r)
                                                 APR_HASH_KEY_STRING );
 
             method = (const char*)apr_hash_get( h_config,
-                                                "RubyHandlerMethod", 
+                                                "RubyHandlerMethod",
                                                 APR_HASH_KEY_STRING );
 
             return ruby_request_load_handler(r, module, cls, method);
@@ -469,22 +469,22 @@ modruby::Handler ruby_request_get_handler(request_rec* r)
     }
     else
     {
-        if(notes.get("RubyDefaultHandlerModule") != NULL)
+        if (notes.get("RubyDefaultHandlerModule") != NULL)
         {
             module = notes.get("RubyDefaultHandlerModule");
         }
 
-        if(notes.get("RubyDefaultHandlerClass") != NULL)
+        if (notes.get("RubyDefaultHandlerClass") != NULL)
         {
             cls    = notes.get("RubyDefaultHandlerClass");
         }
 
-        if(notes.get("RubyDefaultHandlerMethod") != NULL)
+        if (notes.get("RubyDefaultHandlerMethod") != NULL)
         {
             method = notes.get("RubyDefaultHandlerMethod");
         }
 
-        if((module==NULL) || (cls==NULL) || (method==NULL))
+        if ((module == NULL) || (cls == NULL) || (method == NULL))
         {
             std::logic_error e("Default Handler is not defined.");
             throw e;
@@ -498,7 +498,7 @@ modruby::Handler ruby_request_get_handler(request_rec* r)
 
         return ruby_request_load_handler(r, module, cls, method);
     }
-    
+
     // Empty handler -- signifies error
     return modruby::Handler();
 }
@@ -510,7 +510,7 @@ int ruby_request_handler(request_rec* r)
     req.setup_cgi();
 
     // Double check the handler name
-    if(strcmp(req.handler(), "ruby-handler") != 0)
+    if (strcmp(req.handler(), "ruby-handler") != 0)
     {
         return DECLINED;
     }
@@ -525,7 +525,7 @@ int ruby_request_handler(request_rec* r)
     try
     {
         // Load configuration
-        if(ruby_request_init_configuration(r) != 0)
+        if (ruby_request_init_configuration(r) != 0)
         {
             // Configuration failed
             return OK;
@@ -533,24 +533,24 @@ int ruby_request_handler(request_rec* r)
 
         modruby::Handler handler = ruby_request_get_handler(r);
 
-        if(handler.object == NULL)
-        {            
+        if (handler.object == NULL)
+        {
             // Print error to content
             req.rputs("Failed to load handler");
-            
+
             // Log error (critical)
-            ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server, 
-                          "mod_ruby[%i] : %s", 
+            ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server,
+                          "mod_ruby[%i] : %s",
                           getpid(), "Failed to load handler" );
 
             return OK;
         }
 
         // Call the method, passing in the request object
-        VALUE result = handler.object->method( handler.method(), 1, 
+        VALUE result = handler.object->method( handler.method(), 1,
                                                make_request(r) );
     }
-    catch(const ruby::Exception &e)
+    catch (const ruby::Exception& e)
     {
         // Something in the Ruby failed. Report it. This should not be an
         // application error, as all of those should (in theory) be caught in
@@ -563,7 +563,7 @@ int ruby_request_handler(request_rec* r)
         // then we need to do special handling.
         string exception_type = e.type();
 
-        if(exception_type == "ModRuby::Redirect")
+        if (exception_type == "ModRuby::Redirect")
         {
             // This is a utility exception used within the framework. It does
             // not indicate an error.
@@ -571,7 +571,7 @@ int ruby_request_handler(request_rec* r)
             return OK;
         }
 
-        if(exception_type == "ModRuby::RequestTermination")
+        if (exception_type == "ModRuby::RequestTermination")
         {
             // This is a utility exception used within the framework. It does
             // not indicate an error.
@@ -590,8 +590,8 @@ int ruby_request_handler(request_rec* r)
         request.rputs(strm.str().c_str());
 
         // Log error (critical)
-        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server, 
-                      "mod_ruby[%i] : %s", 
+        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server,
+                      "mod_ruby[%i] : %s",
                       getpid(), strm.str().c_str() );
 
         // The unit test function should pick up on this, even though we return
@@ -600,7 +600,7 @@ int ruby_request_handler(request_rec* r)
 
         return OK;
     }
-    catch(const std::exception &e)
+    catch (const std::exception& e)
     {
         // Create a C++ request object, for convenience
         apache::Request request(r);
@@ -609,15 +609,15 @@ int ruby_request_handler(request_rec* r)
         request.rprintf("mod_ruby Error: %s", e.what());
 
         // Log error (critical)
-        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server, 
-                      "mod_ruby[%i] : %s", 
+        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server,
+                      "mod_ruby[%i] : %s",
                       getpid(), e.what() );
 
         return OK;
     }
 
     // If the status changed, use its value
-    if(r->status != rc)
+    if (r->status != rc)
     {
         return r->status;
     }
@@ -629,8 +629,8 @@ int ruby_request_handler(request_rec* r)
 }
 
 /* Common code used for RHTML and Ruby script handlers */
-int ruby_generic_handler( request_rec* r, 
-                          const char* handler_name, 
+int ruby_generic_handler( request_rec* r,
+                          const char* handler_name,
                           const char* method_name )
 {
     apache::Request req(r);
@@ -638,7 +638,7 @@ int ruby_generic_handler( request_rec* r,
     req.setup_cgi();
 
     // Double check the handler name
-    if(strcmp(req.handler(), handler_name) != 0)
+    if (strcmp(req.handler(), handler_name) != 0)
     {
         return DECLINED;
     }
@@ -658,7 +658,7 @@ int ruby_generic_handler( request_rec* r,
         // Pass into the ruby_handler handler to process the request
         ruby_handler->method(method_name, 1, ruby_req);
     }
-    catch(const ruby::Exception &e)
+    catch (const ruby::Exception& e)
     {
         // Something in the Ruby failed. Report it. This should not be an
         // application error, as all of those should (in theory) be caught in
@@ -672,7 +672,7 @@ int ruby_generic_handler( request_rec* r,
         // then we need to do special handling.
         string exception_type = e.type();
 
-        if(exception_type == "ModRuby::Redirect")
+        if (exception_type == "ModRuby::Redirect")
         {
             // This is a utility exception used within the framework. It does
             // not indicate an error.
@@ -683,7 +683,7 @@ int ruby_generic_handler( request_rec* r,
             return OK;
         }
 
-        if(exception_type == "ModRuby::RequestTermination")
+        if (exception_type == "ModRuby::RequestTermination")
         {
             // This is a utility exception used within the framework. It does
             // not indicate an error.
@@ -705,7 +705,7 @@ int ruby_generic_handler( request_rec* r,
         request.rputs(strm.str().c_str());
 
         // Log error (critical)
-        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server, 
+        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server,
                       "mod_ruby[%i] : %s", getpid(), strm.str().c_str() );
 
         // The unit test function should pick up on this, even though we return
@@ -714,7 +714,7 @@ int ruby_generic_handler( request_rec* r,
 
         return OK;
     }
-    catch(const std::exception &e)
+    catch (const std::exception& e)
     {
         // Create a C++ request object, for convenience
         apache::Request request(r);
@@ -723,14 +723,14 @@ int ruby_generic_handler( request_rec* r,
         request.rprintf("mod_ruby Error: %s", e.what());
 
         // Log error (critical)
-        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server, 
+        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server,
                       "mod_ruby[%i] : %s", getpid(), e.what() );
 
         return OK;
     }
 
     // If the status changed, use its value
-    if(r->status != rc)
+    if (r->status != rc)
     {
         return r->status;
     }
@@ -738,15 +738,15 @@ int ruby_generic_handler( request_rec* r,
     {
         // Otherewise everything was OK.
         return OK;
-    }    
+    }
 }
 
 int ruby_request_rhtml_handler(request_rec* r)
 {
-    return ruby_generic_handler(r,"ruby-rhtml-handler", "rhtml"); 
+    return ruby_generic_handler(r, "ruby-rhtml-handler", "rhtml");
 }
 
 int ruby_request_script_handler(request_rec* r)
 {
-    return ruby_generic_handler(r,"ruby-script-handler", "script"); 
+    return ruby_generic_handler(r, "ruby-script-handler", "script");
 }

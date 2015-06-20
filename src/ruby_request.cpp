@@ -28,101 +28,101 @@ using modruby::to_upper;
 
 extern "C" {
 
-static VALUE m_allow_options(VALUE self);
-static VALUE m_allow_overrides(VALUE self);
-static VALUE m_allowed(VALUE self);
-static VALUE m_args(VALUE self);
-static VALUE m_assbackwards(VALUE self);
-static VALUE m_auth_type(VALUE self);
-static VALUE m_bytes_sent(VALUE self);
-static VALUE m_chunked(VALUE self);
-static VALUE m_clength(VALUE self);
-static VALUE m_connection(VALUE self);
-static VALUE m_content(VALUE self);
-static VALUE m_content_encoding(VALUE self);
-static VALUE m_content_languages(VALUE self);
-static VALUE m_content_type(VALUE self);
+    static VALUE m_allow_options(VALUE self);
+    static VALUE m_allow_overrides(VALUE self);
+    static VALUE m_allowed(VALUE self);
+    static VALUE m_args(VALUE self);
+    static VALUE m_assbackwards(VALUE self);
+    static VALUE m_auth_type(VALUE self);
+    static VALUE m_bytes_sent(VALUE self);
+    static VALUE m_chunked(VALUE self);
+    static VALUE m_clength(VALUE self);
+    static VALUE m_connection(VALUE self);
+    static VALUE m_content(VALUE self);
+    static VALUE m_content_encoding(VALUE self);
+    static VALUE m_content_languages(VALUE self);
+    static VALUE m_content_type(VALUE self);
 
 #if AP_SERVER_MINORVERSION_NUMBER < 4
-static VALUE m_default_type(VALUE self);
+    static VALUE m_default_type(VALUE self);
 #endif
 
-static VALUE m_discard_request_body(VALUE self);
-static VALUE m_document_root(VALUE self);
-static VALUE m_err_headers_out(VALUE self);
-static VALUE m_filename(VALUE self);
-static VALUE m_finalize_request_protocol(VALUE self);
-static VALUE m_finfo(VALUE self);
-static VALUE m_get_error(VALUE self);
-static VALUE m_get_remote_logname(VALUE self);
-static VALUE m_get_server_name(VALUE self);
-static VALUE m_handler(VALUE self);
-static VALUE m_header_only(VALUE self);
-static VALUE m_hostname(VALUE self);
-static VALUE m_init(VALUE self);
-static VALUE m_internal_redirect(VALUE self, VALUE url);
-static VALUE m_internal_redirect_handler(VALUE self, VALUE url);
-static VALUE m_is_initial_req(VALUE self);
-static VALUE m_log(VALUE self, VALUE level, VALUE msg);
-static VALUE m_main(VALUE self);
-static VALUE m_make_content_type(VALUE self);
-static VALUE m_make_etag(VALUE self, VALUE force_weak);
-static VALUE m_meets_conditions(VALUE self);
-static VALUE m_method(VALUE self);
-static VALUE m_method_number(VALUE self);
-static VALUE m_mtime(VALUE self);
-static VALUE m_next(VALUE self);
-static VALUE m_no_cache(VALUE self);
-static VALUE m_no_local_copy(VALUE self);
-static VALUE m_note_auth_failure(VALUE self);
-static VALUE m_note_basic_auth_failure(VALUE self);
-static VALUE m_note_digest_auth_failure(VALUE self);
-static VALUE m_notes(VALUE self);
-static VALUE m_parsed_uri(VALUE self);
-static VALUE m_params(VALUE self);
-static VALUE m_path_info(VALUE self);
-static VALUE m_prev(VALUE self);
-static VALUE m_print(VALUE self, VALUE str);
-static VALUE m_puts(VALUE self, VALUE str);
-static VALUE m_proto_num(VALUE self);
-static VALUE m_protocol(VALUE self);
-static VALUE m_proxyreq(VALUE self);
-static VALUE m_queries(VALUE self);
-static VALUE m_range(VALUE self);
-static VALUE m_rationalize_mtime(VALUE self, VALUE mtime);
-static VALUE m_read(VALUE self, VALUE bytes);
-static VALUE m_read_body(VALUE self);
-static VALUE m_read_chunked(VALUE self);
-static VALUE m_read_length(VALUE self);
-static VALUE m_read_line(VALUE self);
-static VALUE m_remaining(VALUE self);
-static VALUE m_request_time(VALUE self);
-static VALUE m_rflush(VALUE self);
-static VALUE m_send_error_response(VALUE self, VALUE recursive_error);
-static VALUE m_send_file(VALUE self, VALUE path);
-static VALUE m_sent_bodyct(VALUE self);
-static VALUE m_server(VALUE self);
-static VALUE m_set_allowed(VALUE self, VALUE bitmask);
-static VALUE m_set_content_length(VALUE self, VALUE length);
-static VALUE m_set_content_type(VALUE self, VALUE type);
-static VALUE m_set_etag(VALUE self);
-static VALUE m_set_keepalive(VALUE self);
-static VALUE m_set_max_content_length(VALUE self, VALUE bytes);
-static VALUE m_set_status(VALUE self, VALUE status);
-static VALUE m_setup_client_block(VALUE self, VALUE policy);
-static VALUE m_should_client_block(VALUE self);
-static VALUE m_some_auth_required(VALUE self);
-static VALUE m_status(VALUE self);
-static VALUE m_status_line(VALUE self);
-static VALUE m_subprocess_env(VALUE self);
-static VALUE m_table_headers_in(VALUE self);
-static VALUE m_table_headers_out(VALUE self);
-static VALUE m_the_request(VALUE self);
-static VALUE m_unparsed_uri(VALUE self);
-static VALUE m_uri(VALUE self);
-static VALUE m_user(VALUE self);
-static VALUE m_vlist_validator(VALUE self);
-static VALUE m_write(VALUE self, VALUE data, VALUE bytes);
+    static VALUE m_discard_request_body(VALUE self);
+    static VALUE m_document_root(VALUE self);
+    static VALUE m_err_headers_out(VALUE self);
+    static VALUE m_filename(VALUE self);
+    static VALUE m_finalize_request_protocol(VALUE self);
+    static VALUE m_finfo(VALUE self);
+    static VALUE m_get_error(VALUE self);
+    static VALUE m_get_remote_logname(VALUE self);
+    static VALUE m_get_server_name(VALUE self);
+    static VALUE m_handler(VALUE self);
+    static VALUE m_header_only(VALUE self);
+    static VALUE m_hostname(VALUE self);
+    static VALUE m_init(VALUE self);
+    static VALUE m_internal_redirect(VALUE self, VALUE url);
+    static VALUE m_internal_redirect_handler(VALUE self, VALUE url);
+    static VALUE m_is_initial_req(VALUE self);
+    static VALUE m_log(VALUE self, VALUE level, VALUE msg);
+    static VALUE m_main(VALUE self);
+    static VALUE m_make_content_type(VALUE self);
+    static VALUE m_make_etag(VALUE self, VALUE force_weak);
+    static VALUE m_meets_conditions(VALUE self);
+    static VALUE m_method(VALUE self);
+    static VALUE m_method_number(VALUE self);
+    static VALUE m_mtime(VALUE self);
+    static VALUE m_next(VALUE self);
+    static VALUE m_no_cache(VALUE self);
+    static VALUE m_no_local_copy(VALUE self);
+    static VALUE m_note_auth_failure(VALUE self);
+    static VALUE m_note_basic_auth_failure(VALUE self);
+    static VALUE m_note_digest_auth_failure(VALUE self);
+    static VALUE m_notes(VALUE self);
+    static VALUE m_parsed_uri(VALUE self);
+    static VALUE m_params(VALUE self);
+    static VALUE m_path_info(VALUE self);
+    static VALUE m_prev(VALUE self);
+    static VALUE m_print(VALUE self, VALUE str);
+    static VALUE m_puts(VALUE self, VALUE str);
+    static VALUE m_proto_num(VALUE self);
+    static VALUE m_protocol(VALUE self);
+    static VALUE m_proxyreq(VALUE self);
+    static VALUE m_queries(VALUE self);
+    static VALUE m_range(VALUE self);
+    static VALUE m_rationalize_mtime(VALUE self, VALUE mtime);
+    static VALUE m_read(VALUE self, VALUE bytes);
+    static VALUE m_read_body(VALUE self);
+    static VALUE m_read_chunked(VALUE self);
+    static VALUE m_read_length(VALUE self);
+    static VALUE m_read_line(VALUE self);
+    static VALUE m_remaining(VALUE self);
+    static VALUE m_request_time(VALUE self);
+    static VALUE m_rflush(VALUE self);
+    static VALUE m_send_error_response(VALUE self, VALUE recursive_error);
+    static VALUE m_send_file(VALUE self, VALUE path);
+    static VALUE m_sent_bodyct(VALUE self);
+    static VALUE m_server(VALUE self);
+    static VALUE m_set_allowed(VALUE self, VALUE bitmask);
+    static VALUE m_set_content_length(VALUE self, VALUE length);
+    static VALUE m_set_content_type(VALUE self, VALUE type);
+    static VALUE m_set_etag(VALUE self);
+    static VALUE m_set_keepalive(VALUE self);
+    static VALUE m_set_max_content_length(VALUE self, VALUE bytes);
+    static VALUE m_set_status(VALUE self, VALUE status);
+    static VALUE m_setup_client_block(VALUE self, VALUE policy);
+    static VALUE m_should_client_block(VALUE self);
+    static VALUE m_some_auth_required(VALUE self);
+    static VALUE m_status(VALUE self);
+    static VALUE m_status_line(VALUE self);
+    static VALUE m_subprocess_env(VALUE self);
+    static VALUE m_table_headers_in(VALUE self);
+    static VALUE m_table_headers_out(VALUE self);
+    static VALUE m_the_request(VALUE self);
+    static VALUE m_unparsed_uri(VALUE self);
+    static VALUE m_uri(VALUE self);
+    static VALUE m_user(VALUE self);
+    static VALUE m_vlist_validator(VALUE self);
+    static VALUE m_write(VALUE self, VALUE data, VALUE bytes);
 
 }
 
@@ -130,7 +130,7 @@ static apache::Request* get_object(VALUE self);
 
 static void deallocator(void* x)
 {
-    if(x != NULL)
+    if (x != NULL)
     {
         delete (apache::Request*)x;
         x = NULL;
@@ -142,7 +142,7 @@ static VALUE allocator(VALUE cls)
 {
     apache::Request* x = NULL;
 
-    rb_raise( rb_eRuntimeError, 
+    rb_raise( rb_eRuntimeError,
               "Cannot create a Apache::Request this way" );
 
     return Data_Wrap_Struct(cls, NULL, deallocator, x);
@@ -305,7 +305,7 @@ VALUE m_server(VALUE self)
     // Assign the Ruby request instance to server::request to keep a reference
     // count on request.
     rb_ivar_set(server, rb_intern("request"), self);
-    
+
     return server;
 }
 
@@ -333,21 +333,21 @@ VALUE m_puts(VALUE self, VALUE val)
 VALUE m_allow_options(VALUE self)
 {
     apache::Request* req = get_object(self);
-    
+
     return INT2FIX(req->allow_options());
 }
 
 VALUE m_allow_overrides(VALUE self)
 {
     apache::Request* req = get_object(self);
-    
+
     return INT2FIX(req->allow_overrides());
 }
 
 VALUE m_allowed(VALUE self)
 {
     apache::Request* req = get_object(self);
-    
+
     return INT2FIX(req->allowed());
 }
 
@@ -356,7 +356,7 @@ VALUE m_set_allowed(VALUE self, VALUE bitmask)
     apache::Request* req = get_object(self);
 
     Check_Type(bitmask, T_FIXNUM);
-    
+
     req->allowed(NUM2INT(bitmask));
 
     return Qnil;
@@ -365,8 +365,8 @@ VALUE m_set_allowed(VALUE self, VALUE bitmask)
 VALUE m_args(VALUE self)
 {
     apache::Request* req = get_object(self);
-    
-    if(req->args() == NULL)
+
+    if (req->args() == NULL)
     {
         return Qnil;
     }
@@ -377,15 +377,15 @@ VALUE m_args(VALUE self)
 VALUE m_assbackwards(VALUE self)
 {
     apache::Request* req = get_object(self);
-    
+
     return INT2FIX(req->assbackwards());
 }
 
 VALUE m_auth_type(VALUE self)
 {
     apache::Request* req = get_object(self);
-    
-    if(req->ap_auth_type() == NULL)
+
+    if (req->ap_auth_type() == NULL)
     {
         return Qnil;
     }
@@ -435,7 +435,7 @@ VALUE m_connection(VALUE self)
     // Assign the Ruby request instance to server::request to keep a reference
     // count on request.
     rb_ivar_set(connection, rb_intern("request"), self);
-    
+
     return connection;
 }
 
@@ -450,12 +450,12 @@ VALUE m_content(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(rb_block_given_p() == Qfalse)
+    if (rb_block_given_p() == Qfalse)
     {
         // Caller wants one big blob
         const char* content = (const char*)req->content().data();
 
-        if(content == NULL)
+        if (content == NULL)
         {
             return Qnil;
         }
@@ -467,7 +467,7 @@ VALUE m_content(VALUE self)
         // Read it out little by little
         req->content(yield_content);
     }
-    
+
     return Qnil;
 }
 
@@ -475,7 +475,7 @@ VALUE m_content_encoding(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->content_encoding() == NULL)
+    if (req->content_encoding() == NULL)
     {
         return Qnil;
     }
@@ -487,7 +487,7 @@ VALUE m_content_languages(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->content_languages() == NULL)
+    if (req->content_languages() == NULL)
     {
         return Qnil;
     }
@@ -499,7 +499,7 @@ VALUE m_content_type(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->content_type() == NULL)
+    if (req->content_type() == NULL)
     {
         return Qnil;
     }
@@ -512,7 +512,7 @@ VALUE m_default_type(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->default_type() == NULL)
+    if (req->default_type() == NULL)
     {
         return Qnil;
     }
@@ -532,7 +532,7 @@ VALUE m_document_root(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->document_root() == NULL)
+    if (req->document_root() == NULL)
     {
         return Qnil;
     }
@@ -551,7 +551,7 @@ VALUE m_filename(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->filename() == NULL)
+    if (req->filename() == NULL)
     {
         return Qnil;
     }
@@ -583,7 +583,7 @@ VALUE m_get_error(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->error() == NULL)
+    if (req->error() == NULL)
     {
         return Qnil;
     }
@@ -595,7 +595,7 @@ VALUE m_get_remote_logname(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->get_remote_logname() == NULL)
+    if (req->get_remote_logname() == NULL)
     {
         return Qnil;
     }
@@ -607,7 +607,7 @@ VALUE m_get_server_name(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->get_server_name() == NULL)
+    if (req->get_server_name() == NULL)
     {
         return Qnil;
     }
@@ -619,7 +619,7 @@ VALUE m_handler(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->handler() == NULL)
+    if (req->handler() == NULL)
     {
         return Qnil;
     }
@@ -638,7 +638,7 @@ VALUE m_hostname(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->hostname() == NULL)
+    if (req->hostname() == NULL)
     {
         return Qnil;
     }
@@ -694,10 +694,10 @@ VALUE m_log(VALUE self, VALUE level, VALUE msg)
 VALUE m_main(VALUE self)
 {
     apache::Request* req = get_object(self);
-    
+
     request_rec* main_req = req->main();
 
-    if(main_req == NULL)
+    if (main_req == NULL)
     {
         return Qnil;
     }
@@ -709,7 +709,7 @@ VALUE m_make_content_type(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->content_type() == NULL)
+    if (req->content_type() == NULL)
     {
         return Qnil;
     }
@@ -737,7 +737,7 @@ VALUE m_method(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->method() == NULL)
+    if (req->method() == NULL)
     {
         return Qnil;
     }
@@ -765,7 +765,7 @@ VALUE m_next(VALUE self)
 
     request_rec* next_req = req->next();
 
-    if(next_req == NULL)
+    if (next_req == NULL)
     {
         return Qnil;
     }
@@ -826,8 +826,8 @@ VALUE m_params(VALUE self)
     apache::Request* req = get_object(self);
 
     apr_table_t* t = req->form_data();
-    
-    if(t == NULL)
+
+    if (t == NULL)
     {
         // Return empty hash
         return rb_hash_new();
@@ -849,7 +849,7 @@ VALUE m_path_info(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->path_info() == NULL)
+    if (req->path_info() == NULL)
     {
         return Qnil;
     }
@@ -863,7 +863,7 @@ VALUE m_prev(VALUE self)
 
     request_rec* prev_req = req->prev();
 
-    if(prev_req == NULL)
+    if (prev_req == NULL)
     {
         return Qnil;
     }
@@ -882,7 +882,7 @@ VALUE m_protocol(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->protocol() == NULL)
+    if (req->protocol() == NULL)
     {
         return Qnil;
     }
@@ -902,8 +902,8 @@ VALUE m_queries(VALUE self)
     apache::Request* req = get_object(self);
 
     apr_table_t* t = req->queries();
-    
-    if(t == NULL)
+
+    if (t == NULL)
     {
         return Qnil;
     }
@@ -915,7 +915,7 @@ VALUE m_range(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->range() == NULL)
+    if (req->range() == NULL)
     {
         return Qnil;
     }
@@ -960,7 +960,7 @@ VALUE m_read_line(VALUE self)
     // Check content type
     const char* value = req->headers_in().get("Content-Type");
 
-    if(value == NULL)
+    if (value == NULL)
     {
         // Use default encoding
         return rb_external_str_new_cstr(req->read_line().c_str());
@@ -970,16 +970,16 @@ VALUE m_read_line(VALUE self)
 
     // Search for matching encoding
     int index = rb_enc_find_index(content_type.c_str());
-    if(index > 0)
+    if (index > 0)
     {
         rb_encoding* encoding = rb_enc_from_index(index);
 
-        return rb_enc_str_new( req->read_line().c_str(), 
-                               req->read_line().size(), 
+        return rb_enc_str_new( req->read_line().c_str(),
+                               req->read_line().size(),
                                encoding );
     }
     else
-    {    
+    {
         // Default UTF8
         return rb_external_str_new_cstr(req->read_line().c_str());
     }
@@ -997,7 +997,7 @@ VALUE m_read(VALUE self, VALUE bytes)
     // Do the read
     int n = req->read(&buff, NUM2INT(bytes));
 
-    if(n <= 0)
+    if (n <= 0)
     {
         // Free the space
         free(buff);
@@ -1147,7 +1147,7 @@ VALUE m_status_line(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->status_line() == NULL)
+    if (req->status_line() == NULL)
     {
         return Qnil;
     }
@@ -1180,7 +1180,7 @@ VALUE m_the_request(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->the_request() == NULL)
+    if (req->the_request() == NULL)
     {
         return Qnil;
     }
@@ -1192,7 +1192,7 @@ VALUE m_unparsed_uri(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->unparsed_uri() == NULL)
+    if (req->unparsed_uri() == NULL)
     {
         return Qnil;
     }
@@ -1204,7 +1204,7 @@ VALUE m_uri(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->uri() == NULL)
+    if (req->uri() == NULL)
     {
         return Qnil;
     }
@@ -1216,7 +1216,7 @@ VALUE m_user(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->user() == NULL)
+    if (req->user() == NULL)
     {
         return Qnil;
     }
@@ -1228,7 +1228,7 @@ VALUE m_vlist_validator(VALUE self)
 {
     apache::Request* req = get_object(self);
 
-    if(req->vlist_validator() == NULL)
+    if (req->vlist_validator() == NULL)
     {
         return Qnil;
     }

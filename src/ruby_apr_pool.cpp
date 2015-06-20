@@ -9,16 +9,16 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-static VALUE m_init(VALUE self);
-static VALUE m_id(VALUE self);
-static VALUE m_set(VALUE self, VALUE key);
+    static VALUE m_init(VALUE self);
+    static VALUE m_id(VALUE self);
+    static VALUE m_set(VALUE self, VALUE key);
 }
 
 static apr_pool_t* get_object(VALUE self);
 
 static void deallocator(void* x)
 {
-    if(x != NULL)
+    if (x != NULL)
     {
         apr_pool_destroy((apr_pool_t*)x);
         x = NULL;

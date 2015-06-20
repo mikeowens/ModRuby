@@ -15,21 +15,21 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-static VALUE m_init(VALUE self, VALUE pool);
-static VALUE m_id(VALUE self);
+    static VALUE m_init(VALUE self, VALUE pool);
+    static VALUE m_id(VALUE self);
 
-static VALUE m_each(VALUE self);
-static VALUE m_keys(VALUE self);
-static VALUE m_values(VALUE self);
-static VALUE m_size(VALUE self);
-static VALUE m_clear(VALUE self);
-static VALUE m_has_key(VALUE self, VALUE key);
-static VALUE m_get(VALUE self, VALUE key);
-static VALUE m_set(VALUE self, VALUE key, VALUE value);
-static VALUE m_add(VALUE self, VALUE key, VALUE value);
-static VALUE m_merge(VALUE self, VALUE key, VALUE value);
-static VALUE m_unset(VALUE self, VALUE key);
-static VALUE m_join(VALUE self, VALUE delimiter);
+    static VALUE m_each(VALUE self);
+    static VALUE m_keys(VALUE self);
+    static VALUE m_values(VALUE self);
+    static VALUE m_size(VALUE self);
+    static VALUE m_clear(VALUE self);
+    static VALUE m_has_key(VALUE self, VALUE key);
+    static VALUE m_get(VALUE self, VALUE key);
+    static VALUE m_set(VALUE self, VALUE key, VALUE value);
+    static VALUE m_add(VALUE self, VALUE key, VALUE value);
+    static VALUE m_merge(VALUE self, VALUE key, VALUE value);
+    static VALUE m_unset(VALUE self, VALUE key);
+    static VALUE m_join(VALUE self, VALUE delimiter);
 
 }
 
@@ -37,7 +37,7 @@ static modruby::apr::table* get_object(VALUE self);
 
 static void deallocator(void* x)
 {
-    if(x != NULL)
+    if (x != NULL)
     {
         delete (modruby::apr::table*)x;
         x = NULL;
@@ -127,10 +127,10 @@ VALUE m_each(VALUE self)
 
     modruby::apr::table::iterator i(*table);
 
-    while(i.next())
+    while (i.next())
     {
-        rb_yield( rb_ary_new3( 2, 
-                               rb_str_new2(i.key()), 
+        rb_yield( rb_ary_new3( 2,
+                               rb_str_new2(i.key()),
                                rb_str_new2(i.data())) );
     }
 
@@ -145,7 +145,7 @@ VALUE m_keys(VALUE self)
 
     modruby::apr::table::iterator i(*table);
 
-    while(i.next())
+    while (i.next())
     {
         rb_ary_push(a, rb_str_new2(i.key()));
     }
@@ -161,7 +161,7 @@ VALUE m_values(VALUE self)
 
     modruby::apr::table::iterator i(*table);
 
-    while(i.next())
+    while (i.next())
     {
         rb_ary_push(a, rb_str_new2(i.data()));
     }
@@ -218,7 +218,7 @@ VALUE m_get(VALUE self, VALUE key)
 
     const char* value = table->get(StringValuePtr(key));
 
-    if(value == NULL)
+    if (value == NULL)
     {
         return Qnil;
     }
@@ -234,7 +234,7 @@ VALUE m_has_key(VALUE self, VALUE key)
 
     const char* value = table->get(StringValuePtr(key));
 
-    if(value == NULL)
+    if (value == NULL)
     {
         return Qfalse;
     }
@@ -251,7 +251,7 @@ VALUE m_merge(VALUE self, VALUE key, VALUE value)
 
     table->merge(StringValuePtr(key), StringValuePtr(value));
 
-    return Qnil;    
+    return Qnil;
 }
 
 VALUE m_unset(VALUE self, VALUE key)

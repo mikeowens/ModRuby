@@ -33,10 +33,10 @@ md5::md5()
 
 md5::md5(const char* path)
 {
-    FILE *in;
+    FILE* in;
     char zBuf[10240];
 
-    if(access(path, R_OK) != 0)
+    if (access(path, R_OK) != 0)
     {
         string msg = (string)"md5() : No such file: " + path;
 
@@ -48,29 +48,29 @@ md5::md5(const char* path)
 
     init();
 
-    in = fopen(path,"rb");
+    in = fopen(path, "rb");
 
-    if(in == 0)
+    if (in == 0)
     {
         printf("md5_test : cannot open file %s", path);
 
         return;
     }
-    
-    for(;;)
+
+    for (;;)
     {
         int n;
-        
+
         n = fread(zBuf, 1, sizeof(zBuf), in);
-        
-        if(n <= 0)
+
+        if (n <= 0)
         {
             break;
         }
-        
+
         update(zBuf, (unsigned)n);
     }
-    
+
     fclose(in);
     final();
 }
@@ -80,14 +80,14 @@ md5::~md5()
 
 }
 
-void md5::byteReverse (unsigned char *buf, unsigned longs)
+void md5::byteReverse (unsigned char* buf, unsigned longs)
 {
     uint32 t;
     do
     {
-        t = (uint32)((unsigned)buf[3]<<8 | buf[2]) << 16 |
-            ((unsigned)buf[1]<<8 | buf[0]);
-        *(uint32 *)buf = t;
+        t = (uint32)((unsigned)buf[3] << 8 | buf[2]) << 16 |
+            ((unsigned)buf[1] << 8 | buf[0]);
+        *(uint32*)buf = t;
         buf += 4;
     }
     while (--longs);
@@ -102,74 +102,74 @@ void md5::transform(uint32 buf[4], const uint32 in[16])
     c = buf[2];
     d = buf[3];
 
-    MD5STEP(F1, a, b, c, d, in[ 0]+0xd76aa478,  7);
-    MD5STEP(F1, d, a, b, c, in[ 1]+0xe8c7b756, 12);
-    MD5STEP(F1, c, d, a, b, in[ 2]+0x242070db, 17);
-    MD5STEP(F1, b, c, d, a, in[ 3]+0xc1bdceee, 22);
-    MD5STEP(F1, a, b, c, d, in[ 4]+0xf57c0faf,  7);
-    MD5STEP(F1, d, a, b, c, in[ 5]+0x4787c62a, 12);
-    MD5STEP(F1, c, d, a, b, in[ 6]+0xa8304613, 17);
-    MD5STEP(F1, b, c, d, a, in[ 7]+0xfd469501, 22);
-    MD5STEP(F1, a, b, c, d, in[ 8]+0x698098d8,  7);
-    MD5STEP(F1, d, a, b, c, in[ 9]+0x8b44f7af, 12);
-    MD5STEP(F1, c, d, a, b, in[10]+0xffff5bb1, 17);
-    MD5STEP(F1, b, c, d, a, in[11]+0x895cd7be, 22);
-    MD5STEP(F1, a, b, c, d, in[12]+0x6b901122,  7);
-    MD5STEP(F1, d, a, b, c, in[13]+0xfd987193, 12);
-    MD5STEP(F1, c, d, a, b, in[14]+0xa679438e, 17);
-    MD5STEP(F1, b, c, d, a, in[15]+0x49b40821, 22);
+    MD5STEP(F1, a, b, c, d, in[ 0] + 0xd76aa478,  7);
+    MD5STEP(F1, d, a, b, c, in[ 1] + 0xe8c7b756, 12);
+    MD5STEP(F1, c, d, a, b, in[ 2] + 0x242070db, 17);
+    MD5STEP(F1, b, c, d, a, in[ 3] + 0xc1bdceee, 22);
+    MD5STEP(F1, a, b, c, d, in[ 4] + 0xf57c0faf,  7);
+    MD5STEP(F1, d, a, b, c, in[ 5] + 0x4787c62a, 12);
+    MD5STEP(F1, c, d, a, b, in[ 6] + 0xa8304613, 17);
+    MD5STEP(F1, b, c, d, a, in[ 7] + 0xfd469501, 22);
+    MD5STEP(F1, a, b, c, d, in[ 8] + 0x698098d8,  7);
+    MD5STEP(F1, d, a, b, c, in[ 9] + 0x8b44f7af, 12);
+    MD5STEP(F1, c, d, a, b, in[10] + 0xffff5bb1, 17);
+    MD5STEP(F1, b, c, d, a, in[11] + 0x895cd7be, 22);
+    MD5STEP(F1, a, b, c, d, in[12] + 0x6b901122,  7);
+    MD5STEP(F1, d, a, b, c, in[13] + 0xfd987193, 12);
+    MD5STEP(F1, c, d, a, b, in[14] + 0xa679438e, 17);
+    MD5STEP(F1, b, c, d, a, in[15] + 0x49b40821, 22);
 
-    MD5STEP(F2, a, b, c, d, in[ 1]+0xf61e2562,  5);
-    MD5STEP(F2, d, a, b, c, in[ 6]+0xc040b340,  9);
-    MD5STEP(F2, c, d, a, b, in[11]+0x265e5a51, 14);
-    MD5STEP(F2, b, c, d, a, in[ 0]+0xe9b6c7aa, 20);
-    MD5STEP(F2, a, b, c, d, in[ 5]+0xd62f105d,  5);
-    MD5STEP(F2, d, a, b, c, in[10]+0x02441453,  9);
-    MD5STEP(F2, c, d, a, b, in[15]+0xd8a1e681, 14);
-    MD5STEP(F2, b, c, d, a, in[ 4]+0xe7d3fbc8, 20);
-    MD5STEP(F2, a, b, c, d, in[ 9]+0x21e1cde6,  5);
-    MD5STEP(F2, d, a, b, c, in[14]+0xc33707d6,  9);
-    MD5STEP(F2, c, d, a, b, in[ 3]+0xf4d50d87, 14);
-    MD5STEP(F2, b, c, d, a, in[ 8]+0x455a14ed, 20);
-    MD5STEP(F2, a, b, c, d, in[13]+0xa9e3e905,  5);
-    MD5STEP(F2, d, a, b, c, in[ 2]+0xfcefa3f8,  9);
-    MD5STEP(F2, c, d, a, b, in[ 7]+0x676f02d9, 14);
-    MD5STEP(F2, b, c, d, a, in[12]+0x8d2a4c8a, 20);
-    
-    MD5STEP(F3, a, b, c, d, in[ 5]+0xfffa3942,  4);
-    MD5STEP(F3, d, a, b, c, in[ 8]+0x8771f681, 11);
-    MD5STEP(F3, c, d, a, b, in[11]+0x6d9d6122, 16);
-    MD5STEP(F3, b, c, d, a, in[14]+0xfde5380c, 23);
-    MD5STEP(F3, a, b, c, d, in[ 1]+0xa4beea44,  4);
-    MD5STEP(F3, d, a, b, c, in[ 4]+0x4bdecfa9, 11);
-    MD5STEP(F3, c, d, a, b, in[ 7]+0xf6bb4b60, 16);
-    MD5STEP(F3, b, c, d, a, in[10]+0xbebfbc70, 23);
-    MD5STEP(F3, a, b, c, d, in[13]+0x289b7ec6,  4);
-    MD5STEP(F3, d, a, b, c, in[ 0]+0xeaa127fa, 11);
-    MD5STEP(F3, c, d, a, b, in[ 3]+0xd4ef3085, 16);
-    MD5STEP(F3, b, c, d, a, in[ 6]+0x04881d05, 23);
-    MD5STEP(F3, a, b, c, d, in[ 9]+0xd9d4d039,  4);
-    MD5STEP(F3, d, a, b, c, in[12]+0xe6db99e5, 11);
-    MD5STEP(F3, c, d, a, b, in[15]+0x1fa27cf8, 16);
-    MD5STEP(F3, b, c, d, a, in[ 2]+0xc4ac5665, 23);
-    
-    MD5STEP(F4, a, b, c, d, in[ 0]+0xf4292244,  6);
-    MD5STEP(F4, d, a, b, c, in[ 7]+0x432aff97, 10);
-    MD5STEP(F4, c, d, a, b, in[14]+0xab9423a7, 15);
-    MD5STEP(F4, b, c, d, a, in[ 5]+0xfc93a039, 21);
-    MD5STEP(F4, a, b, c, d, in[12]+0x655b59c3,  6);
-    MD5STEP(F4, d, a, b, c, in[ 3]+0x8f0ccc92, 10);
-    MD5STEP(F4, c, d, a, b, in[10]+0xffeff47d, 15);
-    MD5STEP(F4, b, c, d, a, in[ 1]+0x85845dd1, 21);
-    MD5STEP(F4, a, b, c, d, in[ 8]+0x6fa87e4f,  6);
-    MD5STEP(F4, d, a, b, c, in[15]+0xfe2ce6e0, 10);
-    MD5STEP(F4, c, d, a, b, in[ 6]+0xa3014314, 15);
-    MD5STEP(F4, b, c, d, a, in[13]+0x4e0811a1, 21);
-    MD5STEP(F4, a, b, c, d, in[ 4]+0xf7537e82,  6);
-    MD5STEP(F4, d, a, b, c, in[11]+0xbd3af235, 10);
-    MD5STEP(F4, c, d, a, b, in[ 2]+0x2ad7d2bb, 15);
-    MD5STEP(F4, b, c, d, a, in[ 9]+0xeb86d391, 21);
-    
+    MD5STEP(F2, a, b, c, d, in[ 1] + 0xf61e2562,  5);
+    MD5STEP(F2, d, a, b, c, in[ 6] + 0xc040b340,  9);
+    MD5STEP(F2, c, d, a, b, in[11] + 0x265e5a51, 14);
+    MD5STEP(F2, b, c, d, a, in[ 0] + 0xe9b6c7aa, 20);
+    MD5STEP(F2, a, b, c, d, in[ 5] + 0xd62f105d,  5);
+    MD5STEP(F2, d, a, b, c, in[10] + 0x02441453,  9);
+    MD5STEP(F2, c, d, a, b, in[15] + 0xd8a1e681, 14);
+    MD5STEP(F2, b, c, d, a, in[ 4] + 0xe7d3fbc8, 20);
+    MD5STEP(F2, a, b, c, d, in[ 9] + 0x21e1cde6,  5);
+    MD5STEP(F2, d, a, b, c, in[14] + 0xc33707d6,  9);
+    MD5STEP(F2, c, d, a, b, in[ 3] + 0xf4d50d87, 14);
+    MD5STEP(F2, b, c, d, a, in[ 8] + 0x455a14ed, 20);
+    MD5STEP(F2, a, b, c, d, in[13] + 0xa9e3e905,  5);
+    MD5STEP(F2, d, a, b, c, in[ 2] + 0xfcefa3f8,  9);
+    MD5STEP(F2, c, d, a, b, in[ 7] + 0x676f02d9, 14);
+    MD5STEP(F2, b, c, d, a, in[12] + 0x8d2a4c8a, 20);
+
+    MD5STEP(F3, a, b, c, d, in[ 5] + 0xfffa3942,  4);
+    MD5STEP(F3, d, a, b, c, in[ 8] + 0x8771f681, 11);
+    MD5STEP(F3, c, d, a, b, in[11] + 0x6d9d6122, 16);
+    MD5STEP(F3, b, c, d, a, in[14] + 0xfde5380c, 23);
+    MD5STEP(F3, a, b, c, d, in[ 1] + 0xa4beea44,  4);
+    MD5STEP(F3, d, a, b, c, in[ 4] + 0x4bdecfa9, 11);
+    MD5STEP(F3, c, d, a, b, in[ 7] + 0xf6bb4b60, 16);
+    MD5STEP(F3, b, c, d, a, in[10] + 0xbebfbc70, 23);
+    MD5STEP(F3, a, b, c, d, in[13] + 0x289b7ec6,  4);
+    MD5STEP(F3, d, a, b, c, in[ 0] + 0xeaa127fa, 11);
+    MD5STEP(F3, c, d, a, b, in[ 3] + 0xd4ef3085, 16);
+    MD5STEP(F3, b, c, d, a, in[ 6] + 0x04881d05, 23);
+    MD5STEP(F3, a, b, c, d, in[ 9] + 0xd9d4d039,  4);
+    MD5STEP(F3, d, a, b, c, in[12] + 0xe6db99e5, 11);
+    MD5STEP(F3, c, d, a, b, in[15] + 0x1fa27cf8, 16);
+    MD5STEP(F3, b, c, d, a, in[ 2] + 0xc4ac5665, 23);
+
+    MD5STEP(F4, a, b, c, d, in[ 0] + 0xf4292244,  6);
+    MD5STEP(F4, d, a, b, c, in[ 7] + 0x432aff97, 10);
+    MD5STEP(F4, c, d, a, b, in[14] + 0xab9423a7, 15);
+    MD5STEP(F4, b, c, d, a, in[ 5] + 0xfc93a039, 21);
+    MD5STEP(F4, a, b, c, d, in[12] + 0x655b59c3,  6);
+    MD5STEP(F4, d, a, b, c, in[ 3] + 0x8f0ccc92, 10);
+    MD5STEP(F4, c, d, a, b, in[10] + 0xffeff47d, 15);
+    MD5STEP(F4, b, c, d, a, in[ 1] + 0x85845dd1, 21);
+    MD5STEP(F4, a, b, c, d, in[ 8] + 0x6fa87e4f,  6);
+    MD5STEP(F4, d, a, b, c, in[15] + 0xfe2ce6e0, 10);
+    MD5STEP(F4, c, d, a, b, in[ 6] + 0xa3014314, 15);
+    MD5STEP(F4, b, c, d, a, in[13] + 0x4e0811a1, 21);
+    MD5STEP(F4, a, b, c, d, in[ 4] + 0xf7537e82,  6);
+    MD5STEP(F4, d, a, b, c, in[11] + 0xbd3af235, 10);
+    MD5STEP(F4, c, d, a, b, in[ 2] + 0x2ad7d2bb, 15);
+    MD5STEP(F4, b, c, d, a, in[ 9] + 0xeb86d391, 21);
+
     buf[0] += a;
     buf[1] += b;
     buf[2] += c;
@@ -178,7 +178,7 @@ void md5::transform(uint32 buf[4], const uint32 in[16])
 
 void md5::init()
 {
-    struct Context *ctx = (struct Context *)&context;
+    struct Context* ctx = (struct Context*)&context;
     ctx->buf[0] = 0x67452301;
     ctx->buf[1] = 0xefcdab89;
     ctx->buf[2] = 0x98badcfe;
@@ -187,10 +187,10 @@ void md5::init()
     ctx->bits[1] = 0;
 }
 
-void md5::update( const char *buf,
+void md5::update( const char* buf,
                   unsigned int len )
 {
-    struct Context *ctx = (struct Context *)&context;
+    struct Context* ctx = (struct Context*)&context;
     uint32 t;
 
     /* Update bitcount */
@@ -198,20 +198,20 @@ void md5::update( const char *buf,
     if ((ctx->bits[0] = t + ((uint32)len << 3)) < t)
     {
         /* Carry from low to high */
-        ctx->bits[1]++; 
+        ctx->bits[1]++;
     }
- 
+
     ctx->bits[1] += len >> 29;
-    
+
     /* Bytes already in shsInfo->data */
-    t = (t >> 3) & 0x3f;    
-    
+    t = (t >> 3) & 0x3f;
+
     /* Handle any leading odd-sized chunks */
     if ( t )
     {
-        unsigned char *p = (unsigned char *)ctx->in + t;
-        
-        t = 64-t;
+        unsigned char* p = (unsigned char*)ctx->in + t;
+
+        t = 64 - t;
         if (len < t)
         {
             memcpy(p, buf, len);
@@ -220,30 +220,30 @@ void md5::update( const char *buf,
 
         memcpy(p, buf, t);
         byteReverse(ctx->in, 16);
-        transform(ctx->buf, (uint32 *)ctx->in);
+        transform(ctx->buf, (uint32*)ctx->in);
         buf += t;
         len -= t;
     }
-    
+
     /* Process data in 64-byte chunks */
     while (len >= 64)
     {
         memcpy(ctx->in, buf, 64);
         byteReverse(ctx->in, 16);
-        transform(ctx->buf, (uint32 *)ctx->in);
+        transform(ctx->buf, (uint32*)ctx->in);
         buf += 64;
         len -= 64;
     }
-    
+
     /* Handle any remaining bytes of data. */
-     memcpy(ctx->in, buf, len);
+    memcpy(ctx->in, buf, len);
 }
 
 void md5::final()
 {
-    struct Context *ctx = (struct Context*)&context;
+    struct Context* ctx = (struct Context*)&context;
     unsigned count;
-    unsigned char *p;
+    unsigned char* p;
 
     /* Compute number of bytes mod 64 */
     count = (ctx->bits[0] >> 3) & 0x3F;
@@ -262,7 +262,7 @@ void md5::final()
         /* Two lots of padding:  Pad the first block to 64 bytes */
         memset(p, 0, count);
         byteReverse(ctx->in, 16);
-        transform(ctx->buf, (uint32 *)ctx->in);
+        transform(ctx->buf, (uint32*)ctx->in);
 
         /* Now fill the next block with 56 bytes */
         memset(ctx->in, 0, 56);
@@ -270,17 +270,17 @@ void md5::final()
     else
     {
         /* Pad block to 56 bytes */
-        memset(p, 0, count-8);
+        memset(p, 0, count - 8);
     }
 
     byteReverse(ctx->in, 14);
 
     /* Append length in bits and transform */
-    ((uint32 *)ctx->in)[ 14 ] = ctx->bits[0];
-    ((uint32 *)ctx->in)[ 15 ] = ctx->bits[1];
-    
-    transform(ctx->buf, (uint32 *)ctx->in);
-    byteReverse((unsigned char *)ctx->buf, 4);
+    ((uint32*)ctx->in)[ 14 ] = ctx->bits[0];
+    ((uint32*)ctx->in)[ 15 ] = ctx->bits[1];
+
+    transform(ctx->buf, (uint32*)ctx->in);
+    byteReverse((unsigned char*)ctx->buf, 4);
 
     memcpy(_hash, ctx->buf, 16);
     DigestToBase16(_hash, _hash_str);
@@ -293,7 +293,7 @@ string md5::debug()
     unsigned char in[64];
     char out[129];
 
-    struct Context *ctx = (struct Context*)&context;
+    struct Context* ctx = (struct Context*)&context;
 
     memcpy(in, ctx->in, 64);
     DigestToBase16(in, out);
@@ -301,16 +301,16 @@ string md5::debug()
     return out;
 }
 
-void md5::DigestToBase16( unsigned char *digest, 
-                          char *zBuf)
+void md5::DigestToBase16( unsigned char* digest,
+                          char* zBuf)
 {
     static char const zEncode[] = "0123456789abcdef";
     int i, j;
 
-    for(j=i=0; i<16; i++)
+    for (j = i = 0; i < 16; i++)
     {
         int a = digest[i];
-        zBuf[j++] = zEncode[(a>>4)&0xf];
+        zBuf[j++] = zEncode[(a >> 4) & 0xf];
         zBuf[j++] = zEncode[a & 0xf];
     }
 

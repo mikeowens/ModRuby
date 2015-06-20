@@ -33,17 +33,17 @@ table::~table()
 const table& table::operator=(apr_table_t* t)
 {
     handle = t;
-    
+
     return *this;
 }
 
 const table& table::operator=(const table& t)
 {
-    if(this != &t)
+    if (this != &t)
     {
         handle = t.handle;
     }
-    
+
     return *this;
 }
 
@@ -135,11 +135,11 @@ string& table::join(const char* sep, string& data)
 
     int len = size();
 
-    while(i.next())
+    while (i.next())
     {
         strm << i.key() << "=" << i.data();
 
-        if(i.index() < len - 1)
+        if (i.index() < len - 1)
         {
             strm << sep;
         }
@@ -163,7 +163,7 @@ table::iterator::iterator(const table& t)
 
 table::iterator::~iterator()
 {
-    
+
 }
 
 void table::iterator::rebind(const table& t)
@@ -180,13 +180,13 @@ i32 table::iterator::index()
 
 bool table::iterator::seek(i32 idx)
 {
-    if(idx < _h->nelts)
+    if (idx < _h->nelts)
     {
         _i = idx;
 
         return true;
     }
-    
+
     return false;
 }
 
@@ -200,7 +200,7 @@ const table::iterator& table::iterator::operator=(const apr_array_header_t* h)
 
 const table::iterator& table::iterator::operator=(const iterator& i)
 {
-    if(this != &i)
+    if (this != &i)
     {
         _h = i._h;
         _i = i._i;
@@ -211,7 +211,7 @@ const table::iterator& table::iterator::operator=(const iterator& i)
 
 const char* table::iterator::key() const
 {
-    if(_i != -1)
+    if (_i != -1)
     {
         return ((const apr_table_entry_t*)_h->elts)[_i].key;
     }
@@ -221,7 +221,7 @@ const char* table::iterator::key() const
 
 const char* table::iterator::data() const
 {
-    if(_i != -1)
+    if (_i != -1)
     {
         return ((const apr_table_entry_t*)_h->elts)[_i].val;
     }
@@ -238,7 +238,7 @@ bool table::iterator::rewind() const
 
 bool table::iterator::first() const
 {
-    if(_h->nelts > 0)
+    if (_h->nelts > 0)
     {
         _i = 0;
     }
@@ -248,9 +248,9 @@ bool table::iterator::first() const
 
 bool table::iterator::last() const
 {
-    if(_h->nelts > 0)
+    if (_h->nelts > 0)
     {
-        _i = _h->nelts-1;
+        _i = _h->nelts - 1;
 
         return true;
     }
@@ -261,36 +261,36 @@ bool table::iterator::last() const
 bool table::iterator::next() const
 {
     // If i is not at the end
-    if(_i == _h->nelts-1)
+    if (_i == _h->nelts - 1)
     {
         return false;
     }
 
-    if(_h->nelts > 0)
+    if (_h->nelts > 0)
     {
         _i++;
 
         return true;
     }
-    
+
     return false;
 }
 
 bool table::iterator::prev() const
 {
     // If _i is valid
-    if(_i != -1)
+    if (_i != -1)
     {
         // Decrement
         _i--;
 
         // If before beginning
-        if(_i < 0)
+        if (_i < 0)
         {
             // Not valid
             return false;
         }
-        
+
         return true;
     }
 

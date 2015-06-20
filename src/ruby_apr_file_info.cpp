@@ -15,28 +15,28 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-static VALUE m_init(VALUE self, VALUE dir, VALUE pool, VALUE want_flags);
+    static VALUE m_init(VALUE self, VALUE dir, VALUE pool, VALUE want_flags);
 
-static VALUE m_atime(VALUE self);
-static VALUE m_csize(VALUE self);
-static VALUE m_ctime(VALUE self);
-static VALUE m_device(VALUE self);
-static VALUE m_fname(VALUE self);
-static VALUE m_group(VALUE self);
-static VALUE m_inode(VALUE self);
-static VALUE m_md5(VALUE self);
-static VALUE m_mode(VALUE self);
-static VALUE m_name(VALUE self);
-static VALUE m_nlink(VALUE self);
-static VALUE m_protection(VALUE self);
-static VALUE m_user(VALUE self);
-static VALUE m_sha1(VALUE self);
-static VALUE m_size(VALUE self);
-static VALUE m_mtime(VALUE self);
-static VALUE m_type(VALUE self);
-static VALUE m_valid(VALUE self);
+    static VALUE m_atime(VALUE self);
+    static VALUE m_csize(VALUE self);
+    static VALUE m_ctime(VALUE self);
+    static VALUE m_device(VALUE self);
+    static VALUE m_fname(VALUE self);
+    static VALUE m_group(VALUE self);
+    static VALUE m_inode(VALUE self);
+    static VALUE m_md5(VALUE self);
+    static VALUE m_mode(VALUE self);
+    static VALUE m_name(VALUE self);
+    static VALUE m_nlink(VALUE self);
+    static VALUE m_protection(VALUE self);
+    static VALUE m_user(VALUE self);
+    static VALUE m_sha1(VALUE self);
+    static VALUE m_size(VALUE self);
+    static VALUE m_mtime(VALUE self);
+    static VALUE m_type(VALUE self);
+    static VALUE m_valid(VALUE self);
 
-static VALUE m_stat(VALUE file);
+    static VALUE m_stat(VALUE file);
 }
 
 using namespace modruby;
@@ -50,11 +50,11 @@ static modruby::apr::file_info* get_object(VALUE self);
 
 static void deallocator(void* x)
 {
-    if(x != NULL)
+    if (x != NULL)
     {
         wrapper* w = (wrapper*)x;
 
-        if(w->finfo != NULL)
+        if (w->finfo != NULL)
         {
             delete (modruby::apr::file_info*)w->finfo;
 
@@ -134,7 +134,7 @@ void init_apr_file_info(VALUE module)
     rb_define_global_const("APR_FINFO_OWNER",   INT2FIX(0x00030000));
     rb_define_global_const("APR_FINFO_PROT",    INT2FIX(0x00700000));
     rb_define_global_const("APR_FINFO_NORM",    INT2FIX(0x0073b170));
-    rb_define_global_const("APR_FINFO_DIRENT",  INT2FIX(0x02000000));    
+    rb_define_global_const("APR_FINFO_DIRENT",  INT2FIX(0x02000000));
 }
 
 VALUE m_init(VALUE self, VALUE path, VALUE pool, VALUE want_flags)
@@ -153,7 +153,8 @@ VALUE m_init(VALUE self, VALUE path, VALUE pool, VALUE want_flags)
     apr_pool_t* p;
     Data_Get_Struct(pool, apr_pool_t, p);
 
-    modruby:apr::file_info f = 
+modruby:
+    apr::file_info f =
         modruby::apr::stat(StringValuePtr(path), p, NUM2INT(want_flags));
 
     // Get the wrapper
@@ -174,7 +175,7 @@ VALUE make_apr_file_info(VALUE path, VALUE pool, VALUE want_flags)
     return m_init(obj, path, pool, want_flags);
 }
 
-VALUE make_apr_finfo_from_struct( const apr_finfo_t& x, const char* name, 
+VALUE make_apr_finfo_from_struct( const apr_finfo_t& x, const char* name,
                                   const char* fname)
 {
     wrapper* w = (wrapper*)malloc(sizeof(wrapper));
@@ -203,10 +204,10 @@ VALUE m_atime(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_ATIME) == true)
+    if (f->valid(APR_FINFO_ATIME) == true)
     {
         // Convert microseconds to seconds
-        return INT2NUM(f->atime()/1000000);
+        return INT2NUM(f->atime() / 1000000);
     }
 
     return Qnil;
@@ -223,10 +224,10 @@ VALUE m_ctime(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_CTIME) == true)
+    if (f->valid(APR_FINFO_CTIME) == true)
     {
         // Convert microseconds to seconds
-        return INT2NUM(f->ctime()/1000000);
+        return INT2NUM(f->ctime() / 1000000);
     }
 
     return Qnil;
@@ -236,7 +237,7 @@ VALUE m_device(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_DEV) == true)
+    if (f->valid(APR_FINFO_DEV) == true)
     {
         return INT2FIX(f->device());
     }
@@ -248,7 +249,7 @@ VALUE m_fname(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->fname() != NULL)
+    if (f->fname() != NULL)
     {
         return rb_str_new2(f->fname());
     }
@@ -260,9 +261,9 @@ VALUE m_group(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_GROUP) == true)
+    if (f->valid(APR_FINFO_GROUP) == true)
     {
-        return INT2FIX(f->gid());        
+        return INT2FIX(f->gid());
     }
 
     return Qnil;
@@ -272,9 +273,9 @@ VALUE m_inode(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_INODE) == true)
+    if (f->valid(APR_FINFO_INODE) == true)
     {
-        return INT2FIX(f->inode());        
+        return INT2FIX(f->inode());
     }
 
     return Qnil;
@@ -301,7 +302,7 @@ VALUE m_md5(VALUE self)
 
     string result = f->md5();
 
-    if(result.length() == 0)
+    if (result.length() == 0)
     {
         return rb_str_new2("");
     }
@@ -313,10 +314,10 @@ VALUE m_mtime(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_MTIME) == true)
+    if (f->valid(APR_FINFO_MTIME) == true)
     {
         // Convert microseconds to seconds
-        return INT2NUM(f->mtime()/1000000);
+        return INT2NUM(f->mtime() / 1000000);
     }
 
     return Qnil;
@@ -326,9 +327,9 @@ VALUE m_name(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_NAME) == true)
+    if (f->valid(APR_FINFO_NAME) == true)
     {
-        if(f->name() != NULL)
+        if (f->name() != NULL)
         {
             return rb_str_new2(f->name());
         }
@@ -341,7 +342,7 @@ VALUE m_nlink(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_NLINK) == true)
+    if (f->valid(APR_FINFO_NLINK) == true)
     {
         return INT2FIX(f->nlink());
     }
@@ -354,9 +355,9 @@ VALUE m_protection(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_UPROT) == true)
+    if (f->valid(APR_FINFO_UPROT) == true)
     {
-        return INT2FIX(f->perms());        
+        return INT2FIX(f->perms());
     }
 
     return Qnil;
@@ -368,7 +369,7 @@ VALUE m_sha1(VALUE self)
 
     string result = f->sha1();
 
-    if(result.length() == 0)
+    if (result.length() == 0)
     {
         return rb_str_new2("");
     }
@@ -380,7 +381,7 @@ VALUE m_size(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_SIZE) == true)
+    if (f->valid(APR_FINFO_SIZE) == true)
     {
         return INT2NUM(f->size());
     }
@@ -392,7 +393,7 @@ VALUE m_type(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_TYPE) == true)
+    if (f->valid(APR_FINFO_TYPE) == true)
     {
         return INT2FIX(f->type());
     }
@@ -405,9 +406,9 @@ VALUE m_user(VALUE self)
 {
     modruby::apr::file_info* f = get_object(self);
 
-    if(f->valid(APR_FINFO_USER) == true)
+    if (f->valid(APR_FINFO_USER) == true)
     {
-        return INT2FIX(f->uid());        
+        return INT2FIX(f->uid());
     }
 
     return Qnil;

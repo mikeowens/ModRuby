@@ -6,18 +6,19 @@
 
 using std::string;
 
-namespace ruby {
+namespace ruby
+{
 
 Object::Object(const char* name, int n, ...)
     : self(Qnil), _class_name()
 {
     va_list vl;
     va_start(vl, n);
-    
+
     /*
     for(int i=0;i<count;i++)
     {
-    
+
     }
     */
 
@@ -42,22 +43,22 @@ const char* Object::class_name()
 
 VALUE Object::method(const char* name, int n, ...)
 {
-    VALUE *argv = 0;
+    VALUE* argv = 0;
 
-    if (n > 0) 
+    if (n > 0)
     {
         argv = ALLOCA_N(VALUE, n);
         va_list ar;
         va_start(ar, n);
 
         int i;
-        for(i=0; i<n ;i++)
+        for (i = 0; i < n ; i++)
         {
             argv[i] = va_arg(ar, VALUE);
         }
 
         va_end(ar);
-    } 
+    }
 
     Arguments arg;
     arg.recv = self;
@@ -68,13 +69,13 @@ VALUE Object::method(const char* name, int n, ...)
     int error = 0;
     VALUE result = rb_protect(ruby::method_wrap, reinterpret_cast<VALUE>(&arg), &error);
 
-    if(error)
+    if (error)
     {
         std::string msg;
-        msg = "ruby::Object::method() invoking " 
-              + _class_name + (std::string)"::" 
+        msg = "ruby::Object::method() invoking "
+              + _class_name + (std::string)"::"
               + name + (std::string)"()" ;
-        
+
         Exception e(msg.c_str());
         e.backtrace();
 
@@ -85,7 +86,7 @@ VALUE Object::method(const char* name, int n, ...)
 }
 
 //------------------------------------------------------------------------------
-// Memory Management 
+// Memory Management
 //------------------------------------------------------------------------------
 
 Objects* Objects::singleton = 0;
@@ -93,7 +94,7 @@ VALUE Objects::objects;
 
 Objects* Objects::instance()
 {
-    if(singleton == NULL)
+    if (singleton == NULL)
     {
         singleton = new Objects();
     }
@@ -124,7 +125,7 @@ void Objects::free_object(VALUE object)
 
 void Objects::free_all()
 {
-    if(singleton != NULL)
+    if (singleton != NULL)
     {
         delete singleton;
         singleton = NULL;
@@ -147,28 +148,28 @@ void free_all()
 }
 
 //------------------------------------------------------------------------------
-// VM Routines 
+// VM Routines
 //------------------------------------------------------------------------------
 
 static bool running = false;
 
 void startup(const char* script_name)
 {
-    if(running)
+    if (running)
     {
         return;
     }
-    
+
     int fake_argc = 0;
-    char *fake_args[fake_argc];
-    char **fake_argv = fake_args;
+    char* fake_args[fake_argc];
+    char** fake_argv = fake_args;
 
     ruby_sysinit(&fake_argc, &fake_argv);
-    
+
     // Initialize Ruby itself
-    RUBY_INIT_STACK;    
+    RUBY_INIT_STACK;
     ruby_init();
-   
+
     ruby_init_loadpath();
     //Init_prelude();
     //ruby_init_gems();
@@ -196,11 +197,11 @@ void shutdown(int exit_code)
     free_all();
     ruby_cleanup(0);
 
-    if(running == false)
+    if (running == false)
     {
         return;
     }
-    
+
     running = false;
 }
 
@@ -210,10 +211,10 @@ void shutdown(int exit_code)
 
 Exception::Exception(const char* msg) : _msg(), _backtrace(), _type()
 {
-    if(msg != NULL)
+    if (msg != NULL)
     {
         _msg = msg;
-    }    
+    }
 }
 
 Exception::Exception(const Exception& e) : _msg(), _backtrace(), _type()
@@ -228,7 +229,7 @@ Exception::~Exception() throw()
 
 const Exception& Exception::operator=(const Exception& e)
 {
-    if(this != &e)
+    if (this != &e)
     {
         _msg       = e._msg;
         _backtrace = e._backtrace;
@@ -253,7 +254,7 @@ const char* Exception::stackdump() const
     return _backtrace.c_str();
 }
 
-// Convert a ruby exception into C++. 
+// Convert a ruby exception into C++.
 void Exception::backtrace() throw()
 {
     _backtrace.clear();
@@ -289,14 +290,15 @@ void Exception::backtrace() throw()
     _backtrace += "Message : " + (std::string)RSTRING_PTR(message) + (std::string)"\n";
 
     // Backtrace:  p (*(RArray*)ary).as.ary
-    if(!NIL_P(exception_instance))
+    if (!NIL_P(exception_instance))
     {
         VALUE ary = rb_funcall(exception_instance, rb_intern("backtrace"), 0);
 
         int c;
-        for (c=0; c<RARRAY_LEN(ary); c++)
-        {   // gdb: p *((RString*)(*(RArray*)ary).as.ary[0])
-            _backtrace += (std::string)"From    : " + 
+        for (c = 0; c < RARRAY_LEN(ary); c++)
+        {
+            // gdb: p *((RString*)(*(RArray*)ary).as.ary[0])
+            _backtrace += (std::string)"From    : " +
                           (std::string)RSTRING_PTR(RARRAY_PTR(ary)[c]) +
                           (std::string)"\n";
         }
@@ -308,7 +310,7 @@ void Exception::backtrace() throw()
 //------------------------------------------------------------------------------
 
 extern "C" {
-static int collect_hash_vals(VALUE key, VALUE value, VALUE data);
+    static int collect_hash_vals(VALUE key, VALUE value, VALUE data);
 }
 
 static int collect_hash_vals(VALUE key, VALUE value, VALUE data)
@@ -316,17 +318,17 @@ static int collect_hash_vals(VALUE key, VALUE value, VALUE data)
     std::map<string, string>* values = (std::map<string, string>*)data;
 
     std::stringstream strm;
-    
+
     string key_str;
 
-    switch(TYPE(key))
+    switch (TYPE(key))
     {
         case T_STRING:
         {
             strm << StringValuePtr(key);
             break;
         }
-        
+
         case T_FIXNUM:
         {
             strm << NUM2INT(key);
@@ -344,14 +346,14 @@ static int collect_hash_vals(VALUE key, VALUE value, VALUE data)
 
     string value_str;
 
-    switch(TYPE(value))
+    switch (TYPE(value))
     {
         case T_STRING:
         {
             strm << StringValuePtr(value);
             break;
         }
-        
+
         case T_FIXNUM:
         {
             strm << NUM2INT(value);
@@ -381,7 +383,7 @@ bool copy_hash(VALUE hash, std::map<std::string, std::string>& values)
 
 VALUE method_wrap(VALUE arg)
 {
-    Arguments &a = *reinterpret_cast<Arguments*>(arg);
+    Arguments& a = *reinterpret_cast<Arguments*>(arg);
 
     return rb_funcall2(a.recv, a.id, a.n, a.argv);
 }
@@ -391,18 +393,18 @@ VALUE method_wrap(VALUE arg)
 **
 **    VALUE Unsafe() {
 **        return rb_funcall(
-**            self, 
-**            rb_intern("test"), 
-**            1, 
+**            self,
+**            rb_intern("test"),
+**            1,
 **            INT2NUM(42)
 **        );
 **    }
 **
 **    VALUE Safe() {
 **        return ruby::method(
-**            self, 
-**            rb_intern("test"), 
-**            1, 
+**            self,
+**            rb_intern("test"),
+**            1,
 **            INT2NUM(42)
 **        );
 **    }
@@ -410,22 +412,22 @@ VALUE method_wrap(VALUE arg)
 
 VALUE method(VALUE recv, ID id, int n, ...)
 {
-    VALUE *argv = 0;
+    VALUE* argv = 0;
 
-    if (n > 0) 
+    if (n > 0)
     {
         argv = ALLOCA_N(VALUE, n);
         va_list ar;
         va_start(ar, n);
 
         int i;
-        for(i=0; i<n ;i++)
+        for (i = 0; i < n ; i++)
         {
             argv[i] = va_arg(ar, VALUE);
         }
 
         va_end(ar);
-    } 
+    }
 
     Arguments arg;
     arg.recv = recv;
@@ -436,7 +438,7 @@ VALUE method(VALUE recv, ID id, int n, ...)
     int error = 0;
     VALUE result = rb_protect(method_wrap, reinterpret_cast<VALUE>(&arg), &error);
 
-    if(error)
+    if (error)
     {
         Exception e;
         e.backtrace();
@@ -448,18 +450,18 @@ VALUE method(VALUE recv, ID id, int n, ...)
 
 VALUE vm_method(VALUE recv, ID id, int n, va_list ar)
 {
-    VALUE *argv = 0;
+    VALUE* argv = 0;
 
-    if (n > 0) 
+    if (n > 0)
     {
         argv = ALLOCA_N(VALUE, n);
 
         int i;
-        for(i=0; i<n ;i++)
+        for (i = 0; i < n ; i++)
         {
             argv[i] = va_arg(ar, VALUE);
         }
-    } 
+    }
 
     Arguments arg;
     arg.recv = recv;
@@ -470,7 +472,7 @@ VALUE vm_method(VALUE recv, ID id, int n, va_list ar)
     int error = 0;
     VALUE result = rb_protect(method_wrap, reinterpret_cast<VALUE>(&arg), &error);
 
-    if(error)
+    if (error)
     {
         Exception e;
         e.backtrace();
@@ -488,22 +490,22 @@ void eval(const char* code, const char* filename, int sl, VALUE binding)
 {
     const char* fn = filename;
 
-    if(fn == NULL)
+    if (fn == NULL)
     {
         fn = "eval";
     }
-    
+
     // We use this rather than ruby::eval() because this allows us
     // to associated a file name with the eval code, giving us more
     // informative backtraces. Otherwise, ruby::eval() would simply
     // list the source of every frame as "(eval)".
-    
+
     method( Qnil, rb_intern("eval"), 4,
             rb_str_new2(code),     // code
             binding,               // binding
             rb_str_new2(fn),       // filename
             INT2NUM(sl) );         // source line
-    
+
     /* old method
 
     // Set the Ruby source line to 0. This is a Ruby hack. There might be a
@@ -525,7 +527,7 @@ void eval(const char* code, const char* filename, int sl, VALUE binding)
 
 VALUE require_protect(VALUE arg)
 {
-    const char *filename = reinterpret_cast<const char*>(arg);
+    const char* filename = reinterpret_cast<const char*>(arg);
     rb_require(filename);
 
     return Qnil;
@@ -536,28 +538,28 @@ bool call_function(const char* method, int n, ...)
     VALUE ret;
     va_list ar;
 
-    if(n > 0) 
+    if (n > 0)
     {
         va_start(ar, n);
     }
 
     try
-    {  
+    {
         ret = ruby::vm_method(Qnil, rb_intern(method), n, ar);
     }
-    catch(const ::ruby::Exception &e)
+    catch (const ::ruby::Exception& e)
     {
         // User needs to see this error on command line, so will we pipe it to
         // stdout.
         fprintf(stdout, "%s\n", e.what());
-        
+
         ret = Qfalse;
     }
 
-    if(n > 0) 
+    if (n > 0)
     {
         va_end(ar);
-    } 
+    }
 
     return ret;
 }
@@ -567,7 +569,7 @@ void require(const char* filename)
     int error = 0;
     rb_protect(require_protect, reinterpret_cast<VALUE>(filename), &error);
 
-    if(error)
+    if (error)
     {
         std::stringstream strm;
 
@@ -584,7 +586,7 @@ void load(const char* filename, int anonymous)
     int error = 0;
     rb_load_protect(rb_str_new2(filename), anonymous, &error);
 
-    if(error)
+    if (error)
     {
         Exception e;
         e.backtrace();
@@ -598,9 +600,9 @@ struct NewArguments
     int n;
     VALUE* argv;
 
-    NewArguments( const char* cname, 
-                  int n, 
-                  VALUE* argv) 
+    NewArguments( const char* cname,
+                  int n,
+                  VALUE* argv)
         : class_name(cname), n(n), argv(argv)
     {
 
@@ -609,7 +611,7 @@ struct NewArguments
 
 VALUE create_object_protect(VALUE arg)
 {
-    NewArguments &a = *reinterpret_cast<NewArguments*>(arg);
+    NewArguments& a = *reinterpret_cast<NewArguments*>(arg);
     //VALUE class_name = rb_const_get(rb_cObject, rb_intern(a.class_name));
     VALUE class_name = rb_path2class(a.class_name);
 
@@ -621,18 +623,18 @@ VALUE create_object_protect(VALUE arg)
 
 VALUE create_object(const char* class_name, int n, va_list ar)
 {
-    VALUE *argv = 0;
+    VALUE* argv = 0;
 
-    if (n > 0) 
+    if (n > 0)
     {
         argv = ALLOCA_N(VALUE, n);
 
         int i;
-        for(i=0; i<n ;i++)
+        for (i = 0; i < n ; i++)
         {
             argv[i] = va_arg(ar, VALUE);
         }
-    } 
+    }
 
     NewArguments arg(class_name, 0, 0);
 
@@ -642,7 +644,7 @@ VALUE create_object(const char* class_name, int n, va_list ar)
     int error = 0;
     VALUE self = rb_protect(create_object_protect, reinterpret_cast<VALUE>(&arg), &error);
 
-    if(error)
+    if (error)
     {
         std::stringstream strm;
         strm << "Error creating Ruby class '" << class_name << "'";
@@ -657,13 +659,13 @@ VALUE create_object(const char* class_name, int n, va_list ar)
 
 void require_class(VALUE x, VALUE cls)
 {
-    if(rb_obj_is_instance_of(x,cls) == Qfalse)
+    if (rb_obj_is_instance_of(x, cls) == Qfalse)
     {
-        rb_raise( rb_eRuntimeError, 
+        rb_raise( rb_eRuntimeError,
                   "wrong argument type %s (expected %s)",
                   rb_obj_classname(x),
                   rb_class2name(cls)
-            );
+                );
     }
 }
 

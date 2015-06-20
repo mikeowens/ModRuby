@@ -4,7 +4,7 @@
 
 using namespace apache;
 
-Server::Server(const server_rec *s)
+Server::Server(const server_rec* s)
 {
     _sr = s;
     _next = s->next ? new Server(s->next) : NULL;
@@ -23,7 +23,7 @@ Server::~Server()
     delete _next;
 }
 
-void* Server::get_module_config(module *m)
+void* Server::get_module_config(module* m)
 {
     return ap_get_module_config(_sr->module_config, m);
 }

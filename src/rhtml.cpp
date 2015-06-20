@@ -16,11 +16,11 @@ using modruby::replace;
 // Note: do NOT initialize scanner(NULL) here. It will cause a segfault. This
 // has something to do with flex code.
 
-RhtmlParser::RhtmlParser() 
-    : text(), line(), _context("Object"), _binding(Qnil), 
+RhtmlParser::RhtmlParser()
+    : text(), line(), _context("Object"), _binding(Qnil),
       _state(TEXT_STATE), _block_start_line(1), _current_line(1),
       _file_name(NULL)
-{    
+{
 
 }
 
@@ -37,7 +37,7 @@ void RhtmlParser::read(const char* t)
         {
             // If we are not at the start of a new line, we are starting a new
             // ruby expression so we must use a semicolon.
-            if(line.size() == 0)
+            if (line.size() == 0)
             {
                 line += "print \"";
             }
@@ -49,7 +49,7 @@ void RhtmlParser::read(const char* t)
             line += tmp;
 
             break;
-        }       
+        }
 
         default:
         {
@@ -93,13 +93,13 @@ void RhtmlParser::change(state_t s)
         case VAR_STATE:
         case CODE_STATE:
         {
-            if(line.size() > 0)
+            if (line.size() > 0)
             {
                 line += "; ";
             }
 
             line += "print \"";
-            
+
             break;
         }
 
@@ -112,7 +112,7 @@ void RhtmlParser::change(state_t s)
         {
             // If we are going from text state and a text line is already
             // started, then we need to close it.
-            if(line.size() > 0)
+            if (line.size() > 0)
             {
                 line += "\"; ";
             }
@@ -129,7 +129,7 @@ void RhtmlParser::end_line()
 {
     _current_line++;
 
-    switch(_state)
+    switch (_state)
     {
         case CODE_STATE:
         {
@@ -147,7 +147,7 @@ void RhtmlParser::end_line()
         {
             // In case there was no text on this line to trigger a read(), then
             // we have to put in a print here for text blocks.
-            if(line.size() == 0)
+            if (line.size() == 0)
             {
                 line += "print \"";
             }
@@ -183,7 +183,7 @@ bool RhtmlParser::eval(VALUE b)
     //> Setup Ruby binding (global scope for eval())
     VALUE binding = Qnil;
 
-    if(b == Qnil)
+    if (b == Qnil)
     {
         // We weren't passed a binding, so we need to create one ourselves.
         _binding = _context.method("binding");
@@ -196,26 +196,26 @@ bool RhtmlParser::eval(VALUE b)
     {
         ruby::eval(text.c_str(), _file_name, _block_start_line, _binding);
     }
-    catch(const ruby::Exception &e)
+    catch (const ruby::Exception& e)
     {
         fprintf(stderr, "\nERROR : %s (lines %i-%i)\n%s\n",
                 _file_name,
                 _block_start_line,
                 _current_line,
                 e.what() );
-        
+
         rb_raise(rb_gv_get("$!"), "Error");
-        
+
         return false;
     }
-        
-    //ruby::method( rb_stdout, rb_intern("write"), 1, 
+
+    //ruby::method( rb_stdout, rb_intern("write"), 1,
     //              rb_str_new(text.c_str(), text.size()) );
 
     // Flush Ruby standard output.
     //ruby::method(rb_stdout, rb_intern("flush"), 0);
 
-    if(b == Qnil)
+    if (b == Qnil)
     {
         // Release binding
         ruby::free_object(binding);

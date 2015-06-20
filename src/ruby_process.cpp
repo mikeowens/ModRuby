@@ -12,10 +12,10 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-static VALUE m_argc(VALUE self);
-static VALUE m_argv(VALUE self);
-static VALUE m_init(VALUE self);
-static VALUE m_short_name(VALUE self);
+    static VALUE m_argc(VALUE self);
+    static VALUE m_argv(VALUE self);
+    static VALUE m_init(VALUE self);
+    static VALUE m_short_name(VALUE self);
 
 }
 
@@ -23,7 +23,7 @@ static apache::Process* get_object(VALUE self);
 
 static void deallocator(void* x)
 {
-    if(x != NULL)
+    if (x != NULL)
     {
         delete (apache::Process*)x;
         x = NULL;
@@ -34,7 +34,7 @@ static VALUE allocator(VALUE cls)
 {
     apache::Process* x = NULL;
 
-    rb_raise( rb_eRuntimeError, 
+    rb_raise( rb_eRuntimeError,
               "Cannot create a Apache::Process object this way" );
 
     return Data_Wrap_Struct(cls, NULL, deallocator, x);
@@ -100,7 +100,7 @@ VALUE m_argv(VALUE self)
 
     const char* const* argv = obj->argv();
 
-    for(i=0; i<count; i++)
+    for (i = 0; i < count; i++)
     {
         rb_ary_push(a, rb_str_new2(argv[i]));
     }
@@ -112,7 +112,7 @@ VALUE m_short_name(VALUE self)
 {
     apache::Process* obj = get_object(self);
 
-    if(obj->short_name() == NULL)
+    if (obj->short_name() == NULL)
     {
         return Qnil;
     }

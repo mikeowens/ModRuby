@@ -23,7 +23,7 @@ static string error;
 
 void init()
 {
-    if(refcount++ == 0)
+    if (refcount++ == 0)
     {
         // Initialize Apache Portable Runtime
         apr_initialize();
@@ -38,7 +38,7 @@ void destroy()
 {
     refcount--;
 
-    if(refcount == 0)
+    if (refcount == 0)
     {
         apr_pool_destroy(apr_pool);
     }
@@ -74,7 +74,7 @@ string str_error(apr_status_t rv)
 apr_file_t* tempfile(const char* name, apr_pool_t* pool, i32 flags)
 {
     string filename = (string)name + "XXXXXX";
-    apr_file_t *fp;
+    apr_file_t* fp;
     apr_file_mktemp(&fp, (char*)filename.c_str(), flags, pool);
 
     return fp;
@@ -94,12 +94,12 @@ int chmod(const char* path, int file_perms)
 
 int cp(const char* source_path, const char* dest_path)
 {
-    apr_status = apr_file_copy( source_path, 
-                                dest_path, 
-                                APR_FILE_SOURCE_PERMS, 
+    apr_status = apr_file_copy( source_path,
+                                dest_path,
+                                APR_FILE_SOURCE_PERMS,
                                 pool() );
 
-    if(apr_status == APR_SUCCESS)
+    if (apr_status == APR_SUCCESS)
     {
         return true;
     }
@@ -111,7 +111,7 @@ int mv(const char* source_path, const char* dest_path)
 {
     return apr_file_rename(source_path, dest_path, pool());
 }
-    
+
 int rm(const char* source_path)
 {
     return apr_file_remove(source_path, pool());
@@ -119,14 +119,14 @@ int rm(const char* source_path)
 
 int mkdir(const char* path, i32 perms)
 {
-    if(perms == -1)
+    if (perms == -1)
     {
         perms = APR_UREAD | APR_UWRITE | APR_UEXECUTE;
     }
 
     apr_status = apr_dir_make_recursive(path, perms, pool());
 
-    if((apr_status == APR_SUCCESS) || (apr_status == EEXIST))
+    if ((apr_status == APR_SUCCESS) || (apr_status == EEXIST))
     {
         return APR_SUCCESS;
     }
@@ -143,17 +143,17 @@ int rmdir(const char* path)
     apr_int32_t  flags = APR_FINFO_TYPE | APR_FINFO_NAME;
 
     /* APR doesn't like "" directories */
-    if(path[0] == '\0')
+    if (path[0] == '\0')
     {
         path = ".";
     }
 
     apr_status = apr_dir_open(&this_dir, path, pool());
 
-    if(apr_status)
+    if (apr_status)
     {
         string err = (string)"Can't open directory " + path + ".";
-        
+
         // TODO
         //log(err);
 
@@ -162,38 +162,38 @@ int rmdir(const char* path)
 
     apr_pool_create(&subpool, pool());
 
-    for( apr_status = apr_dir_read (&this_entry, flags, this_dir);
-         apr_status == APR_SUCCESS;
-         apr_status = apr_dir_read (&this_entry, flags, this_dir) )
+    for ( apr_status = apr_dir_read (&this_entry, flags, this_dir);
+            apr_status == APR_SUCCESS;
+            apr_status = apr_dir_read (&this_entry, flags, this_dir) )
     {
         apr_pool_clear(subpool);
 
-        if ( (this_entry.filetype == APR_DIR) 
-             && ((this_entry.name[0] == '.') 
-                 && ((this_entry.name[1] == '\0')
-                     || ((this_entry.name[1] == '.')
-                         && (this_entry.name[2] == '\0')))))
+        if ( (this_entry.filetype == APR_DIR)
+                && ((this_entry.name[0] == '.')
+                    && ((this_entry.name[1] == '\0')
+                        || ((this_entry.name[1] == '.')
+                            && (this_entry.name[2] == '\0')))))
         {
             continue;
         }
-        else  
+        else
         {
             /* something other than "." or "..", so proceed */
-            const char *fullpath, *entry;
-          
+            const char* fullpath, *entry;
+
             entry = this_entry.name;
-            
+
             stringstream strm;
 
-            if(entry == NULL)
+            if (entry == NULL)
             {
                 fullpath = path;
             }
-            else if(*entry == '/')
+            else if (*entry == '/')
             {
                 fullpath = entry;
             }
-            else if(path == NULL)
+            else if (path == NULL)
             {
                 fullpath = entry;
             }
@@ -202,10 +202,10 @@ int rmdir(const char* path)
                 strm << path << "/" << entry;
                 fullpath = strm.str().c_str();
             }
-            
-            if(this_entry.filetype == APR_DIR)
+
+            if (this_entry.filetype == APR_DIR)
             {
-                if(apr::rmdir(fullpath) == false)
+                if (apr::rmdir(fullpath) == false)
                 {
                     return apr_status;
                 }
@@ -216,10 +216,10 @@ int rmdir(const char* path)
             {
                 apr_status = apr_file_remove(fullpath, subpool);
 
-                if(apr_status)
+                if (apr_status)
                 {
                     string err = (string)"Can't remove  " + fullpath + ".";
-                    
+
                     // TODO
                     //log(err);
 
@@ -244,10 +244,10 @@ int rmdir(const char* path)
 
         return apr_status;
     }
-    
+
     apr_status = apr_dir_close(this_dir);
 
-    if(apr_status)
+    if (apr_status)
     {
         string err = (string)"Error closing directory  " + path + ".";
         // log(err);
@@ -260,7 +260,7 @@ int rmdir(const char* path)
     // TODO:
     //WIN32_RETRY_LOOP (status, apr_dir_remove (path_apr, pool));
 
-    if(apr_status)
+    if (apr_status)
     {
         string err = (string)"Can't remove  " + path + ".";
         // log(err);
@@ -286,8 +286,8 @@ bool path_is_relative(const char* path)
     const char* rootpath = "";
     subpool s;
 
-    apr_status_t rc = apr_filepath_root( &rootpath, &path, 
-                                         APR_FILEPATH_TRUENAME, 
+    apr_status_t rc = apr_filepath_root( &rootpath, &path,
+                                         APR_FILEPATH_TRUENAME,
                                          s.handle );
 
     return rc == APR_ERELATIVE;
@@ -299,12 +299,12 @@ string path_merge(const char* root_path, const char* add_path)
     subpool s;
 
     // APR will fail if add path is absolute.
-    if(*add_path == '/')
+    if (*add_path == '/')
     {
         add_path++;
     }
 
-    apr_status_t rc = apr_filepath_merge( &new_path, root_path, add_path, 
+    apr_status_t rc = apr_filepath_merge( &new_path, root_path, add_path,
                                           APR_FILEPATH_NATIVE, s.handle );
 
     return new_path;
@@ -315,7 +315,7 @@ string path_root(const char* path)
     const char* rootpath = "";
     subpool s;
 
-    apr_status_t rc = apr_filepath_root( &rootpath, &path, 
+    apr_status_t rc = apr_filepath_root( &rootpath, &path,
                                          APR_FILEPATH_NATIVE,
                                          s.handle );
 
@@ -336,11 +336,11 @@ file_info::file_info(const char* filename, apr_pool_t* pool, int want_flags)
 {
     memset(&_stat, 0, sizeof(apr_finfo_t));
 
-    int ret = apr_stat( &_stat, filename, 
+    int ret = apr_stat( &_stat, filename,
                         want_flags | APR_FINFO_MIN | APR_FINFO_LINK | APR_FINFO_IDENT,
                         pool);
 
-    if((ret != APR_SUCCESS) && (ret != APR_INCOMPLETE))
+    if ((ret != APR_SUCCESS) && (ret != APR_INCOMPLETE))
     {
         _valid = false;
     }
@@ -352,12 +352,12 @@ file_info::file_info(const char* filename, apr_pool_t* pool, int want_flags)
 
 file_info::file_info(const apr_finfo_t& s) : _stat(s), _valid(true)
 {
-    
+
 }
 
 file_info::~file_info()
 {
-    
+
 }
 
 bool file_info::valid()
@@ -367,10 +367,10 @@ bool file_info::valid()
 
 bool file_info::valid(int flag)
 {
-    if(_stat.valid & flag)
+    if (_stat.valid & flag)
     {
         return true;
-    }    
+    }
 
     return false;
 }
@@ -437,7 +437,7 @@ apr_off_t file_info::mtime() const
 
 const char* file_info::name() const
 {
-    if(_stat.valid & APR_FINFO_NAME)
+    if (_stat.valid & APR_FINFO_NAME)
     {
         return _stat.name;
     }
@@ -453,7 +453,7 @@ const char* file_info::fname() const
 string file_info::md5()
 {
     modruby::md5 md5h(_stat.fname);
-    
+
     return md5h.result();
 }
 
