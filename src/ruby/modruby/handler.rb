@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 require 'modruby/common'
 
 module ModRuby
@@ -23,6 +21,12 @@ class Handler
   def script(request)
     Runner.new(request).runScript()
   end
+  
+  # Called on module shutdown
+  def shutdown()
+
+  end
+
 end
 
 end # module ModRuby

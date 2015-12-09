@@ -206,10 +206,29 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
 
 int ruby_shutdown_module()
 {
+    // Call shutdown on all handlers so they can clean up
+    map<string, ruby::Object*>::iterator i;
+    for(i = handlers.begin(); i != handlers.end(); i++)
+    {
+        try
+        {
+            i->second->method("shutdown", 0);
+        }
+        catch (const ruby::Exception& e)
+        {
+            fprintf(stderr, "ruby_shutdown_module(): Ruby Exception\n");
+        }
+        catch (const std::exception& e)
+        {
+            fprintf(stderr, "ruby_shutdown_module(): C++ Exception\n");
+        }
+    }
+
     if (ruby_handler != NULL)
     {
-        delete ruby_handler;
+        ruby_handler->method("shutdown", 0);
 
+        delete ruby_handler;
         ruby_handler = NULL;
     }
 
