@@ -1,4 +1,4 @@
-== Copyright
+# Copyright
 
 Copyright (C) 2013 Michael Owens. All rights reserved.
 
@@ -14,7 +14,7 @@ the use of this code in closed, commercial works. It is also compatible with
 with GPL. It is your responsibility to read and fully understand the rights and
 restrictions accorded you by this license.
 
-== Attributions
+## Attributions
 
 This source distribution includes or links to code from other works, all of
 which are identified in the Attributes section below. ALL CODE FROM ALL OTHER
