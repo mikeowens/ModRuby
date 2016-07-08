@@ -210,13 +210,29 @@ int ruby_shutdown_module()
     map<string, ruby::Object*>::iterator i;
     for(i = handlers.begin(); i != handlers.end(); i++)
     {
+        //fprintf(stderr, "ruby_shutdown_module() starting\n");
+        ap_log_error( APLOG_MARK, APLOG_NOTICE, 0, NULL,
+                      "mod_ruby[%i]: ruby_shutdown_module() starting",
+                      getpid() );
+        
         try
         {
             i->second->method("shutdown", 0);
         }
         catch (const ruby::Exception& e)
         {
-            fprintf(stderr, "ruby_shutdown_module(): Ruby Exception\n");
+            //fprintf(stderr, "ruby_shutdown_module(): Ruby Exception\n");
+
+            // Create the error message
+            stringstream strm;
+            strm << "ruby_shutdown_module(): Ruby Exception: " << e.what() << "\n"
+                 << e.stackdump();
+            
+            // Log error (critical)
+            ap_log_error( APLOG_MARK, APLOG_CRIT, 0, NULL,
+                          "mod_ruby[%i] : %s",
+                          getpid(),
+                          strm.str().c_str() );
         }
         catch (const std::exception& e)
         {

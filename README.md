@@ -35,6 +35,10 @@ On other systems you can build generally as follows:
     bash $ make
     bash $ make install
 
+## Documentation
+
+Documentation is [here](http://mikeowens.github.io/mod_ruby/mod_ruby.html).
+
 ## Additional Information
 
 Redistribution and use in source and binary forms, with or without modification,
