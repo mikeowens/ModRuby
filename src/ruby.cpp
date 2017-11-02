@@ -169,15 +169,29 @@ void startup(const char* script_name)
     // Initialize Ruby itself
     RUBY_INIT_STACK;
     ruby_init();
-
     ruby_init_loadpath();
-    //Init_prelude();
-    //ruby_init_gems();
 
-    // To load prelude.rb
-    static char* args[] = { "ruby", "/dev/null" };
-    ruby_process_options(2, args);
+    // This used to be the way to do it (https://bugs.ruby-lang.org/issues/7424):
+    //
+    // static char* args[] = { "ruby", "/dev/null" };
+    // ruby_process_options(2, args);
 
+    // But now I get segfault with following stack trace:
+    //
+    // #0  0x0000000802c97c4e in rb_make_exception () from /usr/local/lib/libruby24.so.24
+    // #1  0x0000000802c97423 in rb_frozen_class_p () from /usr/local/lib/libruby24.so.24
+    // #2  0x0000000802c9610d in rb_exc_raise () from /usr/local/lib/libruby24.so.24
+    // #3  0x0000000802c9433c in rb_loaderror () from /usr/local/lib/libruby24.so.24
+    // #4  0x0000000802c94d1f in rb_sys_warning () from /usr/local/lib/libruby24.so.24
+    // #5  0x0000000802d5b392 in rb_load_file_str () from /usr/local/lib/libruby24.so.24
+    // #6  0x0000000802d5c43f in ruby_process_options () from /usr/local/lib/libruby24.so.24            
+    //
+    // Which seems to imply that it is trying to load /dev/null as a Ruby
+    // module. So I modified it and this is what works now:
+       
+    static char* args[] = { "ruby" };
+    ruby_process_options(1, args);
+    
     // Load Ruby encodings, otherwise we'll get all kinds of "Unitialized
     // constanct Encoding::UTF-7", etc. everywhere.
     rb_enc_find_index("encdb");
