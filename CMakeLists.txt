@@ -137,6 +137,4 @@ message( STATUS )
 include( CMakeExportBuildSettings )
 
 cmake_export_build_settings( "config/BuildSettings.cmake" )
-# Export library dependencies (keep this as the last line in the file)
-export_library_dependencies( "config/LibDeps.cmake" )
 
