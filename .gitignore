@@ -1,0 +1,17 @@
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+config/mod_ruby.conf
+debian/changelog
+*.gitmap
+include/apr.h
+include/common.h
+include/platform.h
+src/config.h
+*.so.*
+*.so
+*.a
+*.swp
+Makefile
+src/Makefile
+
