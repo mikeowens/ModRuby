@@ -1,6 +1,6 @@
-LoadModule rsp_module ${APACHE_MODULES_DIR}/mod_rsp.so
+LoadModule rsp_module ${APACHE_MODULES_DIR}/mod_ruby.so
 
-<IfModule rsp_module>
+<IfModule ruby_module>
 
 AddHandler rsp-handler .rsp
 AddHandler rsp-handler .rhtml
