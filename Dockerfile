@@ -12,6 +12,8 @@ RUN yum -y upgrade && yum install -y \
   curl \
   cyrus-sasl \
   cyrus-sasl-devel \
+  flex \
+  flex-devel \
   gcc \
   gcc-c++ \
   git \
