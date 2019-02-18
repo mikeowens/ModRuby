@@ -19,3 +19,4 @@ src/config.h
 Makefile
 src/Makefile
 install_manifest.txt
+src/rhtml.yy.cpp
