@@ -87,7 +87,7 @@ add_library( static_lib STATIC ${library_sources} )
 set_target_properties( static_lib PROPERTIES OUTPUT_NAME ${PROJECT_NAME} )
 
 # 3. RHTML Shared Library
-add_library( rhtml_lib SHARED rhtml.cpp ruby_rhtml.cpp ruby.cpp )
+add_library( rhtml_lib SHARED rhtml.cpp ruby_rhtml.cpp rhtml.yy.cpp ruby.cpp )
 
 set_target_properties( rhtml_lib PROPERTIES
 
