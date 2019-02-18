@@ -1,4 +1,4 @@
-LoadModule rsp_module ${APACHE_MODULES_DIR}/mod_ruby.so
+LoadModule ruby_module ${APACHE_MODULES_DIR}/mod_ruby.so
 
 <IfModule ruby_module>
 
