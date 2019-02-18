@@ -1,4 +1,4 @@
-MESSAGE( STATUS "SYSTEM: ${SYSTEM} (linux/debian/settings.cmake)" )
+MESSAGE( STATUS "SYSTEM: ${SYSTEM} (linux/Debian/settings.cmake)" )
 
 # Paths, compiler and linker settings
 SET(PREFIX "/usr")
