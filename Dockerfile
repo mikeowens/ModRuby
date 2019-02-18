@@ -50,4 +50,5 @@ WORKDIR /usr/src/mod_ruby
 
 COPY . /usr/src/mod_ruby
 
-RUN cmake . && make && make install
+# Pulls in the RVM environment and installed ruby
+RUN /bin/bash -l -c "cmake . && make && make install"
