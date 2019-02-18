@@ -42,15 +42,31 @@ RUN gpg \
 # Install RVM system wide
 RUN curl -sSL https://get.rvm.io | bash -s stable
 
+# Set our shell to a bash full login environment to pull in
+# RVM's profile in all RUN instructions below.
+# (Requires Docker 1.12)
+SHELL ["/bin/bash", "-l", "-c"] 
+
 # In case we missed any package requirements, this installs them
-RUN /bin/bash -l -c "rvm requirements"
+RUN rvm requirements
 
 # Pick your ruby version here
-RUN /bin/bash -l -c "rvm install ruby-2.3.3"
+RUN rvm install ruby-2.3.3
+
+# Setup our libruby.so dir in ld.so.conf
+RUN rvm config-get libdir > /etc/ld.so.conf.d/ruby.conf && ldconfig
 
 WORKDIR /usr/src/mod_ruby
 
 COPY . /usr/src/mod_ruby
 
 # Pulls in the RVM environment and installed ruby
-RUN /bin/bash -l -c "cmake . && make && make install"
+RUN cmake . && make && make install
+
+# Manually copy some files I couldn't figure out with the CMake system
+RUN cp -a config/mod_ruby.conf /etc/httpd/conf.modules.d/
+
+# librhtml.so
+RUN cp -a lib/* $(rvm config-get libdir) && ldconfig
+
+RUN rm -f /etc/httpd/conf.d/welcome.conf
