@@ -554,9 +554,9 @@ int ruby_request_handler(request_rec* r)
     apache::Request req(r);
 
     req.setup_cgi();
-
+    
     // Double check the handler name
-    if (strcmp(req.handler(), "ruby-handler") != 0)
+    if (req.handler() && strcmp(req.handler(), "ruby-handler") != 0)
     {
         return DECLINED;
     }
@@ -684,7 +684,7 @@ int ruby_generic_handler( request_rec* r,
     req.setup_cgi();
 
     // Double check the handler name
-    if (strcmp(req.handler(), handler_name) != 0)
+    if (req.handler() && strcmp(req.handler(), handler_name) != 0)
     {
         return DECLINED;
     }
