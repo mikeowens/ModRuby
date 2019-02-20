@@ -1,0 +1,9 @@
+#!/bin/bash
+# start httpd in the background, attach with gdb
+# in the foreground
+
+/usr/sbin/httpd
+sleep 3
+# last PID is our single worker child
+pid=$(ps ax |grep '/usr/sbin/httpd' |grep -v grep | awk '{print $1}' |tail -1)
+/usr/bin/gdb -x /gdb.input -p $pid
