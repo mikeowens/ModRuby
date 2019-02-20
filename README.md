@@ -41,9 +41,47 @@ On other systems you can build generally as follows:
     bash $ make
     bash $ make install
 
+## Building with Docker
+
+To build the binary files using a CentOS 7 Docker environment:
+
+    bash $ ./script/build_docker
+
+Edit the Dockerfile to change ruby versions and make other small tweaks.
+
+The build will create these files in the local repo:
+
+  * lib/librhtml.so.3.0.0
+  * src/mod_ruby.so 
+
+
 ## Documentation
 
 Documentation is [here](http://mikeowens.github.io/mod_ruby/mod_ruby.html).
+
+## Developing with Docker
+
+If you want to try fixing bugs, or patching new features into mod_ruby, 
+try using the Docker image as a handy developer's environment:
+
+    bash $ ./script/docker_run
+    ... 
+    0x00007f30bb13733f in accept4 () from /lib64/libc.so.6
+
+A single Apache worker child is running in a gdb shell.  Smoke test
+mod_ruby in a separate terminal window:
+
+    bash $ curl localhost:8080
+    Hi there from ruby
+    <html><body>Hello World from HTML!</body></html>
+
+If mod_ruby crashes, gdb will print a full stack trace.  You may also do 
+`Ctrl + C` to break out to a gdb prompt to inspect the running Apache child.
+
+Set breakpoints or alter gdb's startup commands in `docker/gdb.input` and rebuild
+the Docker image.  Alter httpd.conf and test.rb to create different test cases.
+
+Submit pull requests using feature branches, and have fun!
 
 ## Additional Information
 
