@@ -16,6 +16,7 @@ RUN yum -y upgrade && yum install -y \
   flex-devel \
   gcc \
   gcc-c++ \
+  gdb \
   git \
   gpg \
   httpd \
@@ -61,7 +62,10 @@ WORKDIR /usr/src/mod_ruby
 COPY . /usr/src/mod_ruby
 
 # Pulls in the RVM environment and installed ruby
-RUN cmake . && make && make install
+RUN cmake . && make -j4 && make install
+
+# Remove some junk that the httpd package installs 
+RUN rm -f /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.modules.d/00-systemd.conf
 
 # Manually copy some files I couldn't figure out with the CMake system
 RUN cp -a config/mod_ruby.conf /etc/httpd/conf.modules.d/
@@ -69,4 +73,22 @@ RUN cp -a config/mod_ruby.conf /etc/httpd/conf.modules.d/
 # librhtml.so
 RUN cp -a lib/* $(rvm config-get libdir) && ldconfig
 
-RUN rm -f /etc/httpd/conf.d/welcome.conf
+COPY docker/index.html /var/www/html/index.html
+COPY docker/test.rb /var/www/html/test.rb
+COPY docker/httpd.conf /etc/httpd/conf/httpd.conf
+COPY docker/gdb.input /gdb.input
+COPY docker/httpd-gdb /httpd-gdb
+
+# Force apache logs to docker console logs
+RUN ln -sf /dev/stdout /var/log/httpd/access_log \
+  && ln -sf /dev/stderr /var/log/httpd/error_log 
+
+# Graceful shutdown signal for apache
+# (Requires Docker > 1.11)
+# Note: gdb is set to trap SIGWINCH, so this is for
+# alternate uses with less debugging
+#STOPSIGNAL SIGWINCH
+
+# If you want a simpler image without gdb...
+#CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+CMD ["/httpd-gdb"]
