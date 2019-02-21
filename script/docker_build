@@ -1,0 +1,9 @@
+#!/bin/bash
+
+root=$( readlink -f $( dirname $( readlink -f $0 ) )/.. )
+docker build -t mod_ruby $root
+docker rm -f mod_ruby_build_container
+docker create --name mod_ruby_build_container mod_ruby
+docker cp mod_ruby_build_container:/usr/src/mod_ruby/lib/librhtml.so.3.0.0 $root/lib/
+docker cp mod_ruby_build_container:/usr/src/mod_ruby/lib/librhtml.so $root/lib/
+docker cp mod_ruby_build_container:/usr/src/mod_ruby/src/mod_ruby.so $root/src/
