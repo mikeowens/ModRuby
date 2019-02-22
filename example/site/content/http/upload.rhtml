@@ -1,0 +1,118 @@
+<h1>Uploading Files</h1>
+
+<%
+if @request.queries['delete'] == '1'
+  %x{rm uploaded/*}
+end
+
+require 'rsp/util/upload'
+
+# This loop parses the main body of the form, iterating over the embedded MIME
+# parts.
+
+
+# Get the multipart boundary e.g. '-----------------------------3925256682469'  
+marker = @request.boundary()
+
+# If a boundary exists, then we have form data
+if marker != nil
+
+  puts '<pre>'
+
+  # Create a parser
+  parser = RSP::Rfc2388::Parser.new()
+
+  parser.parse(@request, marker) do |part|
+
+    # We have a MIME part of some sort, but we don't know what kind. Look for a
+    # file argument. This *implies* that there is a file. A better way to do it
+    # is to
+    #
+    # 1. Have a clue what you are posting and what variables correspond to
+    #    what types. or ...
+    #
+    #
+    # 2. Look for the existing of part.fileName. This comes from the filename
+    # attribute in the Content-Disposition header. This may or may not be
+    # present depending on the browser. Per the RFC:
+    #
+    #  4.4 Other attributes
+    #
+    #    Forms may request file inputs from the user; the form software may
+    #    include the file name and other file attributes, as specified in [RFC
+    #    2184].
+    #
+    #    The original local file name may be supplied as well, either as a
+    #    "filename" parameter either of the "content-disposition: form-data"
+    #    header or, in the case of multiple files, in a "content-disposition:
+    #    file" header of the subpart. The sending application MAY supply a file
+    #    name; if the file name of the sender's operating system is not in
+    #    US-ASCII, the file name might be approximated, or encoded using the
+    #    method of RFC 2231.
+    #
+    # 3. If you are clueless as to what you are posting, check the Content-Type
+    #    header of the part to see if it is 'application/octet-stream', e.g.:
+    #
+    #    if part.headers['content-type']['type'] == 'application/octet-stream'
+    #
+    # All in all, its best of your application knows which variables correspond
+    # to actual files and go by the field name.
+
+    # Here we will play fast and loose and look for a fileName attribute
+    if part.fileName != nil
+      
+      # Open the file
+      
+      # Normally, you wouldn't want to save the file using the posted filename
+      # as this can be errorprone (with IE and all). Rather, know the variables
+      # you are posting and map them to some corresponding file name.
+      
+      puts "Opening uploaded/#{part.fileName}"
+      upload_file = open("uploaded/#{part.fileName}", 'w')
+
+      # Read it out
+      bytes = 0
+      part.read() do |content|
+        bytes += content.size
+        puts "  writing #{content.size}..."
+        upload_file.write(content);
+      end
+      
+      # Close
+      upload_file.close()
+    else
+      
+      # This is just simply content part of some kind and we will just read the
+      # data into the part's buffer
+      part.read()
+    end
+    
+    if part.fileName != nil
+      puts "Uploaded file %-20s: %s" % [part.fileName, part.contentType]
+    else
+      puts "%-25s: %s" % [part.name, part.data]
+    end
+  end
+
+  puts '</pre>'
+end
+%>
+
+<form name="input" action="upload.rhtml?queryarg=junior+mints" 
+      method="post" enctype="multipart/form-data">
+
+
+<table>
+<tr><td>File 1:</td><td><input type="file" name="file1"></td></tr>
+<tr><td>File 2:</td><td><input type="file" name="file2"></td></tr>
+<tr><td>File 3:</td><td><input type="file" name="file3"></td></tr>
+<tr><td></td><td><input type="submit" value="Upload"></td></tr>
+</table>
+
+</form>
+
+<p>
+
+You can see your uploaded files <a href="uploaded">here</a>.<br>
+
+To delete your files and reload, click <a href="upload.rhtml?delete=1">here</a>.

@@ -1,0 +1,11 @@
+<pre>
+<%
+@response.setCookie('larry', '1')
+@response.setCookie('mo',    @request.cookie('mo').to_i + 1)
+@response.setCookie('curly', @request.cookie('curly').to_i + 1)
+
+puts "Cookies: "
+@request.cookies.each do |key, value|
+  puts "  #{key}=#{value}" 
+end
+%>

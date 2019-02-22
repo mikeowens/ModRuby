@@ -1,0 +1,18 @@
+<pre>
+
+You were internally redirected here. Notice that while the URL in the CGI
+environment is <%=@request.cgi['REQUEST_URI']%>
+
+The actual file that handled the request is <%=@request.file%>.
+
+The URL and query arguments in the CGI environment stay the same in an internal
+redirect. If you want the current information, you need to use the Apache
+request object.
+
+@request.unparsed_uri():      <%=@request.unparsed_uri()%>
+@request.filename():          <%=@request.filename()%>
+@request.prev.unparsed_uri(): <%=@request.prev.unparsed_uri()%>
+
+<p>
+
+Click <a href="redirect.rhtml">here</a> to go back.

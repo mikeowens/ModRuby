@@ -1,0 +1,13 @@
+--- 
+site_name: devsite
+domain: devsite.com
+settings:
+  connectdb: false 
+urls: 
+  homepage: http://local.devsite.com
+databases: 
+  main:
+    host: localhost
+    db: dev
+    user: dev
+    password: dev

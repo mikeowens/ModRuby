@@ -1,0 +1,10 @@
+<pre>
+<%
+vh = @env['vhost']
+
+puts "Site       : #{vh.serverName}"
+puts "Site Dir   : #{vh.siteDir}"
+puts "Config Dir : #{vh.configDir}"
+puts "Lib Dir    : #{vh.libDir}"
+puts "Doc Root   : #{vh.documentRoot}"
+%>

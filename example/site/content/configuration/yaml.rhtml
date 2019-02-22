@@ -1,0 +1,26 @@
+<pre>
+This is: <%=@env['config']['domain']%>
+<!-- default.rhtml -->
+
+<%
+puts "Site       : #{@env['config']['site_name']}"
+puts "Class      : #{self.class}"
+puts "Method     : #{@method}"
+puts "VHost      : #{@request.serverName}"
+puts "Doc Root   : #{@request.documentRoot}"
+
+config = @env['config']
+puts "Site       : #{config['site']}"
+%>
+
+<p>Database configuration:
+
+<%
+dbs = @env['config']['databases']
+dbs.each do |k,v|
+  puts "Datbase: #{k}"
+  v.sort.each do |k,v|
+    puts "    #{k}=#{v}"
+  end
+end
+%>

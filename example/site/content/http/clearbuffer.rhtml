@@ -1,0 +1,9 @@
+Theorectically, this should show up in the content.
+<%
+puts 'This should as well'
+
+# But is won't because of this:
+@response.clear()
+%>
+
+Only this should render on a page.

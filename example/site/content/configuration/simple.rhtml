@@ -1,0 +1,8 @@
+<pre>
+<%
+puts "Site       : #{@env['config']['site_name']}"
+puts "Class      : #{self.class}"
+puts "Method     : #{@request.method}"
+puts "VHost      : #{@request.serverName}"
+puts "Doc Root   : #{@request.documentRoot}"
+%>
