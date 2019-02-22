@@ -130,10 +130,6 @@ endif()
 # Installation
 #-------------------------------------------------------------------------------
 
-# Install library
-
-set(APACHE_MODULES_DIR "/usr/lib/apache2/modules")
-
 # Install Ruby library
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ruby/ DESTINATION ${RUBY_RUBY_LIB_DIR} COMPONENT)
 

@@ -45,7 +45,12 @@ if( PLATFORM STREQUAL "darwin" )
 endif()
 
 if( PLATFORM STREQUAL "linux" )
-  include(${CMAKE_CURRENT_SOURCE_DIR}/config/linux/debian/settings.cmake)
+  find_program(LSB_RELEASE_EXEC lsb_release)
+  execute_process(COMMAND ${LSB_RELEASE_EXEC} -is
+    OUTPUT_VARIABLE LSB_RELEASE_ID
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message( STATUS "LSB_RELEASE_ID: ${LSB_RELEASE_ID}" )
+  include(${CMAKE_CURRENT_SOURCE_DIR}/config/linux/${LSB_RELEASE_ID}/settings.cmake)
 endif()
 
 execute_process( COMMAND ${DATE_COMMAND}
