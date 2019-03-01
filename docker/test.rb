@@ -6,7 +6,7 @@ module Test
       true
     end
     def shutdown
-      STDERR.puts "Ruby shutdown()"
+      STDERR.puts "Ruby Test shutdown()"
     end
   end
 end
