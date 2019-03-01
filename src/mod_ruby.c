@@ -2,7 +2,7 @@
 #include <http_config.h>
 #include <http_protocol.h>
 #include <http_log.h>
-
+#include <http_request.h>
 #include <ap_config.h>
 
 #include "common.h"
@@ -50,6 +50,12 @@ static int ruby_script_handler(request_rec *r)
     return ruby_request_script_handler(r);
 }
 
+/* Ruby access handler */
+static int ruby_access_handler(request_rec *r)
+{
+    return ruby_request_access_handler(r);
+}
+
 static apr_status_t input_filter( ap_filter_t *f,
                                   apr_bucket_brigade* bb,
                                   ap_input_mode_t mode,
@@ -79,6 +85,9 @@ static void register_hooks(apr_pool_t *p)
 
     /* The ruby script handler */
     ap_hook_handler(ruby_script_handler, NULL, NULL, APR_HOOK_MIDDLE);
+    
+    /* check access handler */
+    ap_hook_check_access_ex(ruby_access_handler, NULL, NULL, APR_HOOK_FIRST, AP_AUTH_INTERNAL_PER_URI);
 
     ap_register_input_filter( "ruby_input_filter", input_filter, NULL,
                                AP_FTYPE_RESOURCE);
@@ -184,13 +193,13 @@ set_ruby_config_var( cmd_parms *parms,
     {
         ruby_config* cfg = ap_get_module_config( parms->server->module_config,
                                                 &ruby_module );
-        
+
         apr_table_set(cfg->options, (char*)arg1, (char*)arg2);
-        
         return NULL;
     }
     
     ruby_dir_config* dir_config = (ruby_dir_config*)config;
+
     apr_table_set(dir_config->options, (char*)arg1, (char*)arg2);
     
     /* Success */
@@ -263,6 +272,36 @@ set_ruby_handler(cmd_parms *parms, void* config, const char* arg)
 }
 
 static const char* 
+set_ruby_access_handler(cmd_parms *parms, void* config, const char* arg)
+{
+    if(arg == NULL)
+    {
+        return NULL;
+    }
+    
+    // If this is in a server config (outside directory). This can only be in
+    // either global environment or <VirtualHost>.
+    if(ap_check_cmd_context(parms, NOT_IN_DIR_LOC_FILE) == NULL)
+    {
+        ruby_config* cfg = ap_get_module_config( parms->server->module_config,
+                                                &ruby_module );
+        
+        /* DO NOT use apr_pstrdup(parms->pool, arg) here to make a copy of the
+        ** string before assignbment. It will cause a segfault.
+        */
+        cfg->handler = arg;
+        
+        return NULL;
+    }
+    
+    ruby_dir_config* dir_config = (ruby_dir_config*)config;
+    apr_table_set(dir_config->options, "RubyAccessHandler", (char*)arg);
+
+    /* Success */
+    return NULL;
+}
+
+static const char* 
 set_ruby_handler_declare(cmd_parms *parms, void* config, const char* arg)
 {
     if(arg == NULL)
@@ -271,7 +310,7 @@ set_ruby_handler_declare(cmd_parms *parms, void* config, const char* arg)
     }
     
     const char* errmsg = ap_check_cmd_context(parms, NOT_IN_DIR_LOC_FILE);
-
+  
     // If this is outside of a directory
     if(errmsg == NULL)
     {
@@ -406,6 +445,15 @@ static const command_rec mod_ruby_cmds[] =
         "-- set a Ruby handler."
     ),
 
+    AP_INIT_TAKE1(
+        "RubyAccessHandler",
+        set_ruby_access_handler,
+        NULL,
+        RSRC_CONF | OR_ALL,
+        "RubyAccessHandler {name} "
+        "-- set a Ruby check_access handler."
+    ),
+    
     AP_INIT_TAKE2(
         "RubyConfig",
         set_ruby_config_var,

@@ -392,6 +392,28 @@ int ruby_request_init_configuration(request_rec* r)
         }
     }
 
+    // RubyAccessHandler is optional.
+    if (merge_var(r, dir_cfg, notes, "RubyAccessHandler", cfg->handler))
+    {
+        // It is defined. So merge all of the handler's settings into the notes
+        // table.
+        apr_hash_t* h_config = ruby_handler_config(r, notes.get("RubyAccessHandler"));
+
+        if (h_config != NULL)
+        {
+            apr_hash_index_t* hi;
+            char* key;
+            apr_ssize_t klen;
+            char* data;
+
+            for (hi = apr_hash_first(r->pool, h_config); hi; hi = apr_hash_next(hi))
+            {
+                apr_hash_this(hi, (const void**)&key, &klen, (void**)&data);
+                notes.set(key, data);
+            }
+        }
+    }
+    
     return 0;
 }
 
@@ -509,7 +531,6 @@ modruby::Handler ruby_request_get_handler(request_rec* r)
             method = (const char*)apr_hash_get( h_config,
                                                 "RubyHandlerMethod",
                                                 APR_HASH_KEY_STRING );
-
             return ruby_request_load_handler(r, module, cls, method);
         }
     }
@@ -545,6 +566,54 @@ modruby::Handler ruby_request_get_handler(request_rec* r)
         return ruby_request_load_handler(r, module, cls, method);
     }
 
+    // Empty handler -- signifies error
+    return modruby::Handler();
+}
+
+/* retreives the AccessHandler, or Default if it's not defined */
+modruby::Handler ruby_request_get_access_handler(request_rec* r)
+{
+    /* Handler resolution. Look for RubyAccessHandler directive in dir_config or
+    ** server_config. If not present, do nothing
+    **
+    ** Handler can be in server or dir config. dir overrides server.
+    */
+
+    apache::Request req(r);
+
+    // This contains all the configuration options
+    apr::table notes = req.notes();
+
+    ruby_config* cfg = ruby_server_config(r->server->module_config);
+
+    // Use default server config
+    const char* module = cfg->default_handler_module;
+    const char* cls    = cfg->default_handler_class;
+    const char* method = cfg->default_handler_method;
+
+    // Check for RubyAccessHandler
+    if (notes.get("RubyAccessHandler") != NULL)
+    {
+        apr_hash_t* h_config;
+        h_config = ruby_handler_config(r, notes.get("RubyAccessHandler"));
+
+        // If it doesn't exist
+        if (h_config != NULL)
+        {
+            module = (const char*)apr_hash_get( h_config,
+                                                "RubyHandlerModule",
+                                                APR_HASH_KEY_STRING );
+
+            cls    = (const char*)apr_hash_get( h_config,
+                                                "RubyHandlerClass",
+                                                APR_HASH_KEY_STRING );
+
+            method = (const char*)apr_hash_get( h_config,
+                                                "RubyHandlerMethod",
+                                                APR_HASH_KEY_STRING );
+            return ruby_request_load_handler(r, module, cls, method);
+        }
+    }
     // Empty handler -- signifies error
     return modruby::Handler();
 }
@@ -796,3 +865,111 @@ int ruby_request_script_handler(request_rec* r)
     return ruby_generic_handler(r, "ruby-script-handler", "script");
 }
 
+int ruby_request_access_handler(request_rec* r)
+{
+    apache::Request req(r);
+
+    req.setup_cgi();
+    
+    // Set the default request to OK (200). The Ruby handler is free to change
+    // this, but if it doesn't we return OK below.
+
+    int rc = r->status;
+
+    try
+    {
+        // Load configuration
+        if (ruby_request_init_configuration(r) != 0)
+        {
+            // Configuration failed
+            return DONE;
+        }
+
+        modruby::Handler handler = ruby_request_get_access_handler(r);
+
+        if (handler.object == NULL)
+        {
+            // no RubyAccessHandler is defined, return DECLINED
+            return DECLINED;
+        }
+        // Call the method, passing in the request object
+        VALUE result = handler.object->method( handler.method(), 1,
+                                               make_request(r) );
+    }
+    catch (const ruby::Exception& e)
+    {
+        // Something in the Ruby failed. Report it. This should not be an
+        // application error, as all of those should (in theory) be caught in
+        // ruby_handler. This error will have to something within the ruby_handler.
+
+        // Create a C++ request object, for convenience
+        apache::Request request(r);
+
+        // Check the exception type. If it is a redirect or RequestTermination,
+        // then we need to do special handling.
+        string exception_type = e.type();
+
+        if (exception_type == "ModRuby::Redirect")
+        {
+            // This is a utility exception used within the framework. It does
+            // not indicate an error.
+
+            return DONE;
+        }
+
+        if (exception_type == "ModRuby::RequestTermination")
+        {
+            // This is a utility exception used within the framework. It does
+            // not indicate an error.
+
+            return DONE;
+        }
+
+        // Else it's a bonified exception. Get the message and stacktrace.
+
+        // Create the error message
+        stringstream strm;
+        strm << "ModRuby FATAL ERROR: Ruby Exception: " << e.what() << "\n"
+             << e.stackdump();
+
+        // Print error to content
+        request.rputs(strm.str().c_str());
+
+        // Log error (critical)
+        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server,
+                      "mod_ruby[%i] : %s",
+                      getpid(), strm.str().c_str() );
+
+        // The unit test function should pick up on this, even though we return
+        // HTTP OK. By convention, the HTTP response status is not what matters
+        // here, it's what's in the headers.
+
+        return DONE;
+    }
+    catch (const std::exception& e)
+    {
+        // Create a C++ request object, for convenience
+        apache::Request request(r);
+
+        // Print error to content
+        request.rprintf("mod_ruby Error: %s", e.what());
+
+        // Log error (critical)
+        ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server,
+                      "mod_ruby[%i] : %s",
+                      getpid(), e.what() );
+
+        return DONE;
+    }
+
+    // If the status changed, use its value
+    if (r->status != rc)
+    {
+        return r->status;
+    }
+    else
+    {
+        // Otherewise everything was OK.
+        return OK;
+    }
+}
