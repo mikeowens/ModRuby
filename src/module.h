@@ -47,6 +47,7 @@ int ruby_request_handler(request_rec* req);
 int ruby_request_rhtml_handler(request_rec* req);
 int ruby_request_script_handler(request_rec* req);
 int ruby_request_init_configuration(request_rec* r);
+int ruby_request_access_handler(request_rec* req);
 
 /* Error logging */
 int ruby_log_error(request_rec* r, int level, const char* msg);

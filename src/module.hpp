@@ -60,5 +60,7 @@ class Handler
 } // end namespace modruby
 
 modruby::Handler ruby_request_get_handler(request_rec* r);
+modruby::Handler ruby_request_get_access_handler(request_rec* r);
+
 
 #endif
