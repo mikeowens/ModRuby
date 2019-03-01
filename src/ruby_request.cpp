@@ -109,6 +109,7 @@ extern "C" {
     static VALUE m_set_keepalive(VALUE self);
     static VALUE m_set_max_content_length(VALUE self, VALUE bytes);
     static VALUE m_set_status(VALUE self, VALUE status);
+    static VALUE m_set_user(VALUE self, VALUE user);
     static VALUE m_setup_client_block(VALUE self, VALUE policy);
     static VALUE m_should_client_block(VALUE self);
     static VALUE m_some_auth_required(VALUE self);
@@ -241,6 +242,7 @@ void init_request(VALUE module)
     rb_define_method(cls, "set_keepalive", (fn)m_set_keepalive, 0);
     rb_define_method(cls, "set_max_content_length", (fn)m_set_max_content_length, 2);
     rb_define_method(cls, "set_status", (fn)m_set_status, 1);
+    rb_define_method(cls, "set_user", (fn)m_set_user, 1);
     rb_define_method(cls, "setup_client_block", (fn)m_setup_client_block, 1);
     rb_define_method(cls, "should_client_block", (fn)m_should_client_block, 0);
     rb_define_method(cls, "some_auth_required", (fn)m_some_auth_required, 0);
@@ -1109,6 +1111,17 @@ VALUE m_set_status(VALUE self, VALUE status)
     Check_Type(status, T_FIXNUM);
 
     req->set_status(NUM2INT(status));
+
+    return Qnil;
+}
+
+VALUE m_set_user(VALUE self, VALUE user)
+{
+    apache::Request* req = get_object(self);
+
+    Check_Type(user, T_STRING);
+
+    req->set_user(StringValuePtr(user));
 
     return Qnil;
 }
