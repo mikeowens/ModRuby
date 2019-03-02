@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<appendix version="5.0" xml:id="mod_ruby.reference.global.index"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Module API Reference</title>
+
+<sect1><title>Overview</title>
+
+<para>The following section documents the Ruby C++ Extensions for ModRuby. The
+Apache module source is documented using Doxygen, and its documenation is
+available <ulink url="dox/html/index.html">here</ulink>.
+</para>
+
+</sect1>
+
+<xi:include href="mod_ruby.global.xml" 
+            parse="xml" 
+            xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+<xi:include href="mod_ruby.rhtml.xml" 
+            parse="xml" 
+            xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+</appendix>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.apache.process"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>The Apache Process Class</title>
+
+<para>The Apache <classname>Process</classname> class contains information
+related to the network connection associated with the current request.</para>
+
+<para>You can obtain the <classname>Process</classname> instance associated with
+the current request using the <link
+linkend="process_def"><methodname>Server::process()</methodname></link> method
+(or directly via <methodname>Request::server()::process()</methodname>.
+</para>
+
+<sect2><title>Method Documentation</title>
+
+<para><xref linkend="process_methods"/> contains the exhaustive list of
+methods, in alphabetical order. The documentation of each method follows.
+
+  <table frame="none" pgwide="1" id="process_methods">
+    <title>Apache Connection Methods</title>
+    <tgroup cols="2" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Type</emphasis></entry>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="argc_def">
+                <function>argc()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="argv_def">
+                <function>argv()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="short_name_def">
+                <function>short_name()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<bridgehead id="argc_def" renderas="sect4">argc()</bridgehead>
+
+<para><function>argc()</function> returns the number of arguments passed to the
+process, each of which which is stored in the <literal>argv</literal>
+structure.</para>
+
+<bridgehead id="argv_def" renderas="sect4">argc()</bridgehead>
+
+<para><function>argc()</function> returns a Ruby <classname>Array</classname>
+containing the number of arguments passed to the process.</para>
+
+<bridgehead id="short_name_def" renderas="sect4">short_name()</bridgehead>
+
+<para><function>short_name()</function> returns a string containing the program
+name used to execute the program.
+</para>
+
+</sect2>
+
+</sect1>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.module.config.contexts"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Variables and Contexts</title>
+
+<para>Orthogonal to the module/class/method request routing mechanism are the
+concepts of configuration contexts and variables. ModRuby allows you to define
+your own custom configuration variables and Apache allows you to merge and
+override variables within various scopes (or contexts) within the configuration
+file. In this section we will explores these ideas and their
+implications.</para>
+
+<sect2><title>Configuration Contexts</title>
+
+<para>In Apache terms, there are basically two configuration contexts: server
+configuration and directory configuration. That is, you can specify
+configuration variables in server (global) scope as well as specifically within
+directory (local) scope. What this amounts to is that server scope is sort of a
+global default: if nothing else is specified, this is the information the
+ModRuby module will use to route requests (module/class/method). But if there
+are directory configurations specified, they will override and or complement the
+server scope.</para>
+
+<para>Consider the following example:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+# Define a sheepdip handler
+RubyHandlerDeclare SHEEPDIP
+RubyHandlerModule  SHEEPDIP sheepdip/handler
+RubyHandlerClass   SHEEPDIP Sheepdip::Handler
+RubyHandlerMethod  SHEEPDIP handle
+
+# Define a jujyfruit handler
+RubyHandlerDeclare JUJIFRUIT
+RubyHandlerModule  JUJIFRUIT jujifruit
+RubyHandlerClass   JUJIFRUIT JujiFruit::Coolness
+RubyHandlerMethod  JUJIFRUIT handle
+
+# Ruby files go to framework handler
+AddHandler ruby-handler .rb
+
+# By default, the SHEEPDIP framework handler should to be used
+# as the framework handler matches
+RubyHandler SHEEPDIP
+
+# But for requests in the /fruity directory
+<Location /fruity>
+    RubyHandler JUJIFRUIT
+</Location>
+
+</IfModule>]]>
+</programlisting>
+
+We have defined two framework handlers: <literal>SHEEPDIP</literal> and
+<literal>JUJIFRUIT</literal>. Further, we’ve made it so that if a request comes
+in for any file with a <filename>.rb</filename> extension, the
+<varname>ruby-handler</varname> framework handler will be called to service the
+request. Further, when this handler runs, it will by default route all requests
+to the <literal>SHEEPDIP</literal> handler as the <literal>RubyHandler</literal>
+has been set to use it in the server (global) scope. So for example a request
+for <filename>/jujifruit.rb</filename> will be handled by the
+<literal>SHEEPDIP</literal> handler (regardless of its name to the
+contrary).</para>
+
+<para>However, if a request for <filename>/fruity/sheepdip.rb</filename> comes
+in, the <literal>JUJIFRUIT</literal> handler will be used to handle the
+request. This is because the <varname>Location</varname> block &mdash; which is
+considered as directory scope &mdash; overrides global scope. So its
+<varname>RubyHandler</varname> directive overrides the global one.</para>
+
+<para>Basically all we are doing here is fixing phase 1 to point to the
+framework handler and then messing around with phase 2 &mdash; specifying what
+framework handlers are fired. So we know that no matter what, we’ve fixed the
+<methodname>ruby-handler</methodname> to fire for any request for files that
+have a <filename>.rb</filename> extension. The point is that the rules for
+defining phase 2 can be layered into different scopes: a global default which
+can then be overridden by directory level settings.</para>
+
+</sect2>
+
+<sect2><title>Configuration Variables</title>
+
+<para>ModRuby provides a way for you to store you own configuration variables.
+You use the <varname>RubyConfig</varname> directive to do so. It takes two
+arguments: a key and a value. It then stores it in the server (global) settings
+table, which you can retreive within Ruby.</para>
+
+<para>For example say that you wanted to set a global configuration setting
+named <varname>GEM_PATH</varname> that which is accessible to all your
+scripts. You would simply do the following in your Apache configuration file:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+RubyConfig GEM_PATH /var/lib/gems/2.4.0/
+
+</IfModule>]]>
+</programlisting>
+
+Like other directives, this variable is subject to server and directory
+contexts. For example, say you had the following:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+RubyConfig GEM_PATH /var/lib/gems/2.4.0/
+
+# But for requests in the /fruity directory
+<Location /fruity>
+  RubyConfig GEM_PATH /var/lib/jujifruit/
+</Location>
+
+# But for requests in the /sheepdip directory
+<Directory /var/www/mysite/sheedip>
+  RubyConfig GEM_PATH /var/lib/sheepdip/
+</Location>
+
+</IfModule>]]>
+</programlisting>
+
+For all requests within the <filename>/fruity</filename> location, the global
+<varname>GEM_PATH</varname> will be overriden with the value in the
+<filename>/fruity</filename> <varname>Location</varname> block. The same is true
+for the <filename>/var/www/mysite/sheedip</filename> directory. Thus directory
+contexts always complement and override server contexts.</para>
+ 
+<sect3><title>Configuration Variables for Handlers</title>
+
+<para>As touched upon earlier, there is also a way for you to set specific
+configuration variables for framework handlers. For example, say you wanted to
+set the <varname>GEM_PATH</varname> only for the <literal>SHEEPDIP</literal>
+handler. You would use the <varname>RubyHandlerConfig</varname> which works the
+same way but takes a handler name as the first argument. For example, in this
+case you would have something like:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+RubyHandlerConfig SHEEPDIP GEM_PATH /var/lib/gems/2.4.0/
+
+# But for requests in the /fruity directory
+<Location /fruity>
+  RubyHandlerConfig SHEEPDIP GEM_PATH /var/lib/jujifruit/
+</Location>
+
+</IfModule>]]>
+</programlisting>
+
+And just like before, the values in directory contexts &mdash; even for handler
+configurations &mdash; will be merged with the server contexts, overriding them
+wherever there are collisions.</para>
+
+</sect3>
+
+<para>Now the question is: how do you get to these values? Well, internally
+there are two configuration sources: one for the server and one for the
+directory corresponding to the active request. Unfortunately, these are C
+structs in Apache, and you cannot easily get to them from Ruby. But as it turns
+out, you don’t really need to. In every request you have access to a general
+purpose APR table that will contain everything you need. Internally the ModRuby
+module will take all ModRuby directives and merge them into a single APR table
+which you can get to at runtime. This table is the the "notes" table which is
+accessible via the <methodname>Apache::Request::notes()</methodname> method. For
+every request, ModRuby automatically does the server and directory merging for
+you, giving you the final merged values for everything in the notes
+table.</para>
+
+<para>So, for example, to get the value for the <varname>GEM_PATH</varname> from
+within Ruby, you would just do the following:
+
+<sourcecode href="modruby_module_config_get.rb"/>
+
+</para>
+
+<para>APR tables are given full treatment in <xref
+linkend="modruby.module.api"/>.</para>
+
+</sect2>
+
+<sect2><title>Environmental Variables</title>
+
+<para>The last feature in configuration is setting environmental variables. You
+can do this using the <varname>RubyEnv</varname> directory which works
+exactly like <varname>RubyConfig</varname>. So, for example if you wanted to set
+your Ruby <varname>RUBYPATH</varname> environmental variable, you could do the
+following:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+RubyEnv RUBYPATH /var/lib/gems/2.4.0/
+
+</IfModule>]]>
+</programlisting>
+
+This will mody the <literal>RUBYPATH</literal> for the server
+environment. Unlike the other cases, there is no concept of merging here. The
+directive will fire whenever called and modify the environmental variables as
+requested. All environmental variables can be access from within Ruby via the
+<methodname>Apache::Request::cgi()</methodname> method which returns and APR
+table of all CGI params (which consist of environmental variables).</para>
+
+</sect2>
+
+</sect1>

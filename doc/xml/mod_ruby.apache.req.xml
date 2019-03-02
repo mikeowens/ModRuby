@@ -1,0 +1,2261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.apache.req"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>The Apache Request Class</title>
+
+<para>The Apache request is the largest data structure in the Apache module API
+and encompasses every aspect of the HTTP request, including all other associated
+data structures such as the connection, process, and server structures. It is
+primary means by which to interact with Apache.
+</para>
+
+<para>This data structure originates in the Apache API as the
+<structname>request_req</structname> structure (documented <ulink
+url="http://ci.apache.org/projects/httpd/trunk/doxygen/structrequest__rec.html">here</ulink>). It
+is encapsulated, and somewhat extended in C++ form in <literal>mod_rsp</literal>
+by the <classname>apache::Request</classname> class
+(<filename>request.cpp</filename>). This, in turn, is then encapsulated in Ruby
+by the <classname>Apache::Ruby</classname> class, defined in the Ruby extension
+<filename>ruby_request.cpp</filename>.
+</para>
+
+<sect2><title>Method Documentation</title>
+
+<para><xref linkend="apache_req_methods"/> contains the exhaustive list of
+methods, in alphabetical order. The documentation of each method follows.
+
+  <table frame="none" pgwide="1" id="apache_req_methods">
+    <title>Apache Request Methods</title>
+    <tgroup cols="3" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Type</emphasis></entry>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="allow_options_def">
+                <function>allow_options()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="allow_overrides_def">
+                <function>allow_overrides()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="allowed_def">
+                <function>allowed()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="allowed_eq_def">
+                <function>allowed=()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="args_def">
+                <function>args()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="assbackwards_def">
+                <function>assbackwards()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="auth_type_def">
+                <function>auth_type()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="sent_bodyct_def">
+                <function>sent_bodyct()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="bytes_sent_def">
+                <function>bytes_sent()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="chunked_def">
+                <function>chunked()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="clength_def">
+                <function>clength()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="connection_def">
+                <function>connection()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="content_def">
+                <function>content()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="content_encoding_def">
+                <function>content_encoding()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="content_languages_def">
+                <function>content_languages()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="content_type_def">
+                <function>content_type()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="default_type_def">
+                <function>default_type()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="discard_request_body_def">
+                <function>discard_request_body()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="document_root_def">
+                <function>document_root()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="err_headers_out_def">
+                <function>err_headers_out()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="filename_def">
+                <function>filename()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="finalize_request_protocol_def">
+                <function>finalize_request_protocol()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="finfo_def">
+                <function>finfo()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="get_remote_logname_def">
+                <function>get_remote_logname()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="get_server_name_def">
+                <function>get_server_name()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="handler_def">
+                <function>handler()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="header_only_def">
+                <function>header_only()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="headers_in_def">
+                <function>headers_in()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="headers_out_def">
+                <function>headers_out()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="hostname_def">
+                <function>hostname()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="internal_redirect_def">
+                <function>internal_redirect()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="internal_redirect_handler_def">
+                <function>internal_redirect_handler()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="is_initial_req_def">
+                <function>is_initial_req()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="log_def">
+                <function>log()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>5</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="m_user_def">
+                <function>m_user()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="main_def">
+                <function>main()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="make_content_type_def">
+                <function>make_content_type()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="make_etag_def">
+                <function>make_etag()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="meets_conditions_def">
+                <function>meets_conditions()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="method_def">
+                <function>method()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="method_number_def">
+                <function>method_number()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="mtime_def">
+                <function>mtime()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="next_def">
+                <function>next()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="no_cache_def">
+                <function>no_cache()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="no_local_copy_def">
+                <function>no_local_copy()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="note_auth_failure_def">
+                <function>note_auth_failure()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="note_basic_auth_failure_def">
+                <function>note_basic_auth_failure()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="note_digest_auth_failure_def">
+                <function>note_digest_auth_failure()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="notes_def">
+                <function>notes()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="out_def">
+                <function>out()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="params_def">
+                <function>params()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="parsed_uri_def">
+                <function>parsed_uri()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="path_info_def">
+                <function>path_info()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="prev_def">
+                <function>prev()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="print_def">
+                <function>print()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="proto_num_def">
+                <function>proto_num()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="protocol_def">
+                <function>protocol()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="proxyreq_def">
+                <function>proxyreq()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="puts_def">
+                <function>puts()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="queries_def">
+                <function>queries()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="range_def">
+                <function>range()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="rationalize_mtime_def">
+                <function>rationalize_mtime()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="read_def">
+                <function>read()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="readline_def">
+                <function>readline()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="read_body_def">
+                <function>read_body()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="read_chunked_def">
+                <function>read_chunked()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="read_length_def">
+                <function>read_length()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="remaining_def">
+                <function>remaining()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="request_time_def">
+                <function>request_time()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="rflush_def">
+                <function>rflush()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="rputs_def">
+                <function>rputs()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="sendfile_def">
+                <function>send_file()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="send_error_response_def">
+                <function>send_error_response()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="server_def">
+                <function>server()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="set_content_length_def">
+                <function>set_content_length()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="set_content_type_def">
+                <function>set_content_type()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="set_etag_def">
+                <function>set_etag()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="set_keepalive_def">
+                <function>set_keepalive()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="set_max_content_length_def">
+                <function>set_max_content_length()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="set_status_def">
+                <function>set_status()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="setup_client_block_def">
+                <function>setup_client_block()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="should_client_block_def">
+                <function>should_client_block()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="some_auth_required_def">
+                <function>some_auth_required()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="status_def">
+                <function>status()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="status_line_def">
+                <function>status_line()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="subprocess_env_def">
+                <function>subprocess_env()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="the_request_def">
+                <function>the_request()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="unparsed_uri_def">
+                <function>unparsed_uri()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="uri_def">
+                <function>uri()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="vlist_validator_def">
+                <function>vlist_validator()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="write_def">
+                <function>write()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>2</entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+
+<bridgehead id="allow_options_def" renderas="sect4">allow_options()</bridgehead>
+<para><function>allow_options()</function> returns a bitmap specifying all of
+the options set for this request (e.g. indexes, includes, sym links,
+execcgi). This corresponds to the <literal>Options</literal> directive for a
+given directory in the Apache configuration file, which controls which server
+features are available in a particular directory. The options bitmap in this
+case returns the the set of options governing the directory encompassing the
+current request.
+</para>
+
+<para>The possible options returned, which are defined in
+<filename>httpd_core.h</filename> of the Apache source, are as xfollows:
+
+<programlisting>
+#define OPT_NONE         0
+#define OPT_INDEXES      1
+#define OPT_INCLUDES     2
+#define OPT_SYM_LINKS    4
+#define OPT_EXECCGI      8
+#define OPT_UNSET       16
+#define OPT_INCNOEXEC   32
+#define OPT_SYM_OWNER   64
+#define OPT_MULTI      128
+#define OPT_ALL        OPT_INDEXES|OPT_INCLUDES|OPT_SYM_LINKS|OPT_EXECCGI
+</programlisting>
+
+</para>
+
+<para>More information on this setting is available in the <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#options">Apache Core Features
+documentation</ulink>.
+
+</para>
+
+<bridgehead id="allow_overrides_def" renderas="sect4">allow_overrides()</bridgehead>
+
+<para><function>allow_overrides()</function> returns a bitmap describing the
+values in the governing <literal>AllowOverrides</literal> setting. This bitmap
+is composed of the same set of options defined in <xref
+linkend="allow_options_def"/>.</para>
+
+<para>From the Apache documentation:
+
+<blockquote><para>When the Apache finds an <filename>.htaccess</filename> file
+(as specified by <literal>AccessFileName</literal>) it needs to know which
+directives declared in that file can override earlier configuration
+directives.</para>
+
+<para>When this directive is set to <literal>None</literal>, then
+<filename>.htaccess</filename> files are completely ignored. In this case, the
+server will not even attempt to read .htaccess files in the filesystem.</para>
+
+<para>When this directive is set to <literal>All</literal>, then any directive
+which has the <filename>.htaccess</filename> <ulink
+url="http://httpd.apache.org/docs/2.2/mod/directive-dict.html#Context">Context</ulink>
+is allowed in <filename>.htaccess</filename> files.</para>
+</blockquote>
+
+</para>
+
+<para>
+More information on this setting is available in the <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#allowoverride">Apache Core
+Features documenation</ulink>.
+</para>
+
+<bridgehead id="allowed_def" renderas="sect4">allowed()</bridgehead>
+
+<para>
+<function>allowed()</function> returns a bitvector of the allowed methods.
+</para>
+
+<para>From the Apache source documentation:
+
+<blockquote>
+
+<para>A handler must ensure that the request method is one that it is capable of
+handling.  Generally modules should <literal>DECLINE</literal> (HTTP response
+code) any request methods they do not handle.  Prior to aborting the handler in
+this case, the handler should set <literal>allowed</literal> to the list of
+methods that it is willing to handle. This bitvector is used to construct the
+<literal>Allow</literal> header required for <literal>OPTIONS</literal> requests
+as well as <literal>HTTP_METHOD_NOT_ALLOWED</literal> and
+<literal>HTTP_NOT_IMPLEMENTED</literal> status codes.</para>
+     
+<para>Since the default handler deals with <literal>OPTIONS</literal>, all
+modules can usually decline to deal with it. <literal>TRACE</literal> is always
+allowed, modules don't need to set it explicitly.
+</para>
+     
+<para>Since the default_handler will always handle a <literal>GET</literal>, a
+module which does <emphasis>not</emphasis> implement <literal>GET</literal>
+should probably return <literal>HTTP_METHOD_NOT_ALLOWED</literal>. Unfortunately
+this means that a Script <literal>GET</literal> handler can't be installed by
+<literal>mod_actions</literal>.
+</para>
+
+</blockquote>
+
+The bit vector map, defined in <filename>httpd.h</filename>, is as follows:
+
+<programlisting>
+#define M_GET                   0       /** RFC 2616: HTTP */
+#define M_PUT                   1       /*  :             */
+#define M_POST                  2
+#define M_DELETE                3
+#define M_CONNECT               4
+#define M_OPTIONS               5
+#define M_TRACE                 6       /** RFC 2616: HTTP */
+#define M_PATCH                 7       /** no rfc(!)  ### remove this one? */
+#define M_PROPFIND              8       /** RFC 2518: WebDAV */
+#define M_PROPPATCH             9       /*  :               */
+#define M_MKCOL                 10
+#define M_COPY                  11
+#define M_MOVE                  12
+#define M_LOCK                  13
+#define M_UNLOCK                14      /** RFC 2518: WebDAV */
+#define M_VERSION_CONTROL       15      /** RFC 3253: WebDAV Versioning */
+#define M_CHECKOUT              16      /*  :                          */
+#define M_UNCHECKOUT            17
+#define M_CHECKIN               18
+#define M_UPDATE                19
+#define M_LABEL                 20
+#define M_REPORT                21
+#define M_MKWORKSPACE           22
+#define M_MKACTIVITY            23
+#define M_BASELINE_CONTROL      24
+#define M_MERGE                 25
+#define M_INVALID               26      /** RFC 3253: WebDAV Versioning */
+</programlisting>
+
+<para>To check whether a given method is support, you use bitwise
+operations. For example, to check whether the <literal>PUT</literal> command is
+allowed, you would do the following:
+
+<sourcecode href="ruby_request_allowed_ex.rb"/>
+
+</para>
+
+</para>
+
+<bridgehead id="allowed_eq_def" renderas="sect4">allowed=()</bridgehead>
+
+<para>
+<function>allowed=()</function> takes a integer value as a mitmask
+representation of all allowed methods and sets it as the handler's bitvector of
+the allowed methods.</para>
+
+<para>For example, to set the allowed options to just <literal>GET</literal>,
+<literal>PUT</literal>, <literal>OPTIONS</literal> and <literal>TRACE</literal>,
+you would do the following:
+
+<sourcecode href="ruby_request_allowed_eq_ex.rb"/>
+
+</para>
+
+<para>See <xref linkend="allowed_def"/> for more information.</para>
+
+<bridgehead id="args_def" renderas="sect4">args()</bridgehead>
+<para><function>args()</function> returns the query args extracted from URL. You
+can then parse them with the Ruby <classname>CGI</classname> class.
+</para>
+
+<para>In addition to <methodname>args()</methodname> you can use the convenience
+<methodname>queries()</methodname> method instead, which decodes, parses and
+returns the query in the form of an APR table. See <xref linkend="queries_def"/>
+for more information.
+</para>
+
+<bridgehead id="assbackwards_def" renderas="sect4">assbackwards()</bridgehead>
+<para><function>assbackwards()</function> sets the handler to return an HTTP/0.9
+"simple" request (e.g. <literal>GET /foo</literal> with no headers).
+</para>
+
+<bridgehead id="auth_type_def" renderas="sect4">auth_type()</bridgehead>
+<para><function>auth_type()</function> If an authentication check was made, this
+gets set to the auth type (the values <literal>"Basic"</literal> or
+<literal>"Digest"</literal>).
+</para>
+
+<para>
+More information on this setting is available in the <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#authtype">Apache Core
+Features documenation</ulink>.
+</para>
+
+<bridgehead id="sent_bodyct_def" renderas="sect4">sent_bodyct()</bridgehead>
+<para><function>sent_bodyct()</function> returns whether the byte count in
+stream is for body. It's not clear if anybody really knows what this is for. It
+indicates whether the byte count returned by
+<methodname>bytes_sent()</methodname> refers to the size of the body. The value
+1 means it does, 0 means it does not. Exactly what it refers to in the case of 0
+is anybody's guess, as there seems to be absolutely zero documentation anywhere
+and very few uses of it in source. It may simply indicate if there is a body at
+all. Like in the case where the client request specifies headers only
+(<literal>HEAD</literal>), then <function>sent_bodyct()</function> would be 0.
+</para>
+
+<bridgehead id="bytes_sent_def" renderas="sect4">bytes_sent()</bridgehead>
+<para><function>bytes_sent()</function> sends the size in bytes of the
+body. This is the number of bytes in the body sent back to the client. This
+value will be zero until some actual data is flushed (sent) to the client
+(i.e. you haven't previously called <methodname>rflush()</methodname>).
+
+</para>
+
+<bridgehead id="chunked_def" renderas="sect4">chunked()</bridgehead>
+<para><function>chunked()</function> returns whether the handler is sending the
+response using chunked encoding. By default, the request will not used chunked
+encoding, which is useful if you wish to return the request back to the client
+in pieces. To employ chunked encoding, you need only call
+<methodname>rflush()</methodname>, which will send all buffered data back to the
+client in a chunk. Each subsequent call will send another chunk. When the
+request completes, any remaining data will be sent as the last chunk.
+</para>
+
+<bridgehead id="clength_def" renderas="sect4">clength()</bridgehead>
+<para><function>clength()</function> returns the actual length in bytes of the
+response body. This will always be zero. The reason is that the RSP handler
+works as the content generator &mdash; it creates all of the
+content.</para>
+
+<para>Furthermore, this value is not set until the RSP handler completes,
+whereupon the content eventually passes through Apache's content length filter
+(<filename>ap_content_length_filter()</filename>), which then computes and set
+the content length, in turn setting the <literal>Content-Length</literal>
+header. Therefore, this value is for all intents and purposes useless as you
+can't set it, and it will always be zero during the handler phase.
+</para>
+
+<bridgehead id="connection_def" renderas="sect4">connection()</bridgehead>
+
+<para><function>connection()</function> returns the
+<classname>Connection</classname> object associated with this request. See <xref
+linkend="modruby.apache.connection"/> for more information.
+</para>
+
+<bridgehead id="content_def" renderas="sect4">content()</bridgehead>
+
+<para><function>content()</function> provides a means to get at the request
+content, specifically for processing data in POST request. There are two ways to
+use it. The first is simply to call it, and it will return a string containing
+the entire request body.</para>
+
+<para>The second is to provide a block with a single argument. In this approach,
+<methodname>content()</methodname> will then funnel out the request body by
+yielding 1024 bytes chunks to the block, as in the following example:
+
+<sourcecode href="ruby_request_content_block_ex.rb"/>
+
+</para>
+
+<para>This is of course a trivial example. In the case of a file upload you
+would have to parse the multipart MIME format (RFC 2388) in place, locate the
+file part, and save that to the file (this is left as an exercise for the
+reader). In any case, this latter approach makes processing large file uploads
+much more efficient, as the file can be read and written to disk in increments,
+rather than having to first be held in memory. For information on handling
+multi-part file uploads, see <xref linkend="read_def"/>.</para>
+
+<bridgehead id="content_encoding_def" renderas="sect4">content_encoding()</bridgehead>
+<para><function>content_encoding()</function> returns the content encoding. 
+</para>
+
+<para>
+More information on this setting is available in the <ulink
+url="http://httpd.apache.org/docs/2.2/mod/mod_mime.html#contentencoding">Apache
+MIME Module documenation</ulink>.
+</para>
+
+<bridgehead id="content_languages_def" renderas="sect4">content_languages()</bridgehead>
+<para><function>content_languages()</function> returns an APR Array of strings
+representing content languages.
+</para>
+
+<para>
+More information on this setting is available in the <ulink
+url="http://httpd.apache.org/docs/2.2/mod/mod_mime.html#charset-lang">Apache MIME Module
+documenation</ulink>.
+</para>
+
+
+<bridgehead id="content_type_def" renderas="sect4">content_type()</bridgehead>
+<para><function>content_type()</function> returns the content type of the
+request. This will always be "text/html" for <filename>.rhtml</filename> and
+<filename>.rsp</filename> files (assuming the administrator properly configured
+the MIME types in Apache).
+</para>
+
+<para>
+More information on this setting is available in the <ulink
+url="http://httpd.apache.org/docs/2.2/mod/mod_mime.html">Apache MIME Module
+documenation</ulink>.
+</para>
+
+<bridgehead id="default_type_def" renderas="sect4">default_type()</bridgehead>
+<para><function>default_type()</function> returns the default content type from
+the configuration, or <literal>text/plain</literal> if none is set.
+</para>
+
+<bridgehead id="discard_request_body_def" renderas="sect4">discard_request_body()</bridgehead>
+
+<para><function>discard_request_body()</function> returns whether the request
+body will be discarded.
+</para>
+
+<para>From the Apache source documentation:
+
+<blockquote><para> In HTTP/1.1, any method can have a body. However, most
+<literal>GET</literal> handlers wouldn't know what to do with a request body if
+they received one. This helper routine tests for and reads any message body in
+the request, simply discarding whatever it receives. We need to do this because
+failing to read the request body would cause it to be interpreted as the next
+request on a persistent connection.
+</para>
+</blockquote>
+
+</para>
+
+<bridgehead id="document_root_def" renderas="sect4">document_root()</bridgehead>
+
+<para><function>document_root()</function> returns the document root from the
+configuration (not necessarily the active one for this request)
+
+<warning><para>This is in to be backward compatible, but is not always accurate
+(e.g. if <literal>mod_userdir</literal> is enabled).  This should not be used.
+</para>
+</warning>
+
+</para>
+
+<bridgehead id="err_headers_out_def"
+renderas="sect4">err_headers_out()</bridgehead>
+
+<para><function>err_headers_out()</function> returns an APR table containing the
+MIME headers from the response printed, even on error.
+</para>
+
+<para>While you might be wondering whether these headers are worth anything, as
+it turns out, they are. Apache requries all headers be sent to
+<literal>err_headers_out</literal> rather than <literal>headers_out</literal> if
+the response code is anything other than 200. This fact is critical to
+redirects.</para>
+
+<bridgehead id="filename_def" renderas="sect4">filename()</bridgehead>
+<para><function>filename()</function> returns the filename on disk corresponding
+to this response.
+</para>
+
+<bridgehead id="finalize_request_protocol_def" renderas="sect4">finalize_request_protocol()</bridgehead>
+
+<para><function>finalize_request_protocol()</function> is cryptic, undocumented,
+and unimportant. The Apache source say it is "Called at completion of sending
+the response. It sends the terminating protocol information." What that means, I
+don't know. If you ever rigure out what it does, right ahead and use it.
+</para>
+
+<bridgehead id="finfo_def" renderas="sect4">finfo()</bridgehead>
+
+<para><function>finfo()</function> returns an APR FileInfo object for the
+request file (if it exists), otherwise it setsit to zero if no such file. See
+<xref linkend="modruby.apr.finfo"/> for information.
+</para>
+
+<bridgehead id="get_remote_logname_def" renderas="sect4">get_remote_logname()</bridgehead>
+
+<para><function>get_remote_logname()</function> returns the login name of the
+remote user. Undefined if it cannot be determined.
+</para>
+
+<bridgehead id="get_server_name_def" renderas="sect4">get_server_name()</bridgehead>
+
+<para><function>get_server_name()</function> returns return the server name from
+the request.
+</para>
+
+<bridgehead id="handler_def" renderas="sect4">handler()</bridgehead>
+
+<para><function>handler()</function> returns the name of the handler assigned
+this request.
+</para>
+
+<bridgehead id="header_only_def" renderas="sect4">header_only()</bridgehead>
+
+<para><function>header_only()</function> returns 1 if this is a
+<literal>HEAD</literal> request, as opposed to <literal>GET</literal>.
+</para>
+
+<bridgehead id="headers_in_def" renderas="sect4">headers_in()</bridgehead>
+
+<para><function>headers_in()</function> returns an APR table containing the MIME
+headers from the request.
+</para>
+
+<bridgehead id="headers_out_def" renderas="sect4">headers_out()</bridgehead>
+
+<para><function>headers_out()</function> returns an APR table containing the
+MIME headers for the reponse.
+</para>
+
+<bridgehead id="hostname_def" renderas="sect4">hostname()</bridgehead>
+<para><function>hostname()</function> returns host name as set by full URI or
+host.
+</para>
+
+<bridgehead id="internal_redirect_def" renderas="sect4">internal_redirect()</bridgehead>
+
+<para><function>internal_redirect()</function> initiates an internal redirect to
+another URI in this server
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def internal_redirect(uri)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>uri</parameter>: the new uri to redirect
+to.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="internal_redirect_handler_def" renderas="sect4">internal_redirect_handler()</bridgehead>
+
+<para><function>internal_redirect_handler()</function> is designed for things
+like actions or CGI scripts, when using <literal>AddHandler</literal> and you
+want to preserve the content type across an internal redirect.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def internal_redirect_handler(uri)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>uri</parameter>: the URI to replace the current
+request with.  </para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="is_initial_req_def" renderas="sect4">is_initial_req()</bridgehead>
+
+<para><function>is_initial_req()</function> returns 1 is this is the main
+request or 0 if it is a subrequest.
+</para>
+
+<bridgehead id="log_def" renderas="sect4">log()</bridgehead>
+<para><function>log()</function> logs a message to the Apache logfile.</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+<synopsis>def log(level, message)</synopsis>
+
+<itemizedlist>
+
+<listitem><para><parameter>level</parameter>: the log level, which can be one
+the following:
+
+<programlisting>
+#define APLOG_EMERG     0       /* system is unusable */
+#define APLOG_ALERT     1       /* action must be taken immediately */
+#define APLOG_CRIT      2       /* critical conditions */
+#define APLOG_ERR       3       /* error conditions */
+#define APLOG_WARNING   4       /* warning conditions */
+#define APLOG_NOTICE    5       /* normal but significant condition */
+#define APLOG_INFO      6       /* informational */
+#define APLOG_DEBUG     7       /* debug-level messages */
+</programlisting>
+
+</para>
+</listitem>
+
+<listitem><para><parameter>message</parameter>: the log message text.
+</para>
+</listitem>
+
+</itemizedlist>
+</para>
+
+<bridgehead id="m_user_def" renderas="sect4">m_user()</bridgehead>
+
+<para><function>m_user()</function> returns the user name, if an authentication
+check was made, otherwise it returns <literal>nil</literal>.
+</para>
+
+<bridgehead id="main_def" renderas="sect4">main()</bridgehead>
+
+<para><function>main()</function> returns the <classname>Request</classname>
+object corresponding to the main request. This is helpful if the current request
+is a subrequents and needs to obtain information about the original request.
+</para>
+
+<bridgehead id="make_content_type_def" renderas="sect4">make_content_type()</bridgehead>
+
+<para><function>make_content_type()</function> is a wrapper around the Apache
+function <function>ap_make_content_type()</function>. From the Apache source
+documentation:
+
+<blockquote><para>Build the content-type that should be sent to the client from
+the content-type specified. The following rules are followed:
+
+    <itemizedlist>
+      <listitem>
+      <para>If type is <literal>NULL</literal>, type is set to
+      <function>ap_default_type(req)</function>.</para>
+      </listitem>
+
+      <listitem><para>If charset adding is disabled, stop processing and return
+      type.</para>
+      </listitem>
+
+      <listitem>
+      <para>Then, if there are no parameters on type, add the default charset
+      return type.
+      </para>
+      </listitem>
+    </itemizedlist>
+</para>
+</blockquote>
+
+</para>
+
+<bridgehead id="make_etag_def" renderas="sect4">make_etag()</bridgehead>
+
+<para><function>make_etag()</function> is a wrapper around the Apache function
+<function>ap_make_etag()</function>, which constructs an entity tag from the
+resource information. If it's a real file, build in some of the file
+characteristics. For more information on ETags, see the <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#fileetag">Apache Core
+documentation</ulink>.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def make_etag(force_weak)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>force_weak</parameter>: Force the entity tag to be
+weak &mdash; it could be modified again in as short an interval.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="meets_conditions_def" renderas="sect4">meets_conditions()</bridgehead>
+
+<para><function>meets_conditions()</function> is a wrapper around the Apache
+function <function>ap_meets_conditions()</function>. Implements condition GET
+rules for HTTP/1.1 specification. It inspects the client headers and determines
+if the response fulfills the requirements specified. It returns
+<literal>OK</literal> if the response fulfills the condition
+<literal>GET</literal> rules, some other status code otherwise.
+</para>
+
+
+<bridgehead id="method_def" renderas="sect4">method()</bridgehead>
+
+<para><function>method()</function> returns the request method
+(eg. <literal>GET</literal>, <literal>HEAD</literal>, <literal>POST</literal>,
+etc.)</para>
+
+<bridgehead id="method_number_def" renderas="sect4">method_number()</bridgehead>
+
+<para><function>method_number()</function> returns the method number of the
+request (e.g. <literal>M_GET</literal>, <literal>M_POST</literal>, etc. These
+method constants are documented in <xref linkend="rsp_global_http_constants"/>.</para>
+
+<bridgehead id="mtime_def" renderas="sect4">mtime()</bridgehead>
+
+<para><function>mtime()</function> returns the last modified time of the
+requested resource.
+</para>
+
+<bridgehead id="next_def" renderas="sect4">next()</bridgehead>
+
+<para><function>next()</function> returns the redirected request if this is an
+external redirect.
+</para>
+
+<bridgehead id="no_cache_def" renderas="sect4">no_cache()</bridgehead>
+
+<para><function>no_cache()</function> returns 1 if this response cannot be
+cached, 0 otherwise.</para>
+
+<bridgehead id="no_local_copy_def" renderas="sect4">no_local_copy()</bridgehead>
+
+<para><function>no_local_copy()</function> returns 1 if there is no local copy
+of this response, 0 otherwise.</para>
+
+
+<bridgehead id="note_auth_failure_def" renderas="sect4">note_auth_failure()</bridgehead>
+
+<para><function>note_auth_failure()</function> sets up the output headers so
+that the client knows how to authenticate itself the next time, if an
+authentication request failed. This function works for both basic and digest
+authentication.
+</para>
+
+<bridgehead id="note_basic_auth_failure_def" renderas="sect4">note_basic_auth_failure()</bridgehead>
+
+<para><function>note_basic_auth_failure()</function> sets up the output headers
+so that the client knows how to authenticate itself the next time, if an
+authentication request failed. This function works only for basic
+authentication.
+</para>
+
+<bridgehead id="note_digest_auth_failure_def" renderas="sect4">note_digest_auth_failure()</bridgehead>
+
+<para><function>note_digest_auth_failure()</function> sets up the output headers
+so that the client knows how to authenticate itself the next time, if an
+authentication request failed. This function works only for digest
+authentication
+</para>
+
+
+<bridgehead id="notes_def" renderas="sect4">notes()</bridgehead>
+
+<para><function>notes()</function> returns and APR table containing notes to
+pass from one module to another.
+</para>
+
+<bridgehead id="out_def" renderas="sect4">out()</bridgehead>
+
+<para><function>out()</function> writes a string out via the Apache
+<function>ap_puts()</function>. This is an alias for the
+<methodname>rputs()</methodname> method.
+
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def out(text)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>text</parameter>: text to write out</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="params_def" renderas="sect4">params()</bridgehead>
+<para><function>params()</function> returns an APR table containing all of the
+form data posted, provided that the request method is a <literal>POST</literal>
+and the content type is <literal>application/x-www-form-urlencoded</literal>
+(not <literal>multipart/form-data</literal> &mdash; which is handled a different
+way). This method does a lot of work under the hood to get this data. It
+mediates the transfer, loads, decodes, and organizes the form data into the APR
+table that is returned.
+</para>
+
+<para>The APR table returned is cached, so this process is only performed on the
+first call. Subsequent calls will return the same table. If this function is
+called an a request which is not a <literal>POST</literal>, it will return
+<literal>nil</literal>.
+
+<note><para>By default this function currently limits the amount of data that
+can be sent to 20Mb. Larger values can be accomodated by setting them using the
+<function>Request::set_max_content_length()</function> method.</para>
+</note>
+
+</para>
+
+<bridgehead id="parsed_uri_def" renderas="sect4">parsed_uri()</bridgehead>
+
+<para><function>parsed_uri()</function> This function is currently not
+implemented. In the future, it will return a Ruby object that wraps the
+<structname>ap_uri_t</structname> structure.
+</para>
+
+
+<bridgehead id="path_info_def" renderas="sect4">path_info()</bridgehead>
+
+<para><function>path_info()</function> returns the path info extracted from this
+request.
+</para>
+
+<bridgehead id="prev_def" renderas="sect4">prev()</bridgehead>
+
+<para><function>prev()</function> returns the previous request object if this is
+an internal redirect.
+</para>
+
+<bridgehead id="print_def" renderas="sect4">print()</bridgehead>
+
+<para><function>print()</function> writes a string out via the Apache
+<function>ap_puts()</function>. This is an alias for the
+<methodname>rputs()</methodname> method.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def print(text)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>text</parameter>: text to write out.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="proto_num_def" renderas="sect4">proto_num()</bridgehead>
+
+<para><function>proto_num()</function> returns the protocol version number of protocol
+(e.g. 1.1 = 1001).
+</para>
+
+<bridgehead id="protocol_def" renderas="sect4">protocol()</bridgehead>
+<para><function>protocol()</function> returns the protocol string, as given to
+us, or HTTP/0.9.
+</para>
+
+<bridgehead id="proxyreq_def" renderas="sect4">proxyreq()</bridgehead>
+
+<para><function>proxyreq()</function> returns a proxy request (calculated during
+post read request and translate_name. Possible values
+<literal>PROXYREQ_NONE</literal>, <literal>PROXYREQ_PROXY</literal>,
+<literal>PROXYREQ_REVERSE</literal>, <literal>PROXYREQ_RESPONSE</literal>.
+
+</para>
+
+<bridgehead id="puts_def" renderas="sect4">puts()</bridgehead>
+
+<para><function>puts()</function> writes a string out via the Apache
+<function>ap_puts()</function>. This is an alias for the
+<methodname>rputs()</methodname> method.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def puts(text)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>text</parameter>: text to write out.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="queries_def" renderas="sect4">queries()</bridgehead>
+<para><function>queries()</function> decodes, parses and returns the query
+arguments in the URL as an APR table. This is a convenience function provided in
+order to alleviate the need of using the Ruby CGI class. Additionally, it
+provides the standard interface of a true APR table. It is implemented in C.
+</para>
+
+<para>
+<sourcecode href="ruby_request_queries_ex.rb"/>
+</para>
+
+<bridgehead id="range_def" renderas="sect4">range()</bridgehead>
+
+<para><function>range()</function> returns the HTTP range header value.</para>
+
+<bridgehead id="rationalize_mtime_def" renderas="sect4">rationalize_mtime()</bridgehead>
+
+<para><function>rationalize_mtime()</function> returns the latest rational time
+from a request/mtime pair. <literal>mtime</literal> is returned unless it's in
+the future, in which case we return the current time.</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+<itemizedlist>
+<listitem><para><parameter>mtime</parameter>: The last modified
+time.</para></listitem>
+</itemizedlist>
+</para>
+
+
+<bridgehead id="read_def" renderas="sect4">read()</bridgehead>
+
+<para><function>read()</function> returns a buffer containing content of the
+request body. It takes a single argument specifying the number of bytes to
+read. It returns a buffer containing that many bytes, or whatever is left. If
+there is no content remaining, it returns <literal>nil</literal>.
+</para>
+
+<para><function>read()</function>, along with <function>readline()</function>
+are used in conjunction the the <classname>RSP::Rfc2388</classname>
+parser class to process multipart forms and file uploads. There is really few if
+any other reasons to use them by themselves. They basically provide the minimal
+requirements for the parser class to operate on the
+<classname>Request</classname> object as if it were a file. The following
+example illustrates its use:
+
+<sourcecode href="modruby_rfc2388_example.rb"/>
+
+</para>
+
+<para>Note that all calls to <function>read()</function> and
+<function>readline()</function> are abstracted away in the parser class. This is
+because parsing is a pain, and the parser class manages all of that for you. The
+end result is that the parser feeds parsed content sections into the block
+supplied it, in the form of <classname>Part</classname> objects. These objects,
+like content sections, have headers and data. The headers are already
+parsed. The data is not yet read, allowing you to read it in discrete parts,
+using the same block/callback mechanism. This appraoch allows file uploads (and
+multi-part forms in general) to be handled sequentially, as a continuous stream,
+rather than all at once. This avoids having store the entire form in memory in
+order to parse/process it.</para>
+
+<para>The bottom line is that all the parsing details are abstracted away, and
+your code only has to deal with processing the incoming data. The additional
+benefit is that this approach can handle arbitrarily large files without any
+increase in memory requirements, as it does not have to store the entire form in
+memory.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def read(bytes)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>bytes</parameter>: the number of bytes of content to
+read.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="readline_def" renderas="sect4">readline()</bridgehead>
+
+<para><function>readline()</function> reads a single line of text from the
+content of the request budy. It looks for a CRLF (<literal>\r\n</literal>) as
+the line terminator. If this is not found, it will return the entire request
+content.
+</para>
+
+<bridgehead id="read_body_def" renderas="sect4">read_body()</bridgehead>
+
+<para><function>read_body()</function> is the method for reading the
+request body (e.g. <literal>REQUEST_CHUNKED_ERROR</literal>).
+</para>
+
+<bridgehead id="read_chunked_def" renderas="sect4">read_chunked()</bridgehead>
+
+<para><function>read_chunked()</function> returns 1 if we are reading chunked
+transfer-coding
+</para>
+
+<bridgehead id="read_length_def" renderas="sect4">read_length()</bridgehead>
+
+<para><function>read_length()</function> returns the number of bytes that have
+been read from the request body</para>
+
+
+<bridgehead id="remaining_def" renderas="sect4">remaining()</bridgehead>
+
+<para><function>remaining()</function> returns the number of remaining bytes
+left to read from the request body</para>
+
+<bridgehead id="request_time_def" renderas="sect4">request_time()</bridgehead>
+
+<para><function>request_time()</function> returns the time when the request
+started.
+</para>
+
+<bridgehead id="rflush_def" renderas="sect4">rflush()</bridgehead>
+
+<para><function>rflush()</function> calls <function>ap_rflush()</function>,
+which flushes all of the data for the current request to the client. Returns the
+number of bytes sent.
+</para>
+
+<bridgehead id="rputs_def" renderas="sect4">rputs()</bridgehead>
+
+<para><function>rputs()</function> writes a string out via the Apache
+<function>ap_puts()</function>. </para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def rputs(text)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>text</parameter>: text to write out.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="sendfile_def" renderas="sect4">send_file()</bridgehead>
+<para><function>send_file()</function> sends the full contents of a file to the
+client (using chunked encoding). When possible (on various platforms),
+<function>send_file()</function> uses optimized OS system calls where available
+to send the file contents through the kernel, minimizing file copy overhead. For
+example, on Linux and BSD Apache will use the <literal>sendfile (2)</literal>
+system call to transfer the file contents, resulting in a "zero-copy" transfer
+&mdash; meaning that it has been optimized so that copying of the file data is
+avoided.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def sendfile(path)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>path</parameter>: full path of file send. If a
+relative path is used, it will be relative to the current working directory
+which differs based on the context in which the request is being handled. Within
+the RSP environment, the current working directory is the directory containing
+the RHTML and RSP file being processed. Otherwise it is the default working
+directory set by Apache.</para></listitem>
+</itemizedlist>
+</para>
+
+
+<bridgehead id="send_error_response_def" renderas="sect4">send_error_response()</bridgehead>
+<para><function>send_error_response()</function> Sends back an error code back
+to client.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def send_error_response(status)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>status</parameter>: error code to send.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="server_def" renderas="sect4">server()</bridgehead>
+<para><function>server()</function> returns the server object associated with
+this request. For more information, see <xref linkend="modruby.apache.server"/>.
+</para>
+
+<bridgehead id="set_content_length_def" renderas="sect4">set_content_length()</bridgehead>
+
+<para><function>set_content_length()</function> called
+<function>ap_set_content_length()</function>. This sets the content length for
+the request.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def set_content_length(length)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>length</parameter>: number of bytes in content.</para></listitem>
+</itemizedlist>
+</para>
+
+
+<bridgehead id="set_content_type_def" renderas="sect4">set_content_type()</bridgehead>
+<para><function>set_content_type()</function> Sets the content type for this request.</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def set_content_type(type)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>type</parameter>: string containing content type.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="set_etag_def" renderas="sect4">set_etag()</bridgehead>
+
+<para><function>set_etag()</function> sets the ETag outgoing header. For more
+information on ETags, see the <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#fileetag">Apache Core
+documentation</ulink>
+</para>
+
+<bridgehead id="set_keepalive_def" renderas="sect4">set_keepalive()</bridgehead>
+
+<para><function>set_keepalive()</function> set the keepalive status for this
+request.</para>
+
+<bridgehead id="set_max_content_length_def" renderas="sect4">set_max_content_length()</bridgehead>
+<para><function>set_max_content_length()</function> sets the maximum amount of form
+data the module will accept from the client in bytes. The default is 20Mb. To
+make this unlimited, set this value to -1. If the POST form data excedes this
+amount, then <methodname>params()</methodname> will set and error and return
+<literal>nil</literal>.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def set_max_content_length(byes)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>bytes</parameter>: Maximum POST form data in bytes.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="set_status_def" renderas="sect4">set_status()</bridgehead>
+<para><function>set_status()</function> sets the HTTP status code to return
+(e.g. <literal>200</literal>, <literal>302</literal>, <literal>404</literal>,
+etc.</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def set_content_status(status)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>status</parameter>: HTTP status code to return.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="setup_client_block_def" renderas="sect4">setup_client_block()</bridgehead>
+
+<para><function>setup_client_block()</function> sets up the client to allow
+Apache to read the request body. This is usually used for processing form data
+in <literal>POST</literal>. If this is the case, don't worry about this, use the
+<methodname>params()</methodname> method, which does all of the work for you.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def setup_client_block(read_policy)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>read_policy</parameter>: How the server should
+interpret a chunked transfer-encoding. This can be one of the
+following: 
+
+<programlisting>
+    REQUEST_NO_BODY          Send 413 error if message has any body
+    REQUEST_CHUNKED_ERROR    Send 411 error if body without Content-Length
+    REQUEST_CHUNKED_DECHUNK  If chunked, remove the chunks for me.
+</programlisting>
+
+</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="should_client_block_def" renderas="sect4">should_client_block()</bridgehead>
+<para><function>should_client_block()</function> determines if the client has
+sent any data. This also sends a 100 Continue response to HTTP/1.1 clients, so
+modules should not be called until the module is ready to read content. This is
+often used in the processing of form data. You most likely will never need to
+use this method.
+</para>
+
+<bridgehead id="some_auth_required_def" renderas="sect4">some_auth_required()</bridgehead>
+
+<para><function>some_auth_required()</function> determines if any authentication
+is required for the current request. It returns 1 is authentication is required,
+0 otherwise.
+</para>
+
+<bridgehead id="status_def" renderas="sect4">status()</bridgehead>
+
+<para><function>status()</function> returns the current HTTP status code.</para>
+
+
+<bridgehead id="status_line_def" renderas="sect4">status_line()</bridgehead>
+
+<para><function>status_line()</function> returns the current HTTP status line
+(text).
+</para>
+
+<bridgehead id="subprocess_env_def" renderas="sect4">subprocess_env()</bridgehead>
+
+<para><function>subprocess_env()</function> returns an APR table of environment
+variables passed to the subprocess, if one exists.
+</para>
+
+<bridgehead id="the_request_def" renderas="sect4">the_request()</bridgehead>
+
+<para><function>the_request()</function> returns the first line of actual HTTP
+request content.</para>
+
+<bridgehead id="unparsed_uri_def" renderas="sect4">unparsed_uri()</bridgehead>
+<para><function>unparsed_uri()</function> returns the URI without any parsing
+performed.</para>
+
+
+<bridgehead id="uri_def" renderas="sect4">uri()</bridgehead>
+<para><function>uri()</function> returns just the path portion of the
+URI.</para>
+
+<bridgehead id="vlist_validator_def" renderas="sect4">vlist_validator()</bridgehead>
+<para><function>vlist_validator()</function> returns the variant list validator
+(if negotiated).</para>
+
+<bridgehead id="write_def" renderas="sect4">write()</bridgehead>
+<para><function>write()</function> writes binary data directly to the socket via
+the Apache <function>ap_rwrite()</function>. This is useful for then you want to
+send images or binary files directly from a controller method. Here is an
+example of sending a captcha using RMagic:
+
+<sourcecode href="ruby_request_captcha_ex.rb"/>
+
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+<para>
+
+<synopsis>def write(data, size)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>data</parameter>: The data to write out.</para></listitem>
+<listitem><para><parameter>size</parameter>: The size of the data in bytes.</para></listitem>
+</itemizedlist>
+</para>
+
+</sect2>
+
+</sect1>

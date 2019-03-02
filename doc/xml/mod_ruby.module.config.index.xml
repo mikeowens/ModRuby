@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<chapter version="5.0" xml:id="mod_ruby.module.config"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Configuration</title>
+
+<para>ModRuby is designed to be extremely flexible. Its main function besides
+embedding Ruby within Apache is to provide a configurable interface with which
+to invoke Ruby code from Apache in a variety of ways &mdash; from executing the
+most bare-bones CGI scripts to hooking in entire web frameworks.</para>
+
+<para>Connecting ModRuby to your code is all done via Apache configuration
+directives. There are endless ways you can do this, but it's all ultimately
+pretty simpe. We will cover the necessary Apache configuration mechanics and
+work through many different scenarios which should give you a good feel for how
+everything works and what you can do.</para>
+
+<xi:include href="mod_ruby.module.config.handlers.xml" 
+            parse="xml" 
+            xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+<xi:include href="mod_ruby.module.config.contexts.xml"
+            parse="xml" 
+            xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+<xi:include href="mod_ruby.module.config.merging.xml" 
+            parse="xml" 
+            xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+<xi:include href="mod_ruby.module.config.conclusion.xml" 
+            parse="xml" 
+            xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+</chapter>
+

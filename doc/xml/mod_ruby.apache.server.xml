@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.apache.server"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>The Apache Server Class</title>
+
+<para>The Apache <classname>Server</classname> class contains information related to the server, or
+virtual host which is handling the current request. It also associated the
+<classname>Process</classname> object related to the request as well, which is
+obtained using the <link
+linkend="process_def"><methodname>Server::process()</methodname></link> method.
+</para>
+
+<para>You can obtain the <classname>Server</classname> instance associated with
+the current request using the <link
+linkend="server_def"><methodname>Request::server()</methodname></link> method.
+</para>
+
+<sect2><title>Method Documentation</title>
+
+<para><xref linkend="server_methods"/> contains the exhaustive list of
+methods, in alphabetical order. The documentation of each method follows.
+
+  <table frame="none" pgwide="1" id="server_methods">
+    <title>Apache Server Methods</title>
+    <tgroup cols="2" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Type</emphasis></entry>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="addrs_def">
+                <function>addrs()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="defn_line_number_def">
+                <function>defn_line_number()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="defn_name_def">
+                <function>defn_name()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="error_fname_def">
+                <function>error_fname()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="error_log_def">
+                <function>error_log()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="is_virtual_def">
+                <function>is_virtual()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="keep_alive_def">
+                <function>keep_alive()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="keep_alive_max_def">
+                <function>keep_alive_max()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="keep_alive_timeout_def">
+                <function>keep_alive_timeout()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="limit_req_fields_def">
+                <function>limit_req_fields()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="limit_req_fieldsize_def">
+                <function>limit_req_fieldsize()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="limit_req_line_def">
+                <function>limit_req_line()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="loglevel_def">
+                <function>loglevel()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="lookup_defaults_def">
+                <function>lookup_defaults()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="names_def">
+                <function>names()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="next_def">
+                <function>next()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="path_def">
+                <function>path()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="pathlen_def">
+                <function>pathlen()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="port_def">
+                <function>port()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="process_def">
+                <function>process()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="server_admin_def">
+                <function>server_admin()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="server_hostname_def">
+                <function>server_hostname()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="timeout_def">
+                <function>timeout()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="wild_names_def">
+                <function>wild_names()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<bridgehead id="addrs_def" renderas="sect4">addrs()</bridgehead>
+
+<para>The official documentation for this method comes directly from the Doxygen
+documentation from the Apache source, defined in line 1192 of
+<filename>httpd.h</filename>:
+
+<blockquote><para>
+I haven't got a clue.
+</para>
+</blockquote>
+
+I have pneumonia and am in a trance right now and don't feel like digging for
+details. Enjoy.
+</para>
+
+
+<bridgehead id="defn_line_number_def" renderas="sect4">defn_line_number()</bridgehead>
+
+<para><function>defn_line_number()</function> returns the line of the config
+file that the server was defined on.</para>
+
+
+<bridgehead id="defn_name_def" renderas="sect4">defn_name()</bridgehead>
+
+<para><function>defn_name()</function> returns the name of the server &mdash;
+the fully qualified domain name. This varies with the particular virtual host
+that is responding to the request.
+</para>
+
+
+<bridgehead id="error_fname_def" renderas="sect4">error_fname()</bridgehead>
+
+<para><function>error_fname()</function> returns the name of the error log.</para>
+
+
+<bridgehead id="error_log_def" renderas="sect4">error_log()</bridgehead>
+
+<para><function>error_log()</function> returns a file descriptor that references
+the error log.</para>
+
+
+<bridgehead id="is_virtual_def" renderas="sect4">is_virtual()</bridgehead>
+
+<para><function>is_virtual()</function> returns 1 is this is a virtual host
+handling the request, 0 otherwise (the default/main server host &mdash; you know
+&mdash; the one that says "If you're seeing this page instead of the one you
+expected ... you must be a n00b". Or something like that. Sorry, still listening
+to Wilco ... You try writing this boring documentation on a Sunday afternoon).
+</para>
+
+
+<bridgehead id="keep_alive_def" renderas="sect4">keep_alive()</bridgehead>
+
+<para><function>keep_alive()</function> returns 1 if keepalive is enabled
+(client requires a persistent connection), 0 otherwise.
+</para>
+
+
+<bridgehead id="keep_alive_max_def" renderas="sect4">keep_alive_max()</bridgehead>
+
+<para><function>keep_alive_max()</function> returns the maximum number of
+requests for a keepalive connection. See <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#maxkeepaliverequests">the
+Apache Core documentation</ulink> for more information.
+</para>
+
+
+<bridgehead id="keep_alive_timeout_def" renderas="sect4">keep_alive_timeout()</bridgehead>
+
+<para><function>keep_alive_timeout()</function> returns the APR interval
+(seconds) that server will wait for another request. See <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#keepalivetimeout">the Apache
+Core documentation</ulink> for more information.
+</para>
+
+
+<bridgehead id="limit_req_fields_def" renderas="sect4">limit_req_fields()</bridgehead>
+
+<para><function>limit_req_fields()</function> returns the limit on number of
+request header fields. See <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#limitrequestfields">the
+Apache Core documentation</ulink> for more information.
+</para>
+
+
+<bridgehead id="limit_req_fieldsize_def" renderas="sect4">limit_req_fieldsize()</bridgehead>
+
+<para><function>limit_req_fieldsize()</function> returns the limit on size of
+any request header field. See <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#limitrequestfieldsize">the
+Apache Core documentation</ulink> for more information.
+</para>
+
+
+<bridgehead id="limit_req_line_def" renderas="sect4">limit_req_line()</bridgehead>
+
+<para><function>limit_req_line()</function> returns the limit on size of the
+HTTP request line. See <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#limitrequestline">the Apache
+Core documentation</ulink> for more information.
+</para>
+
+
+<bridgehead id="loglevel_def" renderas="sect4">loglevel()</bridgehead>
+
+<para><function>loglevel()</function> returns the log level for this server. See
+<ulink url="http://httpd.apache.org/docs/2.2/mod/core.html#loglevel">the Apache
+Core documentation</ulink> for more information.
+</para>
+
+
+<bridgehead id="lookup_defaults_def" renderas="sect4">lookup_defaults()</bridgehead>
+
+<para><function>lookup_defaults()</function> is unimplemented. This is a C-level
+module configuration function which is basically useless from Ruby.
+</para>
+
+<para>This function returns <literal>nil</literal>
+</para>
+
+
+<bridgehead id="names_def" renderas="sect4">names()</bridgehead>
+
+<para><function>names()</function> returns an APR array of server aliases for
+this host. For more information, see the Apache documentation on <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#serveralias">ServerAlias</ulink>.
+</para>
+
+
+<bridgehead id="next_def" renderas="sect4">next()</bridgehead>
+
+<para><function>next()</function> returns the next Server object in the
+list.
+</para>
+
+
+<bridgehead id="path_def" renderas="sect4">path()</bridgehead>
+
+<para><function>path()</function> returns the path name of the server path. For
+more information, see the Apache documentation on <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#serverpath">ServerPath</ulink>.
+</para>
+
+
+<bridgehead id="pathlen_def" renderas="sect4">pathlen()</bridgehead>
+
+<para><function>pathlen()</function> returns the length in bytes of the
+<literal>ServerPath</literal>.
+</para>
+
+
+<bridgehead id="port_def" renderas="sect4">port()</bridgehead>
+
+<para><function>port()</function> returns the port number on the server that the
+request came in on.
+</para>
+
+
+<bridgehead id="process_def" renderas="sect4">process()</bridgehead>
+
+<para><function>port()</function> returns the <classname>Process</classname>
+object associated with this server. See <xref linkend="modruby.apache.process"/> for
+more information.
+</para>
+
+
+<bridgehead id="server_admin_def" renderas="sect4">server_admin()</bridgehead>
+
+<para><function>server_admin()</function> returns the name of the server admin.
+For more information, see the Apache documentation on <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#serveradmin">ServerAdmin</ulink>.
+</para>
+
+
+<bridgehead id="server_hostname_def" renderas="sect4">server_hostname()</bridgehead>
+
+<para><function>server_hostname()</function> returns the server name handling
+the request. For more information, see the Apache documentation on <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#servername">ServerName</ulink>.
+</para>
+
+
+<bridgehead id="timeout_def" renderas="sect4">timeout()</bridgehead>
+
+<para><function>timeout()</function> returns the timeout interval (seconds).</para>
+
+
+<bridgehead id="wild_names_def" renderas="sect4">wild_names()</bridgehead>
+
+<para><function>wild_names()</function> returns and APR array containing the
+wildcarded names for <literal>ServerAlias</literal> servers. For more
+information, see the Apache documentation on <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#serveralias">ServerAlias</ulink>.
+</para>
+
+</sect2>
+
+</sect1>

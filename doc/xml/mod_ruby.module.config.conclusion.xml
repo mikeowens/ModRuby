@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.module.config.conclusion"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Conclusion</title>
+
+<para>There are 11 directives (listed in <xref linkend="ap_config_vars"/>) which
+are basically split into two contexts: server context and handler
+context. Server context pertains to settings and declarations that are specific
+to the (global) server environment. These include setting configuration
+variables (key value pair) and environmental variables (which show up in the CGI
+environment). Handler context pertains to framework handlers. In this context,
+you can define specialized configuration variables associated with specific
+framework handlers.</para>
+
+<para>
+
+  <table frame="none" pgwide="1" id="ap_config_vars">
+    <title>ModRuby Apache Configuration Directives</title>
+    <tgroup cols="3" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      <colspec colnum="3" colname="c3"/>
+
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+          <entry><emphasis role="bold">Scope</emphasis></entry>
+          <entry><emphasis role="bold">Description</emphasis></entry>
+        </row>
+      </thead>
+      
+      <tbody>
+
+        <row>
+          <entry><literal>RubyDefaultHandlerModule</literal></entry>
+          <entry>{module_name}</entry>
+          <entry>Anywhere</entry>
+          <entry>Set default Ruby module for Apache handler</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyDefaultHandlerClass</literal></entry>
+          <entry>{class_name}</entry>
+          <entry>Anywhere</entry>
+          <entry>Set default Ruby class for Apache handler</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyDefaultHandlerMethod</literal></entry>
+          <entry>{method_name}</entry>
+          <entry>Anywhere</entry>
+          <entry>Set default Ruby method for Apache handler</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyConfig</literal></entry>
+          <entry>{key} {value}</entry>
+          <entry>Anywhere</entry>
+          <entry>Set server-level configuration setting</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyEnv</literal></entry>
+          <entry>{key} {value}</entry>
+          <entry>Anywhere</entry>
+          <entry>Set environmental server-level variable</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyHandler</literal></entry>
+          <entry>{handler_name}</entry>
+          <entry>Anywhere</entry>
+          <entry>Set the framework handler to fire for a given context</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyHandlerDeclare</literal></entry>
+          <entry>{handler_name}</entry>
+          <entry>Global</entry>
+          <entry>Declare a new Ruby handler</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyHandlerModule</literal></entry>
+          <entry>{handler_name} {module_name}</entry>
+          <entry>Global</entry>
+          <entry>Define module for declared handler</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyHandlerClass</literal></entry>
+          <entry>{handler_name} {class_name}</entry>
+          <entry>Global</entry>
+          <entry>Define class for declared handler</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyHandlerMethod</literal></entry>
+          <entry>{handler_name} {method_name}</entry>
+          <entry>Global</entry>
+          <entry>Define method for declared handler</entry>
+        </row>
+
+        <row>
+          <entry><literal>RubyHandlerConfig</literal></entry>
+          <entry>{handler_name} {key} {value}</entry>
+          <entry>Global</entry>
+          <entry>Define a handler-level configuration setting</entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+</sect1>

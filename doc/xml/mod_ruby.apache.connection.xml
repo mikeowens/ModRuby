@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.apache.connection"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>The Apache Connection Class</title>
+
+<para>The Apache <classname>Connection</classname> class contains information
+related to the network connection associated with the current request.</para>
+
+<para>You can obtain the <classname>Connection</classname> instance associated
+with the current request using the <link
+linkend="connection_def"><methodname>Request::connection()</methodname></link> method.
+</para>
+
+<sect2><title>Method Documentation</title>
+
+<para><xref linkend="connection_methods"/> contains the exhaustive list of
+methods, in alphabetical order. The documentation of each method follows.
+
+  <table frame="none" pgwide="1" id="connection_methods">
+    <title>Apache Connection Methods</title>
+    <tgroup cols="2" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Type</emphasis></entry>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="aborted_def">
+                <function>aborted()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="id_def">
+                <function>id()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="keepalive_def">
+                <function>keepalive()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="local_host_def">
+                <function>local_host()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="local_ip_def">
+                <function>local_ip()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="remote_host_def">
+                <function>remote_host()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="remote_ip_def">
+                <function>remote_ip()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="remote_logname_def">
+                <function>remote_logname()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<bridgehead id="aborted_def" renderas="sect4">aborted()</bridgehead>
+
+<para><function>aborted()</function> returns 1 if the connection is open, 0 if
+it is closed.</para>
+
+<bridgehead id="id_def" renderas="sect4">id()</bridgehead>
+
+<para><function>id()</function> returns the unique (integer) ID of the current
+connection. It is assigned internally by Apache.</para>
+
+
+<bridgehead id="keepalive_def" renderas="sect4">keepalive()</bridgehead>
+<para><function>keepalive()</function> returns 1 of the keepalive is
+enabled.</para>
+
+<bridgehead id="local_host_def" renderas="sect4">local_host()</bridgehead>
+
+<para><function>local_host()</function> is used for
+<function>ap_get_server_name()</function> when <ulink
+url="http://httpd.apache.org/docs/2.2/mod/core.html#usecanonicalname">UseCanonicalName</ulink>
+is set to DNS (ignores setting of HostnameLookups)
+</para>
+
+<bridgehead id="local_ip_def" renderas="sect4">local_ip()</bridgehead>
+<para><function>local_ip()</function> returns a string containing the server's
+IP address.</para>
+
+<bridgehead id="remote_host_def" renderas="sect4">remote_host()</bridgehead>
+
+<para><function>remote_host()</function> returns the client's DNS name, if
+known, or <literal>nil</literal> if DNS hasn't been checked. It returns "" if no
+address was found. N.B. only access this though
+<function>get_remote_host()</function>.
+</para>
+
+<bridgehead id="remote_ip_def" renderas="sect4">remote_ip()</bridgehead>
+
+<para><function>remote_ip()</function> returns a string containing the remote IP
+address.
+</para>
+
+<bridgehead id="remote_logname_def" renderas="sect4">remote_logname()</bridgehead>
+
+<para><function>remote_logname()</function> is only ever set if doing rfc1413
+lookups. It's better to access this through
+<methodname>Request::get_remote_logname()</methodname>.</para>
+
+</sect2>
+
+</sect1>

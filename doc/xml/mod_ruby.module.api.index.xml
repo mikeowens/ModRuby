@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<chapter version="5.0" xml:id="modruby.module.api"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Programming</title>
+
+<para>You now understand how to configure Apache to route requests to your
+handlers. Now that you have that squared away, your need to actually code
+something in your handler(s), which leads us to the API. And so this chapter is
+about just that.</para>
+
+<para>If you are familiar with the Apache C API, a lot of this material will be
+very familiar. If you are not, well ... that's the point of this chapter. While
+it is easy to document an API, it can be difficult to figure out how to use an
+API to best implement complex (and even common) tasks. There are many common
+scenarios and issues that arise again and again in developing web
+applications. They mainly center around how to use an API to manipulate various
+aspects of the underlying hypertext transport protocol (HTTP) &mdash; things
+like redirection, managing URL encoding, parsing query parameters, reading HTTP
+headers or POST parameters or CGI variables, setting the HTTP status codes or
+content type, setting cookies ... the list goes on. The best way to illustrate
+the API is by looking at concrete examples that accomplish such common
+tasks.</para>
+
+<para>To that end, this section is a cookbook of sorts. It takes a bottom-up
+approach, starting with the design and construction of the core Apache classes
+as the basic ingredients, explaining how they work and fit together. It then
+reverses, taking a top-down approach using those ingredients to illustrate
+different recipes common to many web applications.</para>
+
+<para>Through many practical examples, you will hopefully get a solid grasp of
+how everything fits together, and how best to use the API. Part of the design
+goals in the framework was to create a useful level of abstraction, making
+things as simple as possible, but at the same time to never hide (or discourage
+the use of) the low-level components of the framework. As such, we will be
+spending a lot of time with the lowest levels of the framework &mdash; namely
+the <classname>Apache::Request</classname> object. We are going to look at it
+and the rest of the framework to manage things like:
+
+<itemizedlist>
+
+<listitem><para>Queries, parameters, and cookies</para></listitem>
+<listitem><para>Redirection and output</para></listitem>
+<listitem><para>Forms, encoding, and file uploads</para></listitem>
+<listitem><para>Sessions and databases</para></listitem>
+<listitem><para>Other uses of the Apache <classname>Apache::Request</classname>,
+<classname>Connection</classname>, and <classname>Server</classname>
+objects</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<xi:include href="mod_ruby.module.api.apr.xml" 
+            parse="xml" 
+            xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+<xi:include href="mod_ruby.module.api.apache.xml" 
+            parse="xml" 
+            xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+</chapter>

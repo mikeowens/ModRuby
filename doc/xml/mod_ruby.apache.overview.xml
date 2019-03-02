@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.apache.overview"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Overview</title>
+
+<para>The RSP Apache module (<literal>mod_rsp</literal>) is an Apache module
+that embeds Ruby into Apache. While it is technically similar to
+<literal>mod_ruby</literal>, it is more focused (and limited) in several
+ways. First, it is designed only to run with the Prefork MPM, which means it is
+limited to UNIX systems only. As Ruby does not work well in a multi-threaded
+envrionment, the performance limitations in running it in with the threaded
+Worker MPM make it effectively single-threaded, and therefore useless for a
+production environment.
+</para>
+
+<para>The upshot of this is that the code is generally smaller, simpler and
+cleaner, as there are no mutexes, synchronization, or threading issues to worry
+about. Simple, clean code engenders reliable infrastructure, which is an
+absolute requirement. Bugs in infrastructure are especially problematic as they
+affect all applications, no matter how well written they may be. Therefore, the
+first of <literal>mod_rsp</literal>'s goals is reliability and bug-free code.
+</para>
+
+<para>While <literal>mod_rsp</literal> exposes almost all of the Apache API
+&mdash; request, server, connection, and process objects (and even a good bit of
+the APR) &mdash; it does not aim to be a complete wrapper. Rather, it aims to
+implement a clean, object-oriented MVC framework that allows the web developer
+to focus on Ruby and the application.</para>
+
+<para>RSP was originally designed to run in a strict CGI environment, and was
+developed using <literal>lighttpd</literal> with FCGI. Thus, the focus from the
+outset was always the framework itself, not the web server or a specific API. As
+it has been changed to work on Apache, all of the standard Apache-specific
+objects and services have been made available in the framework, but still the
+focus is the framework, not on developing a generic Ruby Apache module.
+</para>
+
+<para>The module is designed to do pretty much one thing: push the Apache
+request object into the RSP framework for processing. To do so, it has to move
+it from C to C++ to Ruby to Ruby libraries. To that end, the module's code is
+divided into four major parts:
+
+<itemizedlist>
+
+<listitem><para><abbrev>Module API.</abbrev> This is the low-level Apache module
+interface which interacts directly with the Apache core. It registers the module
+and its various hooks and generally contains all the boilerplate code. It is
+written in C and is contained in the file <filename>mod_rsp.c</filename>. In
+addition registering various hooks, it also implements these hooks as
+stubs. That is, is defines basic C functions for relevant hooks (like the
+content generator) which in turn relay the request into a C++ function defined
+in the core module implementation. For example, the main handler &mdash; the
+content handler &mdash; is <function>rsp_handler()</function>. This function is
+simply a stib that takes the request object passed to it and forwards it into
+the C++ function <function>via rsp_request_handler()</function>, which is the
+real implementation. The reason for this is simply to keep the interface between
+Apache and module implementation as clean as possible. That is, this distinction
+dictates that Apache only reaches as far as the functions defined in
+<filename>mod_rsp.c</filename>, and nowhere else. If we ever have a problem with
+hooks being called (or not called), we know exactly where to look first.
+</para>
+</listitem>
+
+<listitem><para><abbrev>Module Implementation.</abbrev> This is where all the
+core module logic is &mdash; written in C++. As stated previously, the module
+interface will relay all requests into this part, which does the real work. This
+code is contained in the file <filename>module.cpp</filename>, which is shwon in
+<xref linkend="module_implementation"/>. This contains everything needed to
+manage the module and process requests, which boils down to three basic
+functions: module initialization function
+(<function>rsp_init_module()</function>), the request handler
+(<function>rsp_request_handler()</function>), and the module shutdown function
+(<function>rsp_shutdown_module()</function>).
+</para>
+</listitem>
+
+<listitem><para><abbrev>Ruby Extensions.</abbrev> Most of the code in the module
+is in the form of Ruby extensions. The Apache request, connection, server, and
+process objects as well the Apache Portable Runtime pool, table, array, and file
+info structures are all wrapped as Ruby extensions. Each is implemented in its
+own source file (e.g. <filename>ruby_request.cpp</filename>,
+<filename>ruby_connection.cpp</filename>,
+<filename>ruby_apr_table.cpp</filename>, etc). These extensions are then loaded
+into the Ruby VM during module initialization
+(<function>rsp_init_module()</function>). Additionally, the Apache log constants
+are also defined as global constants in Ruby as well.
+</para>
+</listitem>
+
+<listitem><para><abbrev>RSP Framework Interface.</abbrev> The framework
+interface consists of the Ruby <classname>RSP::Handler</classname> class. This
+class serves as the gateway from the Apache module into the framework. In
+request processing, the module passes the request into this class which
+processes the request within the appropriate environment, which is based on the
+virtual host (if any) the request is running under. Each site, or virtual host,
+has its own distinct Ruby environment, configuration files, persistent resources
+etc. that is distinct from all other sites. The <classname>Handler</classname>
+class is in charge of managing all this.
+</para>
+
+<para>There is a single <classname>Handler</classname> instance per Apache
+process. You can see this in <xref linkend="module_implementation"/>, where it
+is contained in the statically defined <classname>ruby::Object</classname>
+called <varname>turnstile</varname>. It is created on module initialization.
+</para>
+</listitem>
+
+</itemizedlist>
+
+<figure id="module_implementation">
+<title><filename></filename>Module Implementation</title>
+<sourcecode href="module.cpp"/>
+</figure>
+
+</para>
+
+<para>While this is conceptually simply, there is still a sizeable amount of
+code, given the Ruby extensions, especially the request object. We will cover
+each one each one in turn.
+</para>
+
+</sect1>

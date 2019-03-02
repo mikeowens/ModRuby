@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="mod_ruby.rhtml"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>RHTML</title>
+
+<para>The ModRuby RHTML module is an eRuby compatible C extension compiled into
+<literal>mod_ruby</literal> and loaded into the
+<classname>ModRuby::RHTML</classname> namespace. It converts RHTML text
+conforming to eRuby into Ruby source code that is capable of being evaluated by
+<methodname>Kernel::eval</methodname>. The documentation of each method follows.
+
+  <table frame="none" pgwide="1" id="rhtml_functions">
+    <title>RHTML Functions</title>
+    <tgroup cols="2" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Type</emphasis></entry>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="rhtml_compile">
+                <function>compile()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>2</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="rhtml_eval">
+                <function>eval()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>2</entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<bridgehead id="rhtml_compile" renderas="sect4">compile()</bridgehead>
+
+<para><function>compile()</function> processes an RHTML file and returns a
+string of text comprised of Ruby code intended to be executed by
+<methodname>Kernel::eval()</methodname>.</para>
+
+<bridgehead renderas="sect3">Arguments</bridgehead>
+<para>
+<itemizedlist>
+<listitem><para><parameter>file</parameter>: the path of an RHTML file to process.</para></listitem>
+<listitem><para><parameter>binding</parameter>: an optional binding. If no value
+is provided the global namespace is used.</para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="rhtml_eval" renderas="sect4">eval()</bridgehead>
+
+<para><function>eval()</function> processes a string of RHTML text and returns a
+string of text comprised of Ruby code that can be executed by
+<methodname>Kernel::eval()</methodname>.</para>
+
+<bridgehead renderas="sect3">Arguments</bridgehead>
+<para>
+<itemizedlist>
+<listitem><para><parameter>text</parameter>: a string or RHTML text to process.</para></listitem>
+<listitem><para><parameter>binding</parameter>: an optional binding. If no value
+is provided the global namespace is used.</para></listitem>
+</itemizedlist>
+</para>
+
+</sect1>

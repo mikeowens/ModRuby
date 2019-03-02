@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.module.config.handlers"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Handlers</title>
+
+<para>Everything is done in the context of handlers. Apache has many different
+kinds of handlers for different stages of the request handling process, but the
+most basic and common by far is the “content generator.” That’s where you, well,
+generate content ... which is basically what everyone thinks of server-side web
+programming anyway. That said, all handlers in ModRuby are in Apache parlance
+“content generators.” We will call these “module handlers.” These handlers are
+written in C and reside in the ModRuby module and they can be invoked from the
+Apache configuration as canonical Apache handlers. When you load the
+<filename>mod_ruby.so</filename> module in Apache, these handlers become
+available for you to use.</para>
+
+<para>To be useful, a module handler must be linked up to a Ruby method of some
+kind. We refer to these Ruby methods as just “Ruby handlers” &mdash; they are
+what handles the request. There are three parameters that must specified to link
+a module handler to a Ruby method:
+
+<itemizedlist>
+
+<listitem>
+  <para><varname>Module</varname>: defines the Ruby module specified via the
+  Ruby <literal>require</literal> directive</para>
+</listitem>
+
+<listitem>
+  <para><varname>Class</varname>: specifies the class name within the respective
+  module. This can be qualified with one or more module namespace prefixes
+  (e.g. <classname>Juji::Fruit</classname>)</para>
+</listitem>
+
+<listitem>
+  <para><varname>Method</varname>: specifies the method name within the
+  class. This method takes exactly one argument which is used to pass in the
+  Apache request object for the specific request being handled.</para>
+</listitem>
+
+</itemizedlist>
+
+With these, the ModRuby module can load the Ruby module, instantiate an object
+of the given class, and then call the specified method, passing in the current
+request, which is an instance of the <classname>Apache::Request</classname>
+class. From that point on, it is up to the Ruby method to service the request
+(e.g. generate content). That’s the whole process. So configuration is thus the
+process of connecting module handlers (C functions in the
+<filename>mod_ruby</filename> Apache module) to Ruby methods in your files, and
+this is all done by specifying these connections in the Apache configuration
+file(s).</para>
+
+<para>As with any Apache configuration, you can define all the file types,
+locations, directories and various other conditions under which your Ruby
+handler(s) should be called. There are almost limitless possibilities for how
+you can route requests to handlers. <emphasis>The whole point of all the
+different module handlers to simply to route the request to the right Ruby
+handler, and from that point on, it’s all Ruby. Module handlers are just
+Apache-configurable connectors that give you fine grained control over (1) what
+handlers are invoked, (2) under what circumstances, (3) in what specific
+configuration contexts.</emphasis></para>
+
+<para>In the Apache configuration file, there are two independent phases you
+must address in order to connect a web request to your Ruby handler:
+
+<orderedlist>
+
+<listitem>
+  <para>You specify the specific condition(s) in which the module handler is to
+  be invoked. This connects the Apache request with a specific ModRuby
+  handler.</para>
+</listitem>
+
+<listitem>
+  <para>You associate the respective module handler with a specific Ruby method
+  that is to service the request. This completes the route from Apache request
+  to Ruby code.</para>
+</listitem>
+
+</orderedlist>
+
+</para>
+
+<para>That said, there are two classes of module handlers: <emphasis>script
+handlers</emphasis> and <emphasis>framework handlers</emphasis>. Script handlers
+exist specifically for processing RHTML and optimized Ruby (CGI)
+scripts. Framework handlers, on the other hand, are completely open-ended: they
+allow for a high degree of specificity under which conditions they are run and
+allow you to add custom configuration variables for each handler that are passed
+into the handler’s Ruby environment. They are designed to connect to bigger,
+more complex environments (e.g. frameworks).</para>
+
+<sect2><title>Script Handlers</title>
+
+<para>The script handlers are targeted at processing RHTML and Ruby CGI
+scripts. They consist of the <function>ruby-rhtml-handler</function> and
+<function>ruby-script-handler</function> configuration values, respectively. To
+use them, you would do something like the following in your Apache
+configuration:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+AddHandler ruby-rhtml-handler .rhtml
+AddHandler ruby-script-handler .rb .ruby
+
+# Or perhaps
+<Files ~ "\.(rhtml)$">
+    SetHandler ruby-rhtml-handler
+</Files>
+
+# And maybe
+<Location /ruby-cgi>
+    SetHandler ruby-script-handler
+</Files>
+
+</IfModule>]]>
+</programlisting>
+
+You have to understand a little about Apache configuration file syntax for this
+to be crystal clear. Let’s take just the first two lines (the remaining examples
+of Apache directives will be covered later). The first two lines use Apache's
+<literal>AddHandler</literal> directive to tell Apache that if it sees a file
+with the extension of <literal>.rhtml</literal> to call the
+<function>ruby-rhtml-handler</function> handler. Similarly, if it sees a file
+with an extension of <literal>.rb</literal> or <literal>.ruby</literal>, to call
+the <function>ruby-script-handler</function>. Both of these handlers are just C
+functions in the <filename>mod_ruby.so</filename> module. Basically, these
+directives will cause Apache to pass control to these C functions for requests
+that ask for files with <filename>.rhtml</filename>, <filename>.rb</filename> or
+<filename>.ruby</filename> extensions. This takes care of phase 1.</para>
+
+<para>Now we have to connect these module handlers to Ruby handlers (phase
+2). With script handlers, we do this using two ModRuby directives:
+<varname>RubyDefaultHandlerModule</varname> and
+<varname>RubyDefaultHandlerClass</varname>. They specify the Ruby module and the
+class within that module that contains the handlers. ModRuby includes a default
+module that implements both handlers, called
+<filename>modruby/handler</filename>.  Its implementation is as follows:
+
+<sourcecode href="modruby_handler_module.rb"/>
+
+</para>
+
+<para>There is one method for the RHTML handler and one method for the script
+handler. The <classname>Runner</classname> class is just a cleanroom environment
+with which to run code in. The environment (global namespace) in which the code
+runs will be completely erased when the <classname>Runner</classname> object
+destructs, and all objects and memory allocated by the handler freed. Thus each
+script runs in a clean, self-contained environment which is completely disposed
+of when the Ruby handler finishes.</para>
+
+<para>So, returning to the configuration example (using only the first two lines
+we covered) we make the full connection &mdash; phase 1 and phase 2 &mdash; with
+the following:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+# Phase 1 -- Apache to ModRuby
+AddHandler ruby-rhtml-handler .rhtml
+AddHandler ruby-script-handler .rb .ruby
+
+# Phase 2 -- ModRuby to Ruby
+RubyDefaultHandlerModule 'modruby'
+RubyDefaultHandlerClass  'ModRuby::Handler'
+
+</IfModule>]]>
+</programlisting>
+
+</para>
+
+<para>Notice in phase 2 that we have only specified the module and class. But
+what about the methods? Well, the script handlers are hard-coded to use fixed
+method names. That is, the <function>ruby-rhtml-handler</function> is hard coded
+to always call a method named <methodname>rhtml()</methodname> and likewise the
+<function>ruby-script-handler</function> always calls a method named
+<methodname>script()</methodname>. They are fixed. So you can specify any module
+(<varname>RubyDefaultHandlerModule</varname>) and class
+(<varname>RubyDefaultHandlerClass</varname>) you want, but within that class,
+the script handlers will look for methods within the class that are named
+<methodname>rhtml()</methodname> or <methodname>script()</methodname> (depending
+on the handler).</para>
+
+<para>Furthermore, since they both use the same module and class specification,
+if you want to override the default RHTML or script handlers, your override
+class has to provide <emphasis>both</emphasis> methods. However, there is
+nothing to stop you from delegating the method you don’t want to implement to
+<classname>ModRuby::Handler</classname>. For example, say you wanted to write
+your own <methodname>script()</methodname> handler, but wanted to use the
+default ModRuby RHTML handler. You could create your module/handler as follows:
+
+<sourcecode href="modruby_handler_module_override.rb"/>
+
+</para>
+
+<para>Assuming you place it in a file called <filename>mymodule.rb</filename>
+with the Ruby path, you would then update your Apache configuration to point to
+it as follows:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+# Phase 1 -- Apache to ModRuby
+AddHandler ruby-rhtml-handler .rhtml
+AddHandler ruby-script-handler .rb .ruby
+
+# Phase 2 -- ModRuby to Ruby
+RubyDefaultHandlerModule 'mymodule'
+RubyDefaultHandlerClass  'MyModule::Handler'
+
+</IfModule>]]>
+</programlisting>
+
+Now all RHTML and CGI script handlers will be handled by your module.</para>
+
+</sect2>
+
+<sect2><title>RHTML Handlers</title>
+
+<para>ModRuby uses an RHTML framework that works exactly like <ulink
+url="http://en.wikipedia.org/wiki/ERuby">eRuby</ulink> to parse RHTML
+files. ModRuby originally used eRuby for RHTML processing, but there were
+problems getting it to work with Ruby 1.9.1 when it came out. This led to the
+development of an eRuby clone &mdash; the ModRuby RHTML parser &mdash; a <ulink
+url="http://flex.sourceforge.net/">flex</ulink>-based scanner which is compiled
+directly into <filename>mod_ruby</filename> as a native Ruby C extension. It
+exactly follows the rules of eRuby. Thus all of the rules in eRuby apply to
+creating RHTML documents in ModRuby. Just to be complete, let's cover the gamut
+of RHTML (which may take at most a paragraph).
+
+<note>
+
+<para>ModRuby includes an alternate RHTML delimiter syntax. In addition to angle
+brackets, braces can be used instead. This form supports embeddeding RHTML
+within XHTML, XML, etc. where the angle brackets can cause problems.</para>
+
+</note>
+
+</para>
+
+<para>Let’s begin with the obligatory example:
+<filename>helloworld.rhtml</filename>, which is as follows:
+
+<programlisting>
+Hello World. This is &lt;%=ModRuby.name%&gt;
+</programlisting>
+
+If you don’t already have the page loaded, you this <ulink
+url="http://&modrubyexmpurl;/helloworld.rhtml">link</ulink> and look at the
+result. Simple enough.</para>
+
+<para>RHTML allows you to embed Ruby code in text and run it in the order that
+it appears. There are three basic constructs for embedding code. First there is
+embedding an entire chunk of code, as follows:
+
+<programlisting><![CDATA[
+Here is some text
+<%
+puts "Inside these delimiters, here is Ruby code"
+%>
+
+Outside it's just plain text again.]]>
+</programlisting>
+
+Then there is inline printing:
+
+<programlisting><![CDATA[
+Printing text <%="in line"%>]]>
+</programlisting>
+
+Whenever RHTML sees the <literal>&lt;%=</literal> opening tag, it prints
+everything that follows. You can think of the equals sign as shorthand for a
+<literal>puts</literal> command.
+
+Then there is a third construct which is really a function of the first. You can
+express blocks over several segements of code and text as follows:
+
+<programlisting><![CDATA[
+<%array.each do |something|%>
+This entire text block will be printed with the current
+value of <%="something%> for each iteration of the loop.
+<%end%>]]>
+</programlisting>
+
+</para>
+
+<para>And that's about it &mdash; RHTML in a nutshell.</para>
+
+</sect2>
+
+<sect2><title>Framework Handlers</title>
+
+<para>Framework handlers are more flexible than script handlers and have
+extended features. There is no default implementation for framework
+handlers. Basically, ModRuby passes your Ruby method an Apache request object
+and you’re on your own.</para>
+
+<para>Framework handlers are implemented using the
+<varname>ruby-handler</varname> C function in the ModRuby module. One way to
+declare a framework handler is by using the <varname>AddHandler</varname>
+directive like above. Say for instance we wanted to create a handler for
+“sheepdip” files (which we designate as having a <filename>.dip</filename>
+extension). We could start by doing the following:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+AddHandler ruby-handler .dip
+
+</IfModule>]]>
+</programlisting>
+
+There’s phase 1. Going this route, we now use the
+<varname>DefaultHandler</varname> variables for phase 2 &mdash; connecting the
+framework handler to a Ruby method. We specify the module/class/handler using
+the <varname>RubyDefaultHandlerModule</varname>,
+<varname>RubyDefaultHandlerClass</varname> and the (new)
+<varname>RubyDefaultHandlerMethod</varname> directive, respectively. Notice
+already one difference between framework handlers and script handlers: you can
+specify the Ruby method name via the <varname>RubyDefaultHandlerMethod</varname>
+directive. Whereas the method name is fixed in script handlers, it’s
+parameterized in framework handlers.</para>
+
+<para>Say our fictional sheepdip files use our fictional
+<filename>sheepdip/handler</filename> module, which contains our
+<classname>Sheepdip::Handler</classname> class which contains a
+<methodname>handler()</methodname> method. One way to use it would be to set our
+configuration as follows:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+# Phase 1 -- Apache to ModRuby
+AddHandler ruby-handler .dip
+
+# Phase 2 -- ModRuby to Ruby
+RubyDefaultHandlerModule sheepdip/handler
+RubyDefaultHandlerClass  Sheepdip::Handler
+RubyDefaultHandlerMethod handle
+
+</IfModule>]]>
+</programlisting>
+
+</para>
+
+<para>To summarize, the three default handler directives are as follows:
+
+<itemizedlist>
+
+<listitem>
+  <para><varname>RubyDefaultHandlerModule</varname>: specifies the Ruby handler
+  module to use via the Ruby <literal>require</literal> directive</para>
+</listitem>
+
+<listitem>
+  <para><varname>RubyDefaultHandlerClass</varname>: specifies the Ruby handler
+  class name within the respective module</para>
+</listitem>
+
+<listitem>
+  <para><varname>RubyDefaultHandlerMethod</varname>: specifies the Ruby handler
+  method name within the respective class</para>
+</listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>But you say “yeah, but isn’t setting the
+<varname>RubyDefaultHandlerModule</varname> and
+<varname>RubyDefaultHandlerClass</varname> parameters going to redefine how
+script handlers run as well?” Yes, it will. Unless you also include
+<methodname>rhtml()</methodname> and <methodname>script()</methodname> methods
+in your new default module/class, which is kind of silly and painful, it will
+break the default behavior used for servicing script handlers. That’s why there
+is another (better) way to go about connecting framework handlers.</para>
+
+<para>You can skirt the <varname>DefaultHandler</varname> directives entirely
+and set up your own independent handler with the more general
+<varname>RubyHandler</varname> directives. These directives are as follows:
+
+<itemizedlist>
+
+<listitem>
+  <para><varname>RubyHandlerDeclare</varname>: Declares a new framework
+  handler.</para>
+</listitem>
+
+<listitem>
+  <para><varname>RubyHandlerModule</varname>: Defines the module for a given
+  framework handler.</para>
+</listitem>
+
+<listitem>
+  <para><varname>RubyHandlerClass</varname>: Defines the class for a given
+  framework handler.</para>
+</listitem>
+
+<listitem>
+  <para><varname>RubyHandlerMethod</varname>: Defines the handler method for a
+  given framework handler.</para>
+</listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>These work similarly to the default handler directives, but they take as
+an argument the name of the framework handler to define. They are not defaults,
+they are specifics. To use this approach, we would change our configuration to
+something like the following:
+
+<programlisting><![CDATA[
+<IfModule ruby_module>
+
+# Phase 0 -- Define framework handler
+RubyHandlerDeclare SHEEPDIP
+RubyHandlerModule  SHEEPDIP sheepdip/handler
+RubyHandlerClass   SHEEPDIP Sheepdip::Handler
+RubyHandlerMethod  SHEEPDIP handle
+
+# Phase 1 -- Apache to ModRuby
+<Files ~ "\.(dip)$">
+    SetHandler ruby-handler
+
+    # Phase 2 -- ModRuby to Ruby
+    RubyHandler SHEEPDIP
+</Files>
+
+</IfModule>]]>
+</programlisting>
+
+In "phase 0", <literal>SHEEPDIP</literal> argument is just a unique key used to
+declare and reference a given framework handler. When you declare a framework
+hander, the ModRuby module creates an entry in an internal hash table of
+framework handlers, using the name as the key. Thus you can define as many
+framework handlers as you like, the only constraint being that they must all
+have unique names. The framework hander’s entry (value) in the hash table is
+itself a hash table, and can thus store an unlimited number of key/value pairs
+just for that handler. So what you have is a hashtable of hashtables as follows:
+
+<informalfigure id="ModRubyFrameworkHandlersTable">
+  <mediaobject>
+    <imageobject>
+      <imagedata align="center" scalefit="1" width="600px"
+                 fileref="images/modruby/modruby_framework_handlers_table.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</informalfigure>
+
+The outermost hashtable is the internal ModRuby framework handlers table, which
+is filled with each framework handler you define. In this example there are two:
+<literal>SHEEPDIP</literal> and <literal>JUJIFRUIT</literal>. Each defined
+framework handler in turn has its own name (e.g. <literal>SHEEPDIP</literal>)
+and hashtable in which its respective Ruby module, class and handler method
+variables are stored. But the framework handler’s hashtable can also hold an
+unlimited number of other key/value pairs as well, which you can use to
+customize and/or configure your framework handler. In this example, there is a
+custom <varname>GEM_PATH</varname> variable set in the
+<literal>SHEEPDIP</literal> handler’s table, and a <varname>PASSWORD</varname>
+variable <literal>JUJIFRUIT</literal>’s. These are added using the
+<varname>RubyHandlerConfig</varname> directive, which is covered later. For now,
+all you need to know is that the <varname>RubyHandler</varname> directives are
+stored there and provide all the information needed to invoke the
+handler.</para>
+
+<para>So with the first four lines (phase 0) we have defined our
+<literal>SHEEPDIP</literal> framework handler. Next we need to tell Apache to
+associate <filename>.dip</filename> files to the
+<function>ruby-handler</function> (phase 1), and from there connect it
+(<function>ruby-handler</function>) to our <literal>SHEEPDIP</literal> handler
+(phase 2). To do this, we are going to do things a little different here. We are
+not using the <varname>AddHandler</varname> directive. We could, but here we are
+going to use a different approach just to illustrate we have with Apache’s
+various configuration directives. As we are interested in only files with
+extension <filename>.dip</filename>, we use a <varname>Files</varname> directive
+to match this extension. Within the block we use <varname>SetHandler</varname>,
+which unconditionally sets the Apache handler to
+<function>ruby-handler</function>, rather than <varname>AddHandler</varname>
+outside. This just keeps us from having to repeat ourselves, as
+<varname>AddHandler</varname> requires us to again specify the extension, which
+we’ve already done in the <varname>Files</varname> directive. This approach is
+just a little cleaner. Either way, we are just associating the specific file
+extension <filename>.dip</filename> to <function>ruby-handler</function> &mdash;
+that’s the point here, and you can do that however you like.<footnote><para>For
+more information on <varname>AddHandler</varname> verses
+<varname>SetHandler</varname>, see the Apache <link
+xlink:href="http://httpd.apache.org/docs/2.4/mod/mod_mime.html#addhandler">documentation</link>.</para></footnote>
+Next is phase 2, where we weld the <function>ruby-handler</function> to the
+<literal>SHEEPDIP</literal> framework handler using the
+<varname>RubyHandler</varname> directive. The <varname>RubyHandler</varname>
+directive is a block-level directive which unconditionally sets the specified
+framework handler to use in that scope.</para>
+
+<para>So based on the contents of the <varname>Files</varname> block, when
+Apache sees a file with extension <filename>.dip</filename>, it will invoke
+<function>ruby-handler</function>. When <function>ruby-handler</function>
+executes, it in turn will see the <varname>RubyHandler</varname> directive set
+internally to use the <literal>SHEEPDIP</literal> Ruby handler. Knowing this,
+when <function>ruby-handler</function> processes the request, it will pull the
+<literal>SHEEPDIP</literal> handler entry from the internal handlers table,
+extract the <varname>RubyHandlerModule</varname>,
+<varname>RubyHandlerClass</varname> and <varname>RubyHandlerMethod</varname>
+entries stored there and use them to invoke the Ruby module/class/method,
+effectively routing the request to our Sheepdip handler. From there, it’s all up
+to our Ruby code in the <methodname>Sheepdip::Handler::handle()</methodname>
+method. The Ruby handler will have access to the <literal>SHEEPDIP</literal>
+handler table, which includes the custom configuration variables (i.e. the
+<varname>GEM_PATH</varname> variable in this example). We will cover how that
+works in the next section.</para>
+
+</sect2>
+
+<sect2><title>Summary</title>
+
+<para>There are two classes of module handlers: script handlers and framework
+handlers. There are two subclasses of script handlers: RHTML and CGI. Script
+handlers are created for convienience. Their purpose, along with the
+<varname>DefaultHandler</varname> directives are just to make it as easy as
+possible to get something going. They exist just for the sake of
+simplicity. They require very little knowledge or work to get Ruby code running
+within Apache.</para>
+
+<para>Framework handlers offer greater control, specificity, and features than
+script handlers, but require a little more effort and understanding. They
+slipstream into Apache’s native configuration directives such as
+<varname>Directory</varname>, <varname>Location</varname>, and
+<varname>File</varname>, giving you tremendous flexibility and fine-grained
+control over what handlers fire and under what conditions, with the option of
+adding custom configuration settings with each handler. We will soon see that
+they even enable you to build upon, override and merge directives for different
+directories, locations and files.</para>
+
+<para>To set up a for framework handler, you have to follow three basic steps:
+
+<itemizedlist>
+
+<listitem>
+  <para>Declare and define one or more framework handlers using
+  <varname>RubyHandlerDeclare</varname>, <varname>RubyHandlerModule</varname>,
+  <varname>RubyHandlerClass</varname> and <varname>RubyHandlerMethod</varname>
+  directives.</para>
+</listitem>
+
+<listitem>
+  <para>Tell Apache to call the <function>ruby-handler</function> handler using
+  <literal>&lt;Files&gt;</literal>, <literal>&lt;Location&gt;</literal>
+  <literal>&lt;Directory&gt;</literal> contexts with either the
+  <varname>AddHandler</varname> or <varname>SetHandler</varname>
+  directives. This is phase 1.</para>
+</listitem>
+
+<listitem>
+  <para> Connect the <function>ruby-handler</function> to the specific framework
+  handler using the <varname>RubyHandler</varname> directive. This is phase
+  2.</para>
+</listitem>
+
+</itemizedlist>
+
+As a result, you can create an unlimited number of different handlers for
+different files, directories, locations, extensions and contexts.</para>
+
+</sect2>
+
+</sect1>
+

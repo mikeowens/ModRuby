@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.intro.about"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>What is ModRuby?</title>
+
+<para>ModRuby is an Apache module that embeds a Ruby virtual machine, enabling
+you to use Ruby natively within Apache. It does what you would expect from a
+traditional language module like <literal>mod_perl</literal> or
+<literal>mod_python</literal>, but also a little bit more. That is, it gives you
+more than just a “faster-than-CGI” environment and native access to Apache’s C
+API from within Ruby. It also provides you with three intuitive ways of using
+Ruby within Apache, based on your needs/preferences. These are in the form of
+different Apache handlers. One handler is designed to run straight-up Ruby (like
+in a Fast CGI environment). Another one processes embedded Ruby (RHTML)
+files. The third (and most useful) is a user-defined handler that lets you
+specify how to handle requests &mdash; pointing to the Ruby class/method of your
+choosing to handle incoming requests. Using this handler, you can implement or
+integrate external web frameworks.</para>
+
+<para>Basically, ModRuby’s main purpose is to enable you to easily use Ruby
+within Apache in almost any way you could want, giving you full access to both
+Ruby and Apache via the Apache C API, module framework, and configuration
+system.</para>
+
+<sect2><title>Audience</title>
+
+<para>This documentation covers all aspects of ModRuby and is targeted to web
+developers who have a working knowledge of <ulink
+url="http://www.ruby-lang.org">Ruby</ulink>, <ulink
+url="http://www.apache.org">Apache</ulink> and know their way around a
+Linux/UNIX environment. It addresses administration (compiling/building,
+installing, configuring), development (both general web development and
+extending/customizing ModRuby) as well as design (goals, features and
+limitations).</para>
+
+<para>The general approach is illustration by examples that progressively build
+on each other. All examples are actual working example from a test site that
+accompanies the documentation. This allows you to both read the code and watch
+it work. Using this approach, the documentation starts with the most basic,
+rudimentary concepts and leads into advanced topics.</para>
+
+</sect2>
+
+<sect2><title>Prerequisites</title>
+
+<para>As mentioned already, to get the most out of this documentation, you
+should have basic experience with Ruby, Apache, and a UNIX-like operating system
+such as FreeBSD or Linux.</para>
+
+<para>This documentation does not cover how to install, configure, or use Apache
+<emphasis>unless you are using <ulink
+url="http://www.debian.org">Debian</ulink>/<ulink
+url="http://www.ubuntu.com">Ubuntu</ulink></emphasis>. While ModRuby compiles
+and runs on FreeBSD, OpenBSD and other UNIX-like systems, there are at present
+no binary packages built for those systems. If you are using Ubuntu, then
+installation and configuration is extremely easy: you can set up a working
+system running the ModRuby example site with only a few commands.</para>
+
+<para>If you are not using Debian/Ubuntu, you will have more work to do. You
+will need to know how to do the following:
+
+<itemizedlist>
+
+  <listitem>
+    <para><abbrev>Compile and install software.</abbrev> You will need to know
+    how to compile packages from source using the standard UNIX build tools
+    (<command>tar</command>, <command>make</command>, etc.). All of the support
+    libraries for ModRuby must be downloaded, compiled, and installed.</para>
+  </listitem>
+
+  <listitem>
+    <para><abbrev>Installing Apache.</abbrev> You will either have to have an
+    existing Apache system running, or you will need to know how to get a basic
+    Apache system up and running.</para>
+  </listitem>
+
+  <listitem>
+    <para><abbrev>Module Installation.</abbrev> You will need to know where to
+    install Apache modules on your system, specifically the location (directory)
+    in which they are located.</para>
+  </listitem>
+
+  <listitem>
+    <para><abbrev>Ruby.</abbrev> You will have to have a working version of Ruby
+    1.9.x+ on your system along with the headers files.</para>
+  </listitem>
+
+</itemizedlist>
+
+</para>
+
+</sect2>
+
+<sect2><title>Additional Information</title>
+
+<para>The following are some some good resources for learning Ruby, and Apache:
+    
+<itemizedlist>
+
+  <listitem>
+    <para><ulink
+    url="http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177/">The
+    Ruby Programming Language</ulink>. This is a very good book that is not only
+    a good introduction to Ruby, but covers advanced topics and good programming
+    practices.</para>
+    </listitem>
+    
+  <listitem>
+    <para><ulink url="http://httpd.apache.org/docs/2.2/">The Apache Server
+    Documentation</ulink>. The Apache user documentation is both comprehensive
+    and well written.</para></listitem>
+
+  <listitem>
+    <para><ulink
+    url="http://www.amazon.com/Apache-Modules-Book-Application-Development/dp/0132409674">The
+    Apache Modules Book</ulink>. This is an advanced book for people who want to
+    develop Apache modules. While the Apache documentation for end users is well
+    written, documentation for developers is slim to none. This book is an
+    indespensible guide for anyone who want to develop with Apache.</para>
+  </listitem>
+
+  <listitem>
+    <para><ulink
+    url="https://httpd.apache.org/docs/2.4/developer/modguide.html">The Apache
+    Module Development Documentation</ulink>. Straight from the source.</para>
+  </listitem>
+
+</itemizedlist>
+
+</para>
+
+</sect2>
+
+<sect2><title>Conventions</title>
+
+<para>The following typographical conventions are used in the online
+documentation:
+
+<itemizedlist>
+
+  <listitem>
+    <para>System commands and programs such as <command>grep</command>,
+    <command>awk</command> and <command>dmesg</command> are shown in this
+    manner.</para>
+  </listitem>
+
+  <listitem>
+    <para>Literal expressions such as <literal>select * from user;</literal> are
+    shown in this manner.</para>
+  </listitem>
+  
+  <listitem>
+    <para>Files and paths such as <filename>/etc/shadow</filename> and
+    <filename>/var/log/apache</filename> are shown in this manner.</para>
+  </listitem>
+
+  <listitem>
+    <para>Variable names in code such as <varname>$pwd</varname> and
+    <varname>$SHELL</varname> are shown in this manner.</para>
+  </listitem>
+
+  <listitem>
+    <para>Constants such as <constant>PATH_MAX</constant> are shown in this
+    manner.</para>
+  </listitem>
+
+  <listitem>
+    <para>Functions such as <function>strlen</function> are shown in this
+    manner.</para>
+  </listitem>
+
+  <listitem>
+    <para>Function parameters such as <parameter class="command">len</parameter>
+    are shown in this manner.</para>
+  </listitem>
+
+  <listitem>
+    <para>Classes such as <classname>StringIO</classname> are shown in this
+    manner.
+    </para>    
+  </listitem>
+
+  <listitem>
+    <para>Class methods such as <methodname>StringIO::read()</methodname> are
+    shown in this manner.</para>
+  </listitem>
+
+  <listitem>
+    <para>XML markup such as <markup role="XML">XInclude</markup> is shown in
+    this manner.</para>
+  </listitem>
+
+  <listitem>
+    <para>Links such as <xref linkend="modruby.module.api"/> are shown in this manner.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</para>
+
+<para> The DocBook markup system is described in the printed book
+<emphasis>DocBook - The Definitive Guide</emphasis> <citation><xref
+linkend="bib.TDG99" endterm="bib.TDG99.abbrev"/></citation>. There is an
+up-to-date local HTML copy at CERN <citation><xref linkend="bib.TDGupd"
+endterm="bib.TDGupd.abbrev"/></citation></para>
+
+</sect2>
+
+</sect1>

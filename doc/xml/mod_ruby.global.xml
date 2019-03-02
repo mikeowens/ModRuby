@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.rsp.global"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Global</title>
+
+<para>The RSP module defined to global functions and a number of constants
+related to Apache HTTP processing and and logging. The functions reside under
+the <classname>RSP</classname> module/namespace. The constants are in the
+global namespace.</para>
+
+<para>The Apache HTTP constants are listed in <xref
+linkend="rsp_global_http_constants"/> and the logging constants in <xref
+linkend="rsp_global_logging_constants"/>. The HTTP method constants are returned
+by the <link linkend="method_number_def">
+<methodname>Apache::Request::method_number()</methodname></link> method.
+
+  <table frame="none" pgwide="1" id="rsp_global_http_constants">
+    <title>Apache HTTP Method Constants</title>
+    <tgroup cols="1" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+        <row><entry>M_GET</entry></row>
+        <row><entry>M_PUT</entry></row>
+        <row><entry>M_POST</entry></row>
+        <row><entry>M_DELETE</entry></row>
+        <row><entry>M_CONNECT</entry></row>
+        <row><entry>M_OPTIONS</entry></row>
+        <row><entry>M_TRACE</entry></row>
+        <row><entry>M_PATCH</entry></row>
+        <row><entry>M_PROPFIND</entry></row>
+        <row><entry>M_PROPPATCH</entry></row>
+        <row><entry>M_MKCOL</entry></row>
+        <row><entry>M_COPY</entry></row>
+        <row><entry>M_MOVE</entry></row>
+        <row><entry>M_LOCK</entry></row>
+        <row><entry>M_UNLOCK</entry></row>
+        <row><entry>M_VERSION_CONTROL</entry></row>
+        <row><entry>M_CHECKOUT</entry></row>
+        <row><entry>M_UNCHECKOUT</entry></row>
+        <row><entry>M_CHECKIN</entry></row>
+        <row><entry>M_UPDATE</entry></row>
+        <row><entry>M_LABEL</entry></row>
+        <row><entry>M_REPORT</entry></row>
+        <row><entry>M_MKWORKSPACE</entry></row>
+        <row><entry>M_MKACTIVITY</entry></row>
+        <row><entry>M_BASELINE_CONTROL</entry></row>
+        <row><entry>M_MERGE</entry></row>
+        <row><entry>M_INVALID</entry></row>
+        <row><entry>M_METHODS</entry></row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+  <table frame="none" pgwide="1" id="rsp_global_logging_constants">
+    <title>Apache Logging Constants</title>
+    <tgroup cols="1" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+        <row><entry>APLOG_EMERG</entry></row>
+        <row><entry>APLOG_ALERT</entry></row>
+        <row><entry>APLOG_CRIT</entry></row>
+        <row><entry>APLOG_ERR</entry></row>
+        <row><entry>APLOG_WARNING</entry></row>
+        <row><entry>APLOG_NOTICE</entry></row>
+        <row><entry>APLOG_INFO</entry></row>
+        <row><entry>APLOG_DEBUG</entry></row>
+        <row><entry>APLOG_LEVELMASK</entry></row>
+        <row><entry>APLOG_NOERRNO</entry></row>
+        <row><entry>APLOG_TOCLIENT</entry></row>
+        <row><entry>APLOG_STARTUP</entry></row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<para><xref linkend="rsp_global_functions"/> contains the complete list of RSP
+functions, in alphabetical order. The documentation of each method follows.
+
+  <table frame="none" pgwide="1" id="rsp_global_functions">
+    <title>RSP Global Functions</title>
+    <tgroup cols="2" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Type</emphasis></entry>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="rsp_release_date">
+                <function>release_date()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="rsp_version">
+                <function>version()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<bridgehead id="rsp_release_date" renderas="sect4">release_date()</bridgehead>
+
+<para><function>release_date()</function> returns the build/release date of the
+RSP module.</para>
+
+<bridgehead id="rsp_version" renderas="sect4">version()</bridgehead>
+
+<para><function>version()</function> returns the version of the RSP
+module.</para>
+
+</sect1>

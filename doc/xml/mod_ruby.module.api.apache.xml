@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.module.api.apache"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>The Apache API</title>
+
+<sect2><title>The Request Class</title>
+
+<para>The <classname>Apache::Request</classname> class is the principal class
+you will use to do most of the low-level work, as it contains the most common
+information (queries, POST parameters, cookies, etc.) which in turn comes
+primarily from the HTTP headers and/or the CGI environment.</para>
+
+<sect3 id="http_headers"><title>HTTP Headers</title>
+
+<para>As you now understand how <classname>APR::Table</classname>s work, let’s
+take an opportunity to explore how they and everything else fits together. We
+will look specifically specifically at how HTTP headers are managed. If you
+understand this, everything else is easy. This demonstrates not only the
+subtleties of using APR tables, but also the core linkage between the APR
+classes and the <classname>Apache::Request</classname> classes. HTTP headers (in
+and out) are a large component of handling a request, second only to content,
+which we will look at later.</para>
+
+<para>To start out, let’s look at part of the Ruby implementation of the
+<classname>Apache::Request</classname> class:
+
+<sourcecode href="modruby_apache_req_imp.rb"/>
+
+</para>
+
+<para>Look at <methodname>setCookie()</methodname>. Cookies are stored in the
+<varname>@headers_out</varname> member, which is where all HTTP headers are
+stored. This is an <classname>APR::Table</classname> object. All cookie values
+are stored in a list associated with the key "Set-Cookie". Similarly, the
+<methodname>redirect()</methodname>, <methodname>expires()</methodname>, and
+<methodname>dontCache()</methodname> methods all operate on the
+<varname>@headers_out</varname> table as well. Note that these are outgoing
+headers &mdash; response headers, headers sent back to the client.
+</para>
+
+<para>So at some point these headers have to be shipped out &mdash; sent back to
+the client. And they have to be sent before any of the content. This happens in
+one of two ways:
+
+<itemizedlist>
+
+<listitem>
+  <para><abbrev>Explicitly:</abbrev> Using the
+  <methodname>Request::flush()</methodname> method will explicitly send them on
+  their way.</para>
+</listitem>
+
+<listitem>
+  <para><abbrev>Implicitly:</abbrev> Sending any kind of content will internally
+  trigger Apache to first send the headers out.</para>
+</listitem>
+
+</itemizedlist>
+
+Look at the implementation of <methodname>flush()</methodname>. It calls
+<methodname>self.rflush()</methodname>. This is where we cross into the C
+implementaion of <classname>Apache::Request</classname>. This is basically a
+wrapper over the <function>ap_rflush()</function> function in Apache C API. When
+this is called, the headers are automatically flushed and sent to the client.
+
+<note><title>Error Headers</title>
+<para>Note also that the <classname>Apache::Request</classname> class has both a
+<methodname>headers_out()</methodname> and
+<methodname>err_headers_out()</methodname>. Each returns a reference to the
+<classname>APR::Table</classname> in the Apache request struct. They are two
+distinctly different tables, and it is important that you understand the
+difference. When an error or internal redirect takes place, the
+<varname>@headers_out</varname> are cleared out and only the values in
+<varname>@err_headers_out</varname> are retained.</para>
+
+<para>It mainly centers around the HTTP status code sent back to the
+client. Error fields are sent back if the module aborts or returns an error
+status code. So if the status code is success (200), then the contents of
+<varname>@headers_out</varname> are sent back as the HTTP headers. However,
+<emphasis>for any other status code</emphasis> the
+<varname>@err_headers_out</varname> are used. This has very important
+implications. For example, in doing a HTTP redirect, you have to use the error
+headers rather than the regular headers because that employs returning a 302
+status code. The only exception to this is when you redirect by setting
+<literal>location</literal> header, which is a special case, and then you may
+use <varname>@headers_out</varname>. That is why the
+<methodname>Apache::Request::copyErrorHeaders()</methodname> method exists. It
+is a convenience function that copies all entries in
+<varname>@headers_out</varname> to <varname>@err_headers_out</varname>.</para>
+
+<para>So just remember, if you manually set the HTTP status code, you need to
+make sure that you copy any relevant headers you want to send back to the error
+headers and not to the regular headers (as they will not be sent in this case),
+the only exception being if you set the <literal>location</literal>
+header.</para>
+</note>
+
+</para>
+
+<para>And that’s the story &mdash; HTTP headers. If you understand this,
+everything else is cake, as you can now see the pathway from the high-level
+<classname>Apache::Request</classname> object all the way into the
+<classname>APR::Table</classname>s of the Apache C API. Think of the
+<classname>Apache::Request</classname> class as one big API that contains the
+low-level API to do pretty much everything.</para>
+
+</sect3>
+
+<sect3 id="modruby.module.api.apache.cgi"><title>CGI Environment</title>
+
+<para>Apache request objects have what is called an "environmental table." This
+is an internal table which holds the environmental variables set for the web
+server process. This happens to be the canonical way that web servers pass HTTP
+parameters to CGI processes. As such, the <classname>Apache::Request</classname>
+object contains both <ulink url="http://www.w3.org/CGI/">standard CGI
+environment variables</ulink> and <ulink
+url="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">HTTP
+headers</ulink> for convenience. As this behavior is optional in Apache,
+internally, the ModRuby module calls two Apache C API functions
+(<function>ap_add_cgi_vars()</function> and
+<function>ap_add_common_vars()</function>) which cause the Apache to load CGI
+variables into the request’s environmental table. The high-level data structure
+containing this information is the <varname>Apache::Request::cgi</varname>
+member which in turn is a <classname>APR::Table</classname>. The following code
+illustrates this:
+
+<sourcecode href="modruby_cgi_env_ex.rb"/>
+
+</para>
+
+<para>This example is in <ulink
+url="http://&modrubyexmpurl;/cgi.rhtml">http/cgi.rhtml</ulink>. It
+yields the following:
+
+<programlisting><![CDATA[
+                VLOG: moduby
+   GATEWAY_INTERFACE: CGI/1.1
+     SERVER_PROTOCOL: HTTP/1.1
+      REQUEST_METHOD: GET
+        QUERY_STRING: 
+         REQUEST_URI: /http/cgi.rhtml
+         SCRIPT_NAME: /http/cgi.rhtml
+           HTTP_HOST: www.modruby.org
+     HTTP_USER_AGENT: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.3pre)
+         HTTP_ACCEPT: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+HTTP_ACCEPT_LANGUAGE: en-us,en;q=0.5
+HTTP_ACCEPT_ENCODING: gzip,deflate
+ HTTP_ACCEPT_CHARSET: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+     HTTP_KEEP_ALIVE: 300
+     HTTP_CONNECTION: keep-alive
+        HTTP_REFERER: http://www.modruby.org/
+         HTTP_COOKIE: test=1; sid=439sdkkfdjks; galations=6:1-10
+  HTTP_CACHE_CONTROL: max-age=0
+                PATH: /usr/local/bin:/usr/bin:/bin
+    SERVER_SIGNATURE: 
+Apache/2.2.8 (Ubuntu) Server at www.modruby.org Port 80
+
+     SERVER_SOFTWARE: Apache/2.2.8 (Ubuntu)
+         SERVER_NAME: www.modruby.org
+         SERVER_ADDR: 127.0.0.1
+         SERVER_PORT: 80
+         REMOTE_ADDR: 127.0.0.1
+       DOCUMENT_ROOT: /var/www/modruby-example/content
+        SERVER_ADMIN: webmaster@modruby.org
+     SCRIPT_FILENAME: /var/www/modruby-example/content/http/cgi.rhtml
+         REMOTE_PORT: 51183]]>
+</programlisting>
+
+There can be more or less variables depending on the OS and the nature of the
+request (whether there are cookies are not, etc.).
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2><title>Queries and Parameters</title>
+
+<para>Queries and parameters are stored in <varname>@request.queries</varname> and
+<varname>@request.params</varname>, both of which are APR tables in the
+<classname>Apache::Request</classname> object. Again, you can iterate over APR
+tables just like a Ruby hash:
+
+<sourcecode href="modruby_cgi_queries_ex.rb"/>
+
+</para>
+
+<para>This example is in <ulink url="http://&modrubyexmpurl;/post.rhtml">
+http/post.rhtml</ulink>. Click the <literal>Submit</literal> button. It yields
+the following:
+
+<programlisting>
+Queries: 
+  queryarg=junior mints
+Params: 
+  text=jujifruit
+</programlisting>
+
+</para>
+
+<para>Parameters that come from POST methods have content type
+<literal>application/x-www-form-urlencoded</literal>. For all other content
+types, the value of <varname>@request.params</varname> will be
+<literal>nil</literal>. This means you will have to access the raw content via
+<methodname>@request.content()</methodname> and process it yourself, be it XML,
+JSON, etc.</para>
+
+<para>Additionally, the <classname>Apache::Request</classname> class has three
+shotgun methods called <methodname>value()</methodname>,
+<methodname>values()</methodname>, and
+<methodname>hasValue?()</methodname>. Their purpose is to provide a single
+interface with which to pull a value from any of the queries, parameters, or CGI
+variables (in that order). <methodname>value()</methodname> and
+<methodname>values()</methodname> are essentially the same except the former
+always returns the result in scalar form and the latter in array
+form. <methodname>hasValue?()</methodname> returns a boolean of whether or not
+there is any such value for a given name in any of the respective sources.
+</para>
+
+<para>Again, keep in mind that all of this information &mdash; queries, cookies
+and other various stuff (all but POST parameters) &mdash; is available straight
+from the CGI interface (<varname>@request.cgi</varname>). But it can be easier to
+use the high-level <classname>Apache::Request</classname> methods to get
+it.</para>
+
+</sect2>
+
+<sect2><title>Cookies</title>
+
+<para>The <classname>Apache::Request</classname> class provides some convenience
+methods for cookie handling via the <methodname>cookie()</methodname>,
+<methodname>setCookie()</methodname> and <methodname>clearCookie()</methodname>
+methods. <methodname>cookie()</methodname> takes as a single argument the name
+of the cookie and returns its value, if a cookie by that name
+exists. <methodname>clearCookie()</methodname> takes the name of a cookie and
+clears it. <methodname>setCookie()</methodname> creates a cookie. It takes the
+following arguments:
+
+<itemizedlist>
+
+  <listitem>
+    <para><parameter>name</parameter>: The name of the cookie</para>
+  </listitem>
+
+  <listitem>
+    <para><parameter>value</parameter>: The value of the cookie</para>
+  </listitem>
+
+  <listitem>
+    <para><parameter>days</parameter>: The days until the cookie expires</para>
+  </listitem>
+
+  <listitem>
+    <para><parameter>minutes</parameter>: The minutes until the cookie expires (added to days)</para>
+  </listitem>
+
+  <listitem>
+    <para><parameter>path</parameter>: The path of the cookie</para>
+  </listitem>
+
+</itemizedlist>
+
+If <parameter>days</parameter> and <parameter>minutes</parameter> are both -1,
+then <methodname>setCookie()</methodname> will set the cookie expiration date to
+the maximum &mdash; the year 2038. By default, the expiration is set to the
+duration of the current browser session. <methodname>setCookie()</methodname>
+automatically handles setting the domain name for you based on the current
+virtual host the request is running under. By default, the
+<parameter>path</parameter> parameter is set to the document root
+(<literal>/</literal>).
+</para>
+
+<para>Consider the following example:
+
+<sourcecode href="modruby_cgi_cookies_ex.rb"/>
+
+</para>
+
+<para>This example is in <ulink url="http://&modrubyexmpurl;/cookies.rhtml">
+http/cookies.rhtml</ulink>. Click the <literal>Submit</literal> button and then
+refresh your browser once. It yields the following:
+
+<programlisting>
+Cookies: 
+  mo=1
+  curly=1
+  larry=1
+</programlisting>
+
+Each time you refresh the page, <literal>curly</literal> will increase
+monotonically, as the code feeds off the previous value, incrementing the
+cookie’s value.
+
+</para>
+
+<note><para>Remember that cookies are transmitted in HTTP headers. Therefore,
+once the headers have been sent to the client,
+<methodname>setCookie()</methodname> will not work. Thus the first call to
+<methodname>@request.flush()</methodname> will effectively disable
+<methodname>setCookie()</methodname> as it will send the headers out. Therefore,
+the safest thing to do is to always try to set your cookie(s) and headers before
+any content. Apache will buffer content (forestalling sending out headers), but
+the amount of buffering it will do before flushing is not something you can know
+for sure or bank on.</para></note>
+
+</sect2>
+
+<sect2><title>Redirection</title>
+
+<para>Redirection can be done in two ways: external or internal. An external
+redirect is done by sending the client an HTTP 302 response and providing the
+URL through the response headers. For example, if you want to send a redirect to
+Google, you can do this in your view as follows:
+
+<sourcecode href="modruby_redirect1_ex.rb"/>
+
+</para>
+
+<para>The <classname>Apache::Request</classname> class will do this for you
+however by simply calling
+<methodname>@request.redirect(url)</methodname>.</para>
+
+<para>Internal redirects are done using the
+<methodname>Apache::Request::internal_redirect()</methodname>. This causes
+Apache to change the request internally and rerun the request handler, bypassing
+the trip back to the client. Apache just backs up a step and runs a new
+request. Remember that when this is done, the contents of the current
+<varname>@headers_out</varname> table will be flushed before processing the new,
+redirected request. If you need to transfer the contents, you can copy them to
+<varname>@err_headers_out</varname> and the subsequent request can get to them
+via <methodname>@request.prev.err_headers_out()</methodname>.</para>
+
+<para>The following is an example of both forms of redirection;
+
+<sourcecode href="modruby_redirect_ex.rb"/>
+
+</para>
+
+<para>This example is in <ulink url="http://&modrubyexmpurl;/redirect.rhtml">
+http/redirect.rhtml</ulink>. The internal redirect goes to
+<filename>redirected.rhtml</filename>, and the external redirect to
+<literal>www.devuan.org</literal>.</para>
+
+<para>Which method is preferable depends on what you are trying to do. If you
+have a request that will take a while and you want to put up a progress bar,
+external redirects may be the way to go. If you are having to take evasive
+action or just altogether change to a different request handler (or controller),
+and internal redirect may be better.
+</para>
+
+</sect2>
+
+<sect2 id="modruby.module.api.apache.req.termination"><title>Request Termination</title>
+
+<para>There are times when you may want to cease all processing of a request but
+you can’t easily stop the flow of control without adding a bunch of additional
+messy code. Consider the following example:
+
+<sourcecode href="modruby_terminate1_ex.rb"/>
+
+</para>
+
+<para>Here we have a method that needs to check whether we have the requisite
+access token from Facebook in order to proceed. It calls
+<methodname>ensureAuthorized()</methodname> to make this check. Well, if that
+method sees that we are not authorized, the way to go about it is to send a
+chunk of Javascript back to cause the browser to redirect, and then
+<strong>stop</strong> doing everything. The problem here, is that when
+<methodname>ensureAuthorized()</methodname> returns, that code will continue
+running, and we now have to shift into handling an edge case. So we write a
+conditional to check the result, and then just pass up the false value to the
+caller. But then what about all the caller? He has to deal with the false and
+pass it up to his caller, if there is one, and now we have to hope that every
+caller in the stack is prepared to deal with this edge case. We now have to
+write code all over the place to check for an error condition that should really
+just be contained here. But now all sorts of other code has to be aware ... all
+the way up every possible path in the stack. What a pain.</para>
+
+<para>Wouldn’t it be nice if we could just say "STOP processing right here!" in
+<methodname>ensureAuthorized()</methodname>? If the user is not authorized, we
+do our redirect and have the server just send what its got back to the client?
+Well, this is exactly what the <methodname>Request::terminate()</methodname> is
+for. Internally it thows a unique exception
+(<classname>ModRuby::RequestTermination</classname>) which propagates up the stack
+to the ModRuby handler, which then catches it and does nothing but finalize the
+request. Whenever you call it, it just halts the code right there. Using it, we
+can rewrite our previous example as follows:
+
+<sourcecode href="modruby_terminate2_ex.rb"/>
+
+</para>
+
+<para>Much simpler. Now our edge case is handled here and nobody else has to
+know about it or code for it.</para>
+
+</sect2>
+
+<sect2><title>Output: Buffering and Content Generation</title>
+
+<para>Within the context of RHTML and Ruby script pages, the content generated
+is collected in an output buffer managed by the handler handling the request. By
+default, anything from <function>puts</function>, <function>print</function> or
+whatever else that prints to standard out in Ruby is collected in that
+buffer. After a RHTML page or controller completes, the handler flushes the
+contents of the buffer through Apache, which in turn sends it on to the
+client.</para>
+
+<para>Despite buffering, you still have access to the low-level output via the
+<classname>Apache::Request</classname> object. It can therefore subvert
+buffering if you wish and send content directly through the wire. The question
+is then why would you want buffering at all? The answer is in handling
+errors. There may be times when you don’t want half of a page to render
+correctly and then run into an error and then try to figure out what to
+do. Rather, you would want to be able to clear the generated content and perhaps
+send back a completely different page &mdash; an error page with a stack trace
+perhaps. Buffering allows you to completely change the outcome if and when you
+encounter and error.
+</para>
+
+<para>Before the page is processed, the handler redirects Ruby standard out to a
+<classname>StringIO</classname> instance. This is buffer is accessible via the
+<varname>@request.out</varname> member.  Thus, at any point if you want to clear out
+the output buffer, you just use the <methodname>StringIO::reopen()</methodname>
+method. Consider the following example:
+
+<sourcecode href="modruby_clear_buffer.rhtml"/>
+
+</para>
+
+<para>This example is in <ulink url="http://&modrubyexmpurl;/clearbuffer.rhtml">
+http/clearbuffer.rhtml</ulink>. Only the content after the call to
+<methodname>StringIO::reopen()</methodname> is rendered.
+</para>
+
+<para>When you want to bypass the default output buffer and write directly to
+Apache, you use the <classname>Apache::Request</classname> object as well. There
+are several methods you can use depending on what you want to do. The equivalent
+of <function>puts</function> is <methodname>Request::puts</methodname>. The
+equivalent of <function>print</function> is
+<methodname>Request::print</methodname> or
+<methodname>Request::rputs</methodname> (which calls the same underlying C
+function <function>ap_puts()</function>). You can send binary data using
+<methodname>Request::write()</methodname> which requires both data and number of
+bytes.  When you write with any of these, you completely bypass the output
+buffer and go directly to Apache. Consider the following example:
+
+<sourcecode href="modruby_bypass_buffer.rhtml"/>
+
+</para>
+
+<para>This example is in <ulink
+url="http://&modrubyexmpurl;/bypassbuffer.rhtml">
+http/bypassbuffer.rhtml</ulink>. The Apache I/O content comes first, followed by
+the page content.
+</para>
+
+<para>By default, even output in Apache is buffered up to a point. Normally, you
+most likely don’t care as long as all of the output gets back to the client
+(which it will eventually). There are times however when you want to ensure that
+the content does get to the client at specific times. Sometimes you might have a
+long-running request and you want to send javascript chunks which update the
+screen, and perhaps ultimately send a META REFRESH to redirect the client.
+</para>
+
+<para>This is where chunked encoding comes in handing. To switch Apache into
+chunked encoding mode, all you have to do is call
+<methodname>@request.flush()</methodname>, which calls the low-level
+<function>ap_rflush()</function> function in the C API. The first call will send
+out the headers and any buffered content in Apache. From this point on, you will
+still have buffered writes (in Apache) but you can force them out with
+subsequent calls to <methodname>@request.flush()</methodname>. To reiterate, the
+buffer being referred to here is the buffering within Apache, not the ModRuby page
+buffer (<varname>@request.out</varname>).</para>
+
+<para>There may be times when you want to send not just content through the
+wire, but perhaps entire files. <classname>Apache::Request</classname> has a
+method called <methodname>send_file()</methodname> which takes as a single
+argument &mdash; the (relative or absolute) path of a file. It in turn calls the
+low-level Apache <function>ap_send_file()</function> which, on operating systems
+that support <ulink
+url="http://www.freebsd.org/cgi/man.cgi?query=sendfile">sendfile()</ulink> or
+equivalent, sends the contents of the file back very efficiently. It can be
+called arbitrary many times in a given request, sending the content of multiple
+files out in the order that the method is called. To see this in action,
+consider the following example:
+
+<sourcecode href="modruby_send_file.rhtml"/>
+
+</para>
+
+<para>This example is in <ulink url="http://&modrubyexmpurl;/sendfile.rhtml">
+http/sendfile.rhtml</ulink>. The <filename>/etc/passwd</filename> and
+<filename>/etc/group</filename> files make it, but
+<filename>/etc/shadow</filename> does not, because Apache is not running under a
+priviledged account (at least it better not be! &mdash; if you do see the
+contents, you may need to get a SysAdmin).</para>
+
+<para>So to recap, the normal standard output in the framework is collected in a
+page buffer which is flushed after the request completes. This buffer is
+accessible to you via the <varname>@request.out</varname> member. It is a standard
+Ruby <classname>StringIO</classname> instance, so you can manipulate it however
+you want. Besides this, you can also use the native Apache I/O functions and
+send content directly over the wire. These functions completely bypass the
+request buffer. While they may be buffered to an extent in Apache, you can force
+them out over the network using the the <methodname>@request.flush()</methodname>
+method.</para>
+
+</sect2>
+
+<sect2><title>Logging</title>
+
+<para>ModRuby provides access to native Apache logging via the
+<methodname>Apache::Request::log()</methodname>, which takes two arguments. The
+first is the log level, which can be on of the constants listed in <xref
+linkend="ap_log_levels"/>. The second is a string containing the message text.
+
+  <table frame="none" pgwide="1" id="ap_log_levels">
+    <title>Log Levels</title>
+    <tgroup cols="3" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      <colspec colnum="3" colname="c3"/>
+
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Constant</emphasis></entry>
+          <entry><emphasis role="bold">Description</emphasis></entry>
+          <entry><emphasis role="bold">Example</emphasis></entry>
+        </row>
+      </thead>
+      
+      <tbody>
+
+        <row>
+          <entry><literal>APLOG_EMERG</literal></entry>
+          <entry>Emergencies - system is unusable.</entry>
+          <entry>"Child cannot open lock file. Exiting"</entry>
+        </row>
+
+        <row>
+          <entry><literal>APLOG_ALERT</literal></entry>
+          <entry>Action must be taken immediately.</entry>
+          <entry>"getpwuid: couldn’t determine user name from uid"</entry>
+        </row>
+
+        <row>
+          <entry><literal>APLOG_CRIT</literal></entry>
+          <entry>Critical Conditions.</entry>
+          <entry>"socket: Failed to get a socket, exiting child"</entry>
+        </row>
+
+        <row>
+          <entry><literal>APLOG_ERR</literal></entry>
+          <entry>Error conditions.</entry>
+          <entry>"Premature end of script headers"</entry>
+        </row>
+
+        <row>
+          <entry><literal>APLOG_WARNING</literal></entry>
+          <entry>Warning conditions.</entry>
+          <entry>"child process 1234 did not exit, sending another SIGHUP"</entry>
+        </row>
+
+        <row>
+          <entry><literal>APLOG_NOTICE</literal></entry>
+          <entry>Normal but significant condition.</entry>
+          <entry>"httpd: caught SIGBUS, attempting to dump core in ..."</entry>
+        </row>
+
+        <row>
+          <entry><literal>APLOG_INFO</literal></entry>
+          <entry>Informational.</entry>
+          <entry>"Server seems busy, (you may need to increase StartServers, or Min/MaxSpareServers)..."</entry>
+        </row>
+
+        <row>
+          <entry><literal>APLOG_DEBUG</literal></entry>
+          <entry>Debug-level messages</entry>
+          <entry>"Opening config file ..."</entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<para>The error levels correspond to the <literal>LogLevel</literal> directive
+in the Apache configuration file. See the <ulink
+url="&apdocurl;mod/core.html#loglevel">Apache documentation</ulink> for more
+information.</para>
+
+</sect2>
+
+</sect1>

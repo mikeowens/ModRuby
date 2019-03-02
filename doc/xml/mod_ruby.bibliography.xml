@@ -1,0 +1,115 @@
+<bibliography version="5.0" xml:id="biblio"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Bibliography</title>
+
+<bibliodiv
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Books</title>
+
+<biblioentry id="bib.TDG99">
+      <abbrev id="bib.TDG99.abbrev">TDG1999</abbrev>
+      <authorgroup>
+      <author><firstname>Norman</firstname><surname>Walsh</surname></author>
+      <author><firstname>Leonard</firstname><surname>Muellner</surname></author>
+      </authorgroup>
+      <title>DocBook</title>
+      <subtitle>The Definitive Guide</subtitle>
+      <pubdate>1999</pubdate>
+      <edition>1</edition>
+      <isbn>ISBN: 156592-580-7</isbn>
+      <pagenums>648</pagenums>
+      <releaseinfo>
+      <ulink url="http://www.oreilly.com/catalog/docbook/index.html">Oreilly's catalog entry</ulink>.  
+        An online version <ulink url="http://www.oasis-open.org/docbook/documentation/reference/html/docbook.html">is available</ulink>
+      </releaseinfo>
+</biblioentry>
+
+<biblioentry id="bib.NK07">
+      <abbrev id="bib.NK07.abbrev">NK2007</abbrev>
+      <authorgroup>
+      <author><firstname>Nick</firstname><surname>Kew</surname></author>
+      </authorgroup>
+      <title>Apache Modules Book</title>
+      <subtitle>Application Development with Apache</subtitle>
+      <pubdate>2007</pubdate>
+      <edition>1</edition>
+      <isbn>ISBN: 978-0132409674</isbn>
+      <pagenums>592</pagenums>
+      <releaseinfo>
+      <ulink url="http://www.amazon.com/Apache-Modules-Book-Application-Development/dp/0132409674">Amazon catalog entry</ulink>
+      </releaseinfo>
+</biblioentry>
+
+<biblioentry id="bib.DF06">
+      <abbrev id="bib.DF06.abbrev">DF2006</abbrev>
+      <authorgroup>
+      <author><firstname>David</firstname><surname>Flanagan</surname></author>
+      </authorgroup>
+      <title>Javascript</title>
+      <subtitle>The Definitive Guide</subtitle>
+      <pubdate>2006</pubdate>
+      <edition>5</edition>
+      <isbn>ISBN: 0596101996</isbn>
+      <pagenums>1018</pagenums>
+      <releaseinfo>
+      <ulink url="http://www.amazon.com/JavaScript-Definitive-Guide-David-Flanagan/dp/0596101996/">Amazon catalog entry</ulink>
+      </releaseinfo>
+</biblioentry>
+
+<biblioentry id="bib.TDGupd">
+  <abbrev id="bib.TDGupd.abbrev">TDG2002</abbrev>
+  <authorgroup>
+    <author><firstname>Norman</firstname><surname>Walsh</surname></author>
+    <author><firstname>Leonard</firstname><surname>Muellner</surname></author>
+  </authorgroup>
+  <title>DocBook 4.2</title>
+  <subtitle><ulink
+  url="http://xml.cern.ch/www.docbook.org/tdg/en/html/docbook.html">Updated
+  online Reference installed at CERN</ulink></subtitle>
+</biblioentry>
+
+</bibliodiv>
+
+<bibliodiv
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:mml="http://www.w3.org/1998/Math/MathML"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:db="http://docbook.org/ns/docbook">
+
+<title>Periodicals</title>
+
+<biblioentry>
+  <abbrev>Walsh97</abbrev>
+  <biblioset relation='journal'>
+    <title>XML: Principles, Tools, and Techniques</title>
+    <publisher>
+      <publishername>O'Reilly &amp; Associates, Inc.</publishername>
+    </publisher>
+    <issn>1085-2301</issn>
+    <editor><firstname>Dan</firstname><surname>Connolly</surname></editor>
+  </biblioset>
+  <biblioset relation='article'>
+    <title>A Guide to XML</title>
+    <author><surname>Walsh</surname><firstname>Norman</firstname></author>
+    <copyright><year>1997</year><holder>ArborText, Inc.</holder></copyright>
+    <pagenums>97-108</pagenums>
+  </biblioset>
+</biblioentry>
+
+</bibliodiv>
+
+</bibliography>

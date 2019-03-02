@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.module.api"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>The Apache Portable Runtime</title>
+
+<para>Before we get started into the Apache API, we need to cover two important
+data structures that are used heavily within it, which are part of the Apache
+Portable Runtime (APR). These are tables (<classname>APR::Table</classname>) and
+arrays (<classname>APR::Array</classname>). These are the low-level data
+structures that the Apache C API frequently uses to organize groups of
+data.</para>
+
+<sect2><title>APR Tables</title>
+
+<para>The most important of these by far the the
+<classname>APR::Table</classname> class. This class is a little bit weird at
+first, but when you get the hang of it, you’ll start to see why it’s so
+useful. <classname>APR::Table</classname> basically works like both an array and
+a hash, depending on how you use it. There are methods that make it work as an
+array, and methods that make it work as a hash.
+</para>
+
+<para>No matter how it is used, internally is stores all of its data as
+key/value pairs. What differentiates <classname>APR::Table</classname> from a
+normal Hash is how it handles <emphasis>collisions</emphasis>. A collision is
+when you add a value for a key that is already present in the Hash. For example:
+
+<sourcecode href="modruby_apr_table_collision_ex.rb"/>
+
+</para>
+
+<para>In this example, a normal Hash will only have one key/value pair. The key
+is <literal>Set-Cookie</literal>, and the value is <literal>Path=/</literal>,
+which is the last assignment made. The previous value was overwritten. Hashes
+therefore manage collisions by overwriting the old value with the new one. We
+can say that in Hashes, keys are unique. You cannot have multiple key/value
+pairs that share the same key.
+</para>
+
+<para>This is not the case with <classname>APR::Table</classname>. It’s keys are
+not unique. You <emphasis>can</emphasis> have multiple key/value pairs with the
+same key. And the weird thing is, you can still access the data as if it were a
+Hash. The only problem is that when you access the data for a given key, you
+will only get the <emphasis>first</emphasis> match. If you want all of the
+associated values, then you have to iterate over the table like an array. Are
+you confused yet? Time for an example.</para>
+
+<para>Let’s look at collision handling, iteration, and hash access all at once
+(assume this is in a file called <filename>test.rhtml</filename>):
+
+<sourcecode href="modruby_apr_table_ex.rb"/>
+
+</para>
+
+<para>We add values with the same key, just like before. When we iterate over
+the table, we get:
+
+<screen>
+Dumping Table:
+  Set-Cookie=lp=13ds4; Domain=.jujifruit.com; Path=/
+  Set-Cookie=edge=453fd; Domain=.jujifruit.com; Path=/
+
+table[’Set-Cookie’]=’lp=13ds4; Domain=.jujifruit.com; Path=/’
+</screen>
+
+See what happens? Both key/value pairs are retained. Now we have duplicate keys
+with unique values. When we iterate over the table like we would a normal hash,
+all of the key/value pairs come out. Yet if we access a single value, we only
+get the first match. Now you are starting the get the essence of the
+<classname>APR:Table</classname>: it can act like both an array and a hash at
+the same time.</para>
+
+<para>But there’s more! <classname>APR::Table</classname> can handle collisions
+an alternate way. Notice we used the <methodname>add()</methodname> method. That
+method handles collisions by simply tacking on more key/value pairs. But there
+is also the <methodname>merge()</methodname> method. It handles collisions by
+keeping the key unique, but <emphasis>appending</emphasis> the new data to the
+current value. Consider the following example:
+
+<sourcecode href="modruby_apr_table_ex2.rb"/>
+
+</para>
+
+<para>Here is what we get:
+
+<programlisting>
+Dumping Table:
+  Accept-Charset=ISO-8859-1, utf-8
+
+table[’Accept-Charset’]=’ISO-8859-1, utf-8’
+</programlisting>
+
+See what happens here? Same key, but the value keeps
+growing. <methodname>merge()</methodname> simply appends the new value on to the
+end. So you can decide how you want to handle collisions by which methods you
+use to set the data. You can choose array-sh behavior with
+<methodname>add()</methodname>, an aggregating hash behavior with
+<methodname>merge()</methodname>, and then there is the pure hash behavior with
+a third method: <methodname>set()</methodname>. So what you really have to
+adjust to is just the set/get methods of <classname>APR::Table</classname>. Here
+are the three methods again in review:
+
+<itemizedlist>
+
+  <listitem>
+    <para><methodname>add</methodname>(<parameter>key</parameter>,
+    <parameter>value</parameter>): This method adds a new key/value pair to the
+    table. In the case of a collision, <methodname>add()</methodname> will just
+    tack on the new key/value pair, causing the table to take on array-like
+    characteristics.</para>
+  </listitem>
+
+  <listitem>
+    <para><methodname>merge</methodname>(<parameter>key</parameter>,
+    <parameter>value</parameter>): This works similarly to add for a new
+    key/value pair: it will simply add it to the table. In the case of a
+    collision, however, <methodname>merge()</methodname> will append
+    <parameter>value</parameter> to the end of the current value of the (first)
+    key/value pair already in the table. There operative word here is
+    <emphasis>first</emphasis>. If there are already several key/value pairs
+    added from <methodname>add()</methodname>, a subsequent call to
+    <methodname>merge()</methodname> will operate only on the first match it
+    finds for <parameter>key</parameter>. So keep in mind what happens when you
+    mix these two.</para>
+  </listitem>
+
+  <listitem>
+    <para><methodname>set</methodname>(<parameter>key</parameter>,
+    <parameter>value</parameter>): This works like add for new key/value
+    pairs. In the event of a collision, it will <emphasis>replace</emphasis> the
+    old value (scalar or array) with the current value. That is, even if there
+    are multiple key/value pairs for the given value of
+    <parameter>key</parameter>, <methodname>set()</methodname> <emphasis>will
+    first wipe them all out</emphasis>.</para>
+  </listitem>
+
+</itemizedlist>
+
+So to be absolutely clear how these methods work indepently and together, let’s
+look at one final example:
+
+<sourcecode href="modruby_apr_table_ex3.rb"/>
+
+</para>
+
+<para>Here is what we get:
+
+<programlisting>
+Dumping Table:
+  Set-Cookie=lp=13ds4; Domain=.jujifruit.com; Path=/
+  Set-Cookie=edge=453fd; Domain=.jujifruit.com; Path=/
+Dumping Table:
+  Set-Cookie=lp=13ds4; Domain=.jujifruit.com; Path=/, ISO-8859-1, utf8
+  Set-Cookie=edge=453fd; Domain=.jujifruit.com; Path=/
+Dumping Table:
+  Set-Cookie=wiped out
+</programlisting>
+
+Additionally, <classname>APR::Table</classname> supports the
+<literal>[]=</literal> operator as well, which is just another way of calling
+<methodname>set()</methodname> (as you would expect).
+</para>
+
+<para>Now, you may still have the question “Why? &mdash; What’s the point?”
+Well, the previous examples give some hint to that. Notice that they all
+involved HTTP headers. Some HTTP headers &mdash; like
+<literal>Set-Cookie</literal> &mdash; can have duplicate keys. Thus in this
+case, <classname>APR:Table</classname>’s <methodname>add()</methodname> comes in
+handy. In other cases, some HTTP headers &mdash; like
+<literal>Accept-Charset</literal> &mdash; have a single key, but multiple
+comma-delimited values. In this case, <classname>APR:Table</classname>’s
+<methodname>merge()</methodname> comes in handy. The Apache developers
+recognized this and said “To keep our code clean, we need something that can
+easily handle both situations elegantly.” And thus the APR table (known as the
+<structname>apr_table_t</structname> struct in the APR C API) was born. When you
+do much work with HTTP headers, it doesn’t take long for you to appreciate
+<classname>APR:Table</classname>’s flexibility.</para>
+
+<para>You’ll probably be glad to know that the remaining methods of
+<classname>APR::Table</classname> are straightforward. They all follow the
+<ulink url="http://apr.apache.org/docs/apr/1.3/group__apr__tables.html">APR
+table C API</ulink>. The complete documentation for
+<classname>APR::Table</classname> is in <xref linkend="modruby.apr.table"/>.
+</para>
+
+</sect2>
+
+<sect2><title>APR Arrays</title>
+
+<para>Finally, a word on the <classname>APR::Array</classname> class. For all
+intents and purposes, it’s a read-only Ruby array. It has two methods:
+<classname>each()</classname> and <classname>size()</classname> (ideally, it
+also needs at least a <methodname>[]</methodname> operator). Currently, the only
+method in the API that returns an <methodname>APR::Array</methodname> is
+<methodname>Request::content_languages()</methodname>.
+</para>
+
+</sect2>
+
+</sect1>

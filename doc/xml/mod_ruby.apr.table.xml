@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.apr.table"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>The APR Table Class</title>
+
+<para>The APR table, like the APR itself, permeates Apache, and you see it used
+frequently in Apache API. Apache represents its headers as APR tables, for
+example. The APR table is somewhat of a unique data structure in that it is
+capable of working as both hashtable and array.
+</para>
+
+<sect2><title>Method Documentation</title>
+
+<para><xref linkend="apr_table_methods"/> contains the exhaustive list of
+methods, in alphabetical order. The documentation of each method follows.
+
+  <table frame="none" pgwide="1" id="apr_table_methods">
+    <title>APR Table Methods</title>
+    <tgroup cols="2" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Type</emphasis></entry>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="apr_table_get_def">
+                <function>[]</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="apr_table_set_def">
+                <function>[]=</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>2</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="add_def">
+                <function>add()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>2</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="clear_def">
+                <function>clear()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="each_def">
+                <function>each()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="get_def">
+                <function>get()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="has_key?_def">
+                <function>has_key?()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="join_def">
+                <function>initialize()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="join_def">
+                <function>join()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="keys_def">
+                <function>keys()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="merge_def">
+                <function>merge()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>2</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="set_def">
+                <function>set()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>2</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="size_def">
+                <function>size()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="unset_def">
+                <function>unset()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="values_def">
+                <function>values()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<!-- [] -->
+
+<bridgehead id="apr_table_get_def" renderas="sect4">[ ]</bridgehead>
+
+<para><function>[]</function> is a lookup operator. It returns the value
+associated with a key which is passed in the as the argument. Internally, this
+function calls <function>apr_table_get()</function>.</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<itemizedlist>
+<listitem><para><parameter>key</parameter>: the key value.</para></listitem>
+</itemizedlist>
+</para>
+
+<!-- []= -->
+
+<bridgehead id="apr_table_set_def" renderas="sect4">[ ]=</bridgehead>
+
+<para><function>[]=</function> is an assignment operator. It assigns a value for
+the given key argument. If another value exists for this key, it will be
+overwritten. Internally, this function calls
+<function>apr_table_set()</function>.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<itemizedlist>
+<listitem><para><parameter>key</parameter>: the key value</para></listitem>
+</itemizedlist>
+</para>
+
+<!-- add() -->
+
+<bridgehead id="add_def" renderas="sect4">add()</bridgehead>
+
+<para><function>add()</function> is a non-destructive assigment operator. That
+is, if there is already a value associated with the given key,
+<methodname>add()</methodname> will keep it in place and add the new value. In
+this case, there are multiple values associated with a single key.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def add(key, value)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>key</parameter>: the key value</para></listitem>
+<listitem><para><parameter>value</parameter>: the value corresponding to <parameter>key</parameter>
+</para></listitem>
+</itemizedlist>
+</para>
+
+
+<!-- clear() -->
+
+<bridgehead id="clear_def" renderas="sect4">clear()</bridgehead>
+
+<para><function>clear()</function> deletes all of the elements from a
+table. Internally is calls <function>apr_table_clear()</function>.
+</para>
+
+
+<!-- each() -->
+
+<bridgehead id="each_def" renderas="sect4">each()</bridgehead>
+
+<para><function>each()</function> is an iterator function which passes the
+key/value pair of each element into the block.
+</para>
+
+
+<!-- get() -->
+
+<bridgehead id="get_def" renderas="sect4">get()</bridgehead>
+
+<para><function>get()</function> retrieves the value corresponding to the key
+provided as the argument. It is another form of the <literal>[]</literal>
+operator, and is included in order to be consistent with the APR table API.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def get(key)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>key</parameter>: the key value.</para></listitem>
+</itemizedlist>
+</para>
+
+
+<!-- has_key?() -->
+
+<bridgehead id="has_key?_def" renderas="sect4">has_key?()</bridgehead>
+<para><function>has_key?()</function> returns <literal>true</literal> if the
+table has at least one value associated with the given key.
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def has_key?(key)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>key</parameter>: the key value.</para></listitem>
+</itemizedlist>
+</para>
+
+
+<!-- initialize() -->
+
+<bridgehead id="initialize_def" renderas="sect4">initialize()</bridgehead>
+
+<para><function>initialize()</function> is the constructor. It takes an APR pool
+object from which to allocate its memory. This allows you to optionally control
+the memory management, potentially consoidating multiple tables out of the same
+pool.
+</para>
+
+<para>For processing requests, you will rarely if ever need to create APR
+tables, as all of the tables in the API will already be created for you. If and
+when you do need to create a table, you can use either a new
+<classname>Pool</classname> object, or better yet one of the existing pools
+associated with the <classname>Request</classname>,
+<classname>Connection</classname>, or <classname>Server</classname> objects.
+
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def initialize(pool)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>pool</parameter>: APR pool object to associate with
+table.</para></listitem>
+</itemizedlist>
+</para>
+
+
+<!-- join() -->
+
+<bridgehead id="join_def" renderas="sect4">join()</bridgehead>
+<para><function>join()</function> returns a string containing equality pairs for
+each element in the table, delimited by the value provided as the argument.</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def join(sep)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>separator</parameter>: delimiter</para></listitem>
+</itemizedlist>
+</para>
+
+
+<!-- keys() -->
+
+<bridgehead id="keys_def" renderas="sect4">keys()</bridgehead>
+
+<para><function>keys()</function> returns a Ruby Array containing all keys in
+the table.
+</para>
+
+
+<!-- merge() -->
+
+<bridgehead id="merge_def" renderas="sect4">merge()</bridgehead>
+<para><function>merge()</function> adds a key/value pair to the table. What
+makes merge different is how it handles collisions. If there is already a value
+present for the given key, <methodname>merge()</methodname> will string
+concatenate the new value onto the present value, after adding a comma.
+</para>
+
+<para>For example, if the table contains the value <literal>"bar"</literal> for
+key <literal>"foo"</literal>, and you call <literal>merge("foo",
+"baz")</literal>, then the new value associated with <literal>"foo"</literal>
+will be <literal>"bar, baz"</literal>.
+
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def merge(key, value)</synopsis>
+
+<itemizedlist>
+
+<listitem><para>
+  <parameter>key</parameter>: the key value</para>
+</listitem>
+
+<listitem><para>
+  <parameter>value</parameter>: the value corresponding to
+  <parameter>key</parameter></para>
+</listitem>
+
+</itemizedlist>
+</para>
+
+
+<!-- set() -->
+
+<bridgehead id="set_def" renderas="sect4">set()</bridgehead>
+
+<para><function>set()</function> assigns a key/value pair to the table. If there
+is a value in the table corresponding to key, then it will be
+overwritten. <methodname>set()</methodname> is another form of the
+<literal>[]=</literal> operator, and is included in order to be consistent with
+the APR table API.
+
+</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+<itemizedlist>
+
+<synopsis>def set(key, value)</synopsis>
+
+<listitem><para>
+  <parameter>key</parameter>: the key value</para>
+</listitem>
+
+<listitem><para>
+  <parameter>value</parameter>: the value corresponding to
+  <parameter>key</parameter></para>
+</listitem>
+</itemizedlist>
+
+</para>
+
+
+<!-- size() -->
+
+<bridgehead id="size_def" renderas="sect4">size()</bridgehead>
+
+<para><function>size()</function> returns the number of elements in the table.
+</para>
+
+
+<!-- unset() -->
+
+<bridgehead id="unset_def" renderas="sect4">unset()</bridgehead>
+
+<para><function>unset()</function> removes all values associated with the given
+key.</para>
+
+<bridgehead renderas="sect5">Definition</bridgehead>
+
+<para>
+
+<synopsis>def unset(key, value)</synopsis>
+
+<itemizedlist>
+<listitem><para><parameter>key</parameter>: the key value.</para></listitem>
+</itemizedlist>
+</para>
+
+
+<!-- values() -->
+
+<bridgehead id="values_def" renderas="sect4">values()</bridgehead>
+
+<para><function>values()</function> returns a Ruby Array containing all values in
+the table.
+</para>
+
+</sect2>
+
+</sect1>

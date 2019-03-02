@@ -1,0 +1,9 @@
+Theoretically, this should show up in the content.
+<%
+puts 'This should as well'
+
+# But is won't because of this:
+@request.out.reopen('', 'a')
+%>
+
+Only this should render on a page.

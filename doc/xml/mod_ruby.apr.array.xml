@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book [
+<!ENTITY % doc.mod SYSTEM "doc.mod" >
+%doc.mod;
+]>
+
+<sect1 version="5.0" xml:id="modruby.apr.array"
+       xmlns="http://docbook.org/ns/docbook"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:svg="http://www.w3.org/2000/svg"
+       xmlns:mml="http://www.w3.org/1998/Math/MathML"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xmlns:db="http://docbook.org/ns/docbook">
+
+<title>The APR Array Class</title>
+
+<para>
+
+</para>
+
+<sect2><title>Method Documentation</title>
+
+<para><xref linkend="apr_array_methods"/> contains the exhaustive list of
+methods, in alphabetical order. The documentation of each method follows.
+
+  <table frame="none" pgwide="1" id="apr_array_methods">
+    <title>APR Array Methods</title>
+    <tgroup cols="2" colsep="1">
+      <colspec colnum="1" colname="c1" align="left" valign="top"/>
+      <colspec colnum="2" colname="c2"/>
+      
+      <thead>
+        <row>
+          <entry><emphasis role="bold">Type</emphasis></entry>
+          <entry><emphasis role="bold">Name</emphasis></entry>
+          <entry><emphasis role="bold">Args</emphasis></entry>
+        </row>
+      </thead>
+
+      <tbody>
+
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="each_def">
+                <function>each()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="initialize_def">
+                <function>initialize()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>1</entry>
+        </row>
+
+        <row>
+          <entry>method</entry>
+          <entry>
+            <methodname>
+              <link linkend="size_def">
+                <function>size()</function>
+              </link>
+            </methodname>
+          </entry>
+          <entry>0</entry>
+        </row>
+
+
+      </tbody>
+    </tgroup>
+  </table>
+
+</para>
+
+<bridgehead id="each_def" renderas="sect4">each()</bridgehead>
+
+<para><function>each()</function> ...</para>
+
+<bridgehead id="initialize_def" renderas="sect4">initialize()</bridgehead>
+
+<para><function>initialize()</function> ...</para>
+
+<bridgehead renderas="sect4">Arguments</bridgehead>
+<para>
+<itemizedlist>
+<listitem><para><parameter>todo</parameter>: </para></listitem>
+</itemizedlist>
+</para>
+
+<bridgehead id="size_def" renderas="sect4">size()</bridgehead>
+
+<para><function>size()</function> ...</para>
+
+</sect2>
+
+</sect1>
