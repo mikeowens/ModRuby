@@ -29,31 +29,6 @@
 
 <xsl:template match="sourcecode">
 
-  <!-- 
-  <xsl:variable name="test">
-    <xsl:processing-instruction name="htmlcode">
-      include/dms_sql.rb.html
-    </xsl:processing-instruction>
-  </xsl:variable>
-
-  <xsl:message terminate="yes">
-    <xsl:value-of select="ext:node-set($test)"/>
-    <xsl:value-of select="$href"/>
-  </xsl:message>
-
-  <xsl:element name="programlisting">
-    <xsl:copy-of select="."/>
-    <xsl:copy-of select="ext:node-set($test)"/>
-  </xsl:element>
-
-  <xsl:apply-templates mode="d.programlisting" select="ext:node-set($test)">
-  </xsl:apply-templates>
-
-  <xsl:processing-instruction name="htmlcode">
-    include/dms_sql.rb.html
-  </xsl:processing-instruction>
-  -->
-
   <xsl:variable name="href" select="@href"/>
 
   <xsl:variable name="sourcefile">
@@ -73,11 +48,6 @@
 
     <xsl:copy-of select="$codefile/*/node()"/>
   </xsl:element>
-
-  <!-- 
-  <xsl:apply-templates select="$codefile/*" mode="common.html.attributes"/>
-  <xsl:call-template name="id.attribute"/>
-  -->
 
 </xsl:template>
 

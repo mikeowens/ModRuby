@@ -5,6 +5,7 @@
 <!ENTITY apdocurl              "http://httpd.apache.org/docs/2.2/">
 <!ENTITY modrubyreleaseyear    "2019">
 <!ENTITY modrubyexmpurl        "modruby.example.org/doc/examples">
+<!ENTITY exmpsite              "modruby.example.org">
 
 <!-- C0 Controls and Basic Latin -->
 <!ENTITY quot     "&#34;">

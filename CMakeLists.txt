@@ -92,6 +92,10 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/apr.h.in
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config/mod_ruby.conf.in 
                 ${CMAKE_CURRENT_SOURCE_DIR}/config/mod_ruby.conf )
 
+# Documentation
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/doc/xml/doc.mod.in 
+                ${CMAKE_CURRENT_SOURCE_DIR}/doc/xml/doc.mod )
+              
 #-------------------------------------------------------------------------------
 # Project Options
 #-------------------------------------------------------------------------------

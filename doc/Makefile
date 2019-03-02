@@ -4,12 +4,12 @@ HTML_DIR   = html
 DOCBOOKXSL = xsl/docbook/xsl
 CUSTOM_XSL_HTML_CHUNK=$(PWD)/xsl/html_chunk.xsl
 
-all:	mod_ruby
+all:	includes mod_ruby
 
 includes:
 	./scripts/makeincludes.sh
 
-mod_ruby: images xml/* xml/website.xml xml/
+mod_ruby: xml/* xml/
 	cd $(HTML_DIR) && xsltproc -o $@ -path $(DOCBOOKDTD)   \
         --nonet                                                          \
 	    --stringparam section.autolabel 1                                \

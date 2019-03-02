@@ -2,12 +2,10 @@
 
 dir=${1:-"include"}
 
-#find include 
-
 # For each file in $dir except those in .svn dir 
-for doc in $(find $dir -path "$dir/.svn" -prune -o -print)
+for doc in $(find $dir -type f -prune -print)
 do
-
+    
   # The source file
   in_file=$doc
 
