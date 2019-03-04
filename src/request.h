@@ -130,6 +130,9 @@ class Request
     /** \return Status line **/
     inline int set_status(int s) const { _req->status = s; return s;}
 
+    /** \return set user **/
+    inline void set_user(char *user) const { _req->user = apr_pstrdup(_req->pool,user); }
+
     /** \return Request method (eg. GET, HEAD, POST, etc.) **/
     inline const char* method() const { return _req->method; }
 
