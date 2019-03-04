@@ -643,7 +643,7 @@ int ruby_request_handler(request_rec* r)
         if (ruby_request_init_configuration(r) != 0)
         {
             // Configuration failed
-            return OK;
+            return DONE;
         }
 
         modruby::Handler handler = ruby_request_get_handler(r);
@@ -658,7 +658,7 @@ int ruby_request_handler(request_rec* r)
                           "mod_ruby[%i] : %s",
                           getpid(), "Failed to load handler" );
 
-            return OK;
+            return DONE;
         }
         // Call the method, passing in the request object
         VALUE result = handler.object->method( handler.method(), 1,
@@ -682,7 +682,7 @@ int ruby_request_handler(request_rec* r)
             // This is a utility exception used within the framework. It does
             // not indicate an error.
 
-            return OK;
+            return DONE;
         }
 
         if (exception_type == "ModRuby::RequestTermination")
@@ -690,7 +690,7 @@ int ruby_request_handler(request_rec* r)
             // This is a utility exception used within the framework. It does
             // not indicate an error.
 
-            return OK;
+            return DONE;
         }
 
         // Else it's a bonified exception. Get the message and stacktrace.
@@ -712,7 +712,7 @@ int ruby_request_handler(request_rec* r)
         // HTTP OK. By convention, the HTTP response status is not what matters
         // here, it's what's in the headers.
 
-        return OK;
+        return DONE;
     }
     catch (const std::exception& e)
     {
@@ -727,7 +727,7 @@ int ruby_request_handler(request_rec* r)
                       "mod_ruby[%i] : %s",
                       getpid(), e.what() );
 
-        return OK;
+        return DONE;
     }
 
     // If the status changed, use its value
@@ -794,7 +794,7 @@ int ruby_generic_handler( request_rec* r,
             // Set the TestResult Header
             request.headers_out().set("TestResult", "PASS");
 
-            return OK;
+            return DONE;
         }
 
         if (exception_type == "ModRuby::RequestTermination")
@@ -805,7 +805,7 @@ int ruby_generic_handler( request_rec* r,
             // Set the TestResult Header
             request.headers_out().set("TestResult", "PASS");
 
-            return OK;
+            return DONE;
         }
 
         // Else it's a bonified exception. Get the message and stacktrace.
@@ -826,7 +826,7 @@ int ruby_generic_handler( request_rec* r,
         // HTTP OK. By convention, the HTTP response status is not what matters
         // here, it's what's in the headers.
 
-        return OK;
+        return DONE;
     }
     catch (const std::exception& e)
     {
@@ -840,7 +840,7 @@ int ruby_generic_handler( request_rec* r,
         ap_log_error( APLOG_MARK, APLOG_CRIT, 0, r->server,
                       "mod_ruby[%i] : %s", getpid(), e.what() );
 
-        return OK;
+        return DONE;
     }
 
     // If the status changed, use its value
