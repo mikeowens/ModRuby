@@ -529,29 +529,23 @@ works in the next section.</para>
   
 <para>An access handler implements the 
 <ulink url="https://ci.apache.org/projects/httpd/trunk/doxygen/group__APACHE__CORE__REQ.html#ga2a9dc3af1fbed52e36fc9e9386e4f919">
-Apache ap_hook_check_access_ex handler</ulink>.  This is a special 
-handler that inspects the request headers or request body and
-makes an authentication and authorization decision.  This handler
-is run before other handlers and is a nice method to separate
-authentication code from content.
-</para>
-<para>
-If the user
-passes the checks, nothing happens and the RubyHandler or any other
-handler is run.  This is also compatible with any other content handlers
-like mod_cgi, mod_dir, mod_autoindex, etc.
-</para>
+Apache ap_hook_check_access_ex handler</ulink>.  This is a special handler that
+inspects the request headers or request body and makes an authentication and
+authorization decision.  This handler is run before other handlers and is a nice
+method to separate authentication code from content.</para>
 
-<para>
-If the user fails your authentication/authorization check, the error
-response can be an HTTP 401 Unauthorized response to request
-Basic auth or OAuth2 bearer tokens.  Or something more simple like a
-redirect to an authentication system.
-</para>
+<para>If the user passes the checks, nothing happens and the RubyHandler or any
+other handler is run.  This is also compatible with any other content handlers
+like <literal>mod_cgi</literal>, <literal>mod_dir</literal>,
+<literal>mod_autoindex</literal>, etc.</para>
 
-<para>
-Here's an Apache config example for setting up a Framework Handler
-that is used as an Access Handler:
+<para>If the user fails your authentication/authorization check, the error
+response can be an HTTP 401 Unauthorized response to request Basic auth or
+OAuth2 bearer tokens. Or something more simple like a redirect to an
+authentication system.</para>
+
+<para>Here is an Apache config example for setting up a Framework Handler that
+is used as an Access Handler:
 
 <programlisting><![CDATA[
 RubyHandlerDeclare ACCESS_TEST
@@ -578,7 +572,9 @@ RubyHandlerMethod  DECLINED check_access
 </para>
 
 <para>
+
 some pseudocode that might be used as access_test.rb:
+
 </para>
 
 <programlisting><![CDATA[
@@ -596,12 +592,10 @@ module AccessTest
 end
 ]]></programlisting>
 
-<para>
-In some cases, you might want to exclude some paths from authentication, like
-assets.  Since you can't remove a RubyAccessHandler, we can set a 
-new one that does nothing but return.  It's lightweight, and doesn't add 
-the extra overhead of authentication.
-</para>
+<para>In some cases, you might want to exclude some paths from authentication,
+like assets. Since you can’t remove a <literal>RubyAccessHandler</literal>, we
+can set a new one that does nothing but return. It’s lightweight, and doesn't
+add the extra overhead of authentication.</para>
 
 <programlisting><![CDATA[
 module Declined
