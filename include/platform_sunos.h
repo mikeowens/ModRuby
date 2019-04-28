@@ -1,0 +1,6 @@
+#ifndef MODRUBY_PLATFORM_SUNOS_DECL
+#define MODRUBY_PLATFORM_SUNOS_DECL
+
+#define __SunOS__ 1
+
+#endif
