@@ -32,6 +32,10 @@ message( STATUS "SYSTEM: ${CMAKE_SYSTEM}" )
 message( STATUS "VERSION: ${CMAKE_SYSTEM_VERSION}" )
 message( STATUS "ARCH: ${CMAKE_SYSTEM_PROCESSOR}" )
 
+if( PLATFORM STREQUAL "sunos" )
+  include(${CMAKE_CURRENT_SOURCE_DIR}/config/sunos/settings.cmake)
+endif()
+
 if( PLATFORM STREQUAL "freebsd" )
   include(${CMAKE_CURRENT_SOURCE_DIR}/config/freebsd/settings.cmake)
 endif()

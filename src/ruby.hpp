@@ -1,5 +1,5 @@
-#ifndef RSP_EMBEDRUBY_LIBRARY_H
-#define RSP_EMBEDRUBY_LIBRARY_H
+#ifndef MODRUBY_EMBEDRUBY_LIBRARY_H
+#define MODRUBY_EMBEDRUBY_LIBRARY_H
 
 #include <stdexcept>
 #include <ruby.h>

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 require 'time'
 require 'fileutils'
 require 'digest/md5'
