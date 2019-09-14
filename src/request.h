@@ -124,10 +124,10 @@ class Request
     /** \return Status line **/
     inline const char* status_line() const { return _req->status_line; }
 
-    /** \return Status line **/
+    /** \return Status code **/
     inline int status() const { return _req->status; }
 
-    /** \return Status line **/
+    /** \return Status code **/
     inline int set_status(int s) const { _req->status = s; return s;}
 
     /** \return set user **/

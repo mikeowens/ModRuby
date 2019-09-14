@@ -32,6 +32,19 @@ static void ruby_child_init_hook(apr_pool_t* child_pool, server_rec* s)
                                apr_pool_cleanup_null );
 }
 
+/* This function is exported (non-static) to allow other code to make a direct
+ * internal redirect from another module / content handler if so desired. This
+ * is helpful if you have another module used in a Location directive which
+ * cannot handle the request and you would like to use this module for a
+ * fallback. Apache cannot do this kind of thing from configuration
+ * directives. Once you call SetHandler you care committed to only that
+ * handler. There is no way to specify a fallback.
+ */  
+int external_ruby_handler(request_rec *r)
+{
+    return ruby_request_handler(r);
+}
+
 /* Ruby handler */
 static int ruby_handler(request_rec *r)
 {
