@@ -2,15 +2,15 @@
 root=$( readlink -f $( dirname $( readlink -f $0 ) )/.. )
 
 docker rm -f mod_ruby_run_container
+#  -v $root:/usr/src/mod_ruby \
 # Change 8080 here if you have a local conflict with it
 docker run \
   --name=mod_ruby_run_container \
   --cap-add=SYS_PTRACE \
   --security-opt seccomp=unconfined \
-  -v $root:/usr/src/mod_ruby \
   -ti \
   -p 8080:80 \
-  mod_ruby /bin/bash -l -c 'cmake . && make install && /httpd-gdb'
+  mod_ruby /bin/bash -l -c '/httpd-gdb'
 #If you run httpd in FOREGROUND and run the container
 #with -d instead of -ti
 #docker logs -f mod_ruby_run_container

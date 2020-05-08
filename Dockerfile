@@ -73,6 +73,9 @@ RUN cmake . && make -j4 && make install
 RUN rm -f /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.modules.d/00-systemd.conf
 
 # Manually copy some files I couldn't figure out with the CMake system
+### PATH_INFO bug:  comment out this line and rebuild the Docker image
+###   to disable mod_ruby and show the correct implementation of path_info
+###   in Passenger/Sinatra
 RUN cp -a config/mod_ruby.conf /etc/httpd/conf.modules.d/
 
 # librhtml.so
@@ -84,7 +87,9 @@ COPY docker/*.cgi /var/www/cgi-bin/
 COPY docker/httpd.conf /etc/httpd/conf/httpd.conf
 COPY docker/gdb.input /gdb.input
 COPY docker/httpd-gdb /httpd-gdb
-COPY docker/sinatra /
+COPY docker/sinatra /sinatra
+
+RUN cd /sinatra && bundle install --system
 
 # Force apache logs to docker console logs
 RUN ln -sf /dev/console /var/log/httpd/access_log \
