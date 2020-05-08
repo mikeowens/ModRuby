@@ -214,7 +214,7 @@ int ruby_shutdown_module()
         ap_log_error( APLOG_MARK, APLOG_NOTICE, 0, NULL,
                       "mod_ruby[%i]: ruby_shutdown_module() starting",
                       getpid() );
-        
+
         try
         {
             i->second->method("shutdown", 0);
@@ -227,7 +227,7 @@ int ruby_shutdown_module()
             stringstream strm;
             strm << "ruby_shutdown_module(): Ruby Exception: " << e.what() << "\n"
                  << e.stackdump();
-            
+
             // Log error (critical)
             ap_log_error( APLOG_MARK, APLOG_CRIT, 0, NULL,
                           "mod_ruby[%i] : %s",
@@ -413,7 +413,7 @@ int ruby_request_init_configuration(request_rec* r)
             }
         }
     }
-    
+
     return 0;
 }
 
@@ -622,8 +622,6 @@ int ruby_request_handler(request_rec* r)
 {
     apache::Request req(r);
 
-    req.setup_cgi();
-    
     // Double check the handler name
     if (req.handler() && strcmp(req.handler(), "ruby-handler") != 0)
     {
@@ -631,6 +629,8 @@ int ruby_request_handler(request_rec* r)
     }
 
     //> Process the request
+
+    req.setup_cgi();
 
     // Set the default request to OK (200). The Ruby handler is free to change
     // this, but if it doesn't we return OK below.
@@ -749,8 +749,6 @@ int ruby_generic_handler( request_rec* r,
 {
     apache::Request req(r);
 
-    req.setup_cgi();
-
     // Double check the handler name
     if (req.handler() && strcmp(req.handler(), handler_name) != 0)
     {
@@ -758,6 +756,8 @@ int ruby_generic_handler( request_rec* r,
     }
 
     //> Process the request
+
+    req.setup_cgi();
 
     // Set the default request to OK (200). The Ruby handler is free to change
     // this, but if it doesn't we return OK below.
@@ -869,8 +869,6 @@ int ruby_request_access_handler(request_rec* r)
 {
     apache::Request req(r);
 
-    req.setup_cgi();
-    
     // Set the default request to OK (200). The Ruby handler is free to change
     // this, but if it doesn't we return OK below.
 
