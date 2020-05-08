@@ -21,6 +21,7 @@ RUN yum -y upgrade && yum install -y \
   gpg \
   httpd \
   httpd-devel \
+  libcurl-devel \
   libffi-devel \
   libtool \
   libyaml \
@@ -52,7 +53,11 @@ SHELL ["/bin/bash", "-l", "-c"]
 RUN rvm requirements
 
 # Pick your ruby version here
-RUN rvm install ruby-2.3.3
+RUN rvm install ruby-2.5.8 
+
+RUN gem install bundler -v 1.17.3 \
+  && gem install passenger -v 6.0.4 \
+  && passenger-install-apache2-module -a
 
 # Setup our libruby.so dir in ld.so.conf
 RUN rvm config-get libdir > /etc/ld.so.conf.d/ruby.conf && ldconfig
@@ -79,6 +84,7 @@ COPY docker/*.cgi /var/www/cgi-bin/
 COPY docker/httpd.conf /etc/httpd/conf/httpd.conf
 COPY docker/gdb.input /gdb.input
 COPY docker/httpd-gdb /httpd-gdb
+COPY docker/sinatra /
 
 # Force apache logs to docker console logs
 RUN ln -sf /dev/console /var/log/httpd/access_log \
