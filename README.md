@@ -21,7 +21,7 @@ MPMs.
 
 ## Documentation
 
-The user guide is [here](http://mikeowens.github.io/mod_ruby/mod_ruby.html). This
+The user guide is [here](http://mikeowens.github.io/modruby/modruby.html). This
 covers building, configuring and programming with the module along with a full
 module API reference.
 
