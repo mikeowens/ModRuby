@@ -149,7 +149,7 @@ yields the following:
    GATEWAY_INTERFACE: CGI/1.1
      SERVER_PROTOCOL: HTTP/1.1
       REQUEST_METHOD: GET
-        QUERY_STRING: 
+        QUERY_STRING:
          REQUEST_URI: /http/cgi.rhtml
          SCRIPT_NAME: /http/cgi.rhtml
            HTTP_HOST: www.modruby.org
@@ -164,7 +164,7 @@ HTTP_ACCEPT_ENCODING: gzip,deflate
          HTTP_COOKIE: test=1; sid=439sdkkfdjks; galations=6:1-10
   HTTP_CACHE_CONTROL: max-age=0
                 PATH: /usr/local/bin:/usr/bin:/bin
-    SERVER_SIGNATURE: 
+    SERVER_SIGNATURE:
 Apache/2.2.8 (Ubuntu) Server at www.modruby.org Port 80
 
      SERVER_SOFTWARE: Apache/2.2.8 (Ubuntu)
@@ -202,9 +202,9 @@ http/post.rhtml</ulink>. Click the <literal>Submit</literal> button. It yields
 the following:
 
 <programlisting>
-Queries: 
+Queries:
   queryarg=junior mints
-Params: 
+Params:
   text=jujifruit
 </programlisting>
 
@@ -293,7 +293,7 @@ http/cookies.rhtml</ulink>. Click the <literal>Submit</literal> button and then
 refresh your browser once. It yields the following:
 
 <programlisting>
-Cookies: 
+Cookies:
   mo=1
   curly=1
   larry=1
@@ -540,7 +540,7 @@ linkend="ap_log_levels"/>. The second is a string containing the message text.
           <entry><emphasis role="bold">Example</emphasis></entry>
         </row>
       </thead>
-      
+
       <tbody>
 
         <row>

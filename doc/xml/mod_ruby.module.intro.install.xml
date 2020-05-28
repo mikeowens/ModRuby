@@ -20,7 +20,7 @@ FreeBSD, Mac OS X). A lot of work has gone into making ModRuby easy to compile a
 build in general and especially on Debian/Ubuntu.</para>
 
 <para>ModRuby only works with the Apache prefork MPM, which is the traditional
-Apache backend. The debian package will require this
+Apache backend. The Debian package will require this
 (<literal>apache2-mpm-prefork</literal>) as a dependency. Most sites that use
 PHP or other frameworks use this backend as well. ModRuby <emphasis>will not
 work with the threaded (worker MPM) backend</emphasis>. This is mainly because
@@ -33,9 +33,9 @@ support for reentrancy as well.</para>
 do the following:
 
 <screen>
-<prompt>bash $</prompt> apt-get install git build-essential devscripts pbuilder cmake 
-<prompt>bash $</prompt> git clone https://github.com/mikeowens/mod_ruby
-<prompt>bash $</prompt> cd mod_ruby
+<prompt>bash $</prompt> apt-get install git build-essential devscripts pbuilder cmake
+<prompt>bash $</prompt> git clone https://github.com/mikeowens/ModRuby.git
+<prompt>bash $</prompt> cd ModRuby
 <prompt>bash $</prompt> sudo /usr/lib/pbuilder/pbuilder-satisfydepends
 <prompt>bash $</prompt> fakeroot debian/rules clean
 <prompt>bash $</prompt> dpkg-build -b
@@ -136,10 +136,7 @@ as follows (from source root):
 <prompt>bash $</prompt> make
 </screen>
 
-At this point, I am not sure I would recommend the <literal>make
-install</literal> command on other platforms because it's not been written for
-anything other than Debian. But basically you just copy
-<filename>mod_ruby.so</filename> to wherever your Apache modules directory
+Copy <filename>mod_ruby.so</filename> to wherever your Apache modules directory
 is. Copy the <filename>debian/mod_ruby.load</filename> and
 <filename>mod_ruby.conf</filename> scripts to your module configuration
 directory (or put their contents into your main Apache configuration file). The
@@ -216,15 +213,15 @@ Now enable everything:
 <prompt>user@host $</prompt> sudo a2ensite mod_ruby-example
 </screen>
 
-If you are running a stock Ubuntu Apache install, that's it! Restart Apache to
+If you are running a stock Ubuntu Apache install, that’s it! Restart Apache to
 institute the changes using <command>apache2ctl restart</command>.
 
 </para>
 
 <para>If you are not using the default Ubuntu Apache configuration and wish to
 configure it manually, you can modify the VHost configuration in
-<filename>/etc/apache2/sites-available/mod_ruby-example</filename>. The following as
-a minimal configuration to get the ModRuby module loaded and a simple site running:
+<filename>mod_ruby-example.conf</filename>. The following as a minimal
+configuration to get the ModRuby module loaded and a simple site running:
 
 <informalfigure>
 <programlisting><![CDATA[
@@ -261,7 +258,7 @@ This tells Apache to load the <literal>mod_ruby.so</literal> module, and
 associate its handler to files with the suffixes <literal>.rb</literal> and
 <literal>.rhtml</literal>. The <literal>AddType</literal> directive defines
 associates these extension with <literal>text/html</literal> MIME types. You
-could rather associate these suffixes with system's
+could rather associate these suffixes with system’s
 <filename>mime.types</filename> configuration file. In this case, you would
 simply modify the appropriate line of that file as follows:
 
@@ -287,9 +284,9 @@ Apache configuration file for the example site uses the domain
 </para>
 
 <para>Now you can load the example site in your browser by going to <ulink
-url="http://&exmpsite;/">http://modruby.example.org</ulink>.</para>
+url="http://&exmpsite;/">http://&exmpsite;</ulink>.</para>
 
-<para>So that's it. Everything is set up and working. Let's move on to the
+<para>So that’s it. Everything is set up and working. Let’s move on to the
 interesting stuff.</para>
 
 </sect2>

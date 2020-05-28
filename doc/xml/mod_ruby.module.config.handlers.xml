@@ -66,12 +66,11 @@ file(s).</para>
 <para>As with any Apache configuration, you can define all the file types,
 locations, directories and various other conditions under which your Ruby
 handler(s) should be called. There are almost limitless possibilities for how
-you can route requests to handlers. <emphasis>The whole point of all the
-different module handlers to simply to route the request to the right Ruby
-handler, and from that point on, it’s all Ruby. Module handlers are just
-Apache-configurable connectors that give you fine grained control over (1) what
-handlers are invoked, (2) under what circumstances, (3) in what specific
-configuration contexts.</emphasis></para>
+you can route requests to handlers. The whole point of all the different module
+handlers to simply to route the request to the right Ruby handler, and from that
+point on, it’s all Ruby. Module handlers are just Apache-configurable connectors
+that give you fine grained control over (1) what handlers are invoked, (2) under
+what circumstances, (3) in what specific configuration contexts.</para>
 
 <para>In the Apache configuration file, there are two independent phases you
 must address in order to connect a web request to your Ruby handler:
@@ -526,8 +525,8 @@ works in the next section.</para>
 </sect2>
 
 <sect2><title>Access Handlers</title>
-  
-<para>An access handler implements the 
+
+<para>An access handler implements the
 <ulink url="https://ci.apache.org/projects/httpd/trunk/doxygen/group__APACHE__CORE__REQ.html#ga2a9dc3af1fbed52e36fc9e9386e4f919">
 Apache ap_hook_check_access_ex handler</ulink>.  This is a special handler that
 inspects the request headers or request body and makes an authentication and
@@ -566,7 +565,7 @@ RubyHandlerClass   DECLINED Declined::Handler
 RubyHandlerMethod  DECLINED check_access
 
 <Location "/assets">
-  RubyAccessHandler DECLINED  
+  RubyAccessHandler DECLINED
 </Location
 ]]></programlisting>
 </para>
@@ -604,7 +603,7 @@ module Declined
     end
   end
 end
-]]></programlisting>  
+]]></programlisting>
 </sect2>
 
 <sect2><title>Summary</title>
@@ -660,4 +659,3 @@ different files, directories, locations, extensions and contexts.</para>
 </sect2>
 
 </sect1>
-

@@ -33,7 +33,7 @@ methods, in alphabetical order. The documentation of each method follows.
     <tgroup cols="2" colsep="1">
       <colspec colnum="1" colname="c1" align="left" valign="top"/>
       <colspec colnum="2" colname="c2"/>
-      
+
       <thead>
         <row>
           <entry><emphasis role="bold">Type</emphasis></entry>

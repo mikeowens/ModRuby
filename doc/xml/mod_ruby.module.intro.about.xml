@@ -61,21 +61,23 @@ such as FreeBSD or Linux.</para>
 
 <para>This documentation does not cover how to install, configure, or use Apache
 <emphasis>unless you are using <ulink
-url="http://www.debian.org">Debian</ulink>/<ulink
-url="http://www.ubuntu.com">Ubuntu</ulink></emphasis>. While ModRuby compiles
-and runs on FreeBSD, OpenBSD and other UNIX-like systems, there are at present
-no binary packages built for those systems. If you are using Ubuntu, then
-installation and configuration is extremely easy: you can set up a working
-system running the ModRuby example site with only a few commands.</para>
+url="http://www.freebsd.org">FreeBSD</ulink> or <ulink
+url="http://www.debian.org">Debian</ulink>-based distribution (<ulink
+url="http://www.devuan.org">Devuan</ulink> or <ulink
+url="http://www.ubuntu.com">Ubuntu</ulink></emphasis>). While ModRuby compiles
+and runs on other Linux distributions, NetBSD, OpenBSD and other UNIX-like
+systems, they are not covered specifically in this documentation. Regardless,
+installation and configuration is still quite easy across the board: you can set
+up a working system running the ModRuby example site with only a few
+commands.</para>
 
-<para>If you are not using Debian/Ubuntu, you will have more work to do. You
-will need to know how to do the following:
+<para>Building from source requires a basic knowledge of the following:
 
 <itemizedlist>
 
   <listitem>
-    <para><abbrev>Compile and install software.</abbrev> You will need to know
-    how to compile packages from source using the standard UNIX build tools
+    <para><abbrev>Compiling and installing software.</abbrev> You will need to
+    know how to compile packages from source using the standard UNIX build tools
     (<command>tar</command>, <command>make</command>, etc.). All of the support
     libraries for ModRuby must be downloaded, compiled, and installed.</para>
   </listitem>
@@ -94,7 +96,7 @@ will need to know how to do the following:
 
   <listitem>
     <para><abbrev>Ruby.</abbrev> You will have to have a working version of Ruby
-    1.9.x+ on your system along with the headers files.</para>
+    1.9.x+ on your system along with the Ruby header files.</para>
   </listitem>
 
 </itemizedlist>
@@ -106,7 +108,7 @@ will need to know how to do the following:
 <sect2><title>Additional Information</title>
 
 <para>The following are some some good resources for learning Ruby, and Apache:
-    
+
 <itemizedlist>
 
   <listitem>
@@ -116,7 +118,7 @@ will need to know how to do the following:
     a good introduction to Ruby, but covers advanced topics and good programming
     practices.</para>
     </listitem>
-    
+
   <listitem>
     <para><ulink url="http://httpd.apache.org/docs/2.2/">The Apache Server
     Documentation</ulink>. The Apache user documentation is both comprehensive
@@ -160,7 +162,7 @@ documentation:
     <para>Literal expressions such as <literal>select * from user;</literal> are
     shown in this manner.</para>
   </listitem>
-  
+
   <listitem>
     <para>Files and paths such as <filename>/etc/shadow</filename> and
     <filename>/var/log/apache</filename> are shown in this manner.</para>
@@ -189,7 +191,7 @@ documentation:
   <listitem>
     <para>Classes such as <classname>StringIO</classname> are shown in this
     manner.
-    </para>    
+    </para>
   </listitem>
 
   <listitem>

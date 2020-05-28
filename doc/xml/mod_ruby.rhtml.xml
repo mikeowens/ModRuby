@@ -5,7 +5,7 @@
 %doc.mod;
 ]>
 
-<sect1 version="5.0" xml:id="mod_ruby.rhtml"
+<sect1 version="5.0" xml:id="modruby.rhtml"
        xmlns="http://docbook.org/ns/docbook"
        xmlns:xlink="http://www.w3.org/1999/xlink"
        xmlns:svg="http://www.w3.org/2000/svg"

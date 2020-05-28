@@ -5,7 +5,7 @@
 %doc.mod;
 ]>
 
-<chapter version="5.0" xml:id="mod_ruby.module.intro"
+<chapter version="5.0" xml:id="modruby.module.intro"
     xmlns="http://docbook.org/ns/docbook"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -19,24 +19,24 @@
     <mediaobject condition="pdf">
       <imageobject>
         <imagedata fileref="images/wheat_bw.jpg" format="JPG" scalefit="1" />
-      </imageobject>      
+      </imageobject>
     </mediaobject>
-    
+
     <keywordset>
       <keyword>Background</keyword>
       <keyword>Design</keyword>
     </keywordset>
-    
+
   </chapterinfo>
 
 <title>Introduction</title>
 
-<xi:include href="mod_ruby.module.intro.about.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.module.intro.about.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.module.intro.install.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.module.intro.install.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
 </chapter>

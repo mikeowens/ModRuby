@@ -41,7 +41,7 @@ methods, in alphabetical order. The documentation of each method follows.
     <tgroup cols="3" colsep="1">
       <colspec colnum="1" colname="c1" align="left" valign="top"/>
       <colspec colnum="2" colname="c2"/>
-      
+
       <thead>
         <row>
           <entry><emphasis role="bold">Type</emphasis></entry>
@@ -1236,12 +1236,12 @@ methods that it is willing to handle. This bitvector is used to construct the
 <literal>Allow</literal> header required for <literal>OPTIONS</literal> requests
 as well as <literal>HTTP_METHOD_NOT_ALLOWED</literal> and
 <literal>HTTP_NOT_IMPLEMENTED</literal> status codes.</para>
-     
+
 <para>Since the default handler deals with <literal>OPTIONS</literal>, all
 modules can usually decline to deal with it. <literal>TRACE</literal> is always
 allowed, modules don't need to set it explicitly.
 </para>
-     
+
 <para>Since the default_handler will always handle a <literal>GET</literal>, a
 module which does <emphasis>not</emphasis> implement <literal>GET</literal>
 should probably return <literal>HTTP_METHOD_NOT_ALLOWED</literal>. Unfortunately
@@ -1413,7 +1413,7 @@ rather than having to first be held in memory. For information on handling
 multi-part file uploads, see <xref linkend="read_def"/>.</para>
 
 <bridgehead id="content_encoding_def" renderas="sect4">content_encoding()</bridgehead>
-<para><function>content_encoding()</function> returns the content encoding. 
+<para><function>content_encoding()</function> returns the content encoding.
 </para>
 
 <para>
@@ -2173,7 +2173,7 @@ in <literal>POST</literal>. If this is the case, don't worry about this, use the
 <itemizedlist>
 <listitem><para><parameter>read_policy</parameter>: How the server should
 interpret a chunked transfer-encoding. This can be one of the
-following: 
+following:
 
 <programlisting>
     REQUEST_NO_BODY          Send 413 error if message has any body

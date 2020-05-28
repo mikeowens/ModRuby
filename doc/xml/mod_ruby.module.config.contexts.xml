@@ -20,8 +20,7 @@
 concepts of configuration contexts and variables. ModRuby allows you to define
 your own custom configuration variables and Apache allows you to merge and
 override variables within various scopes (or contexts) within the configuration
-file. In this section we will explores these ideas and their
-implications.</para>
+file. In this section we will explore these ideas and their implications.</para>
 
 <sect2><title>Configuration Contexts</title>
 

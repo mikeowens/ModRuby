@@ -5,7 +5,7 @@
 %doc.mod;
 ]>
 
-<appendix version="5.0" xml:id="mod_ruby.reference.apache"
+<appendix version="5.0" xml:id="modruby.reference.apache"
     xmlns="http://docbook.org/ns/docbook"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -25,36 +25,36 @@ using DocBook.
 
 </sect1>
 
-<xi:include href="mod_ruby.apache.req.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.apache.req.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.apache.server.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.apache.server.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.apache.connection.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.apache.connection.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.apache.process.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.apache.process.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.apr.table.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.apr.table.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.apr.array.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.apr.array.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.apr.finfo.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.apr.finfo.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.apr.pool.xml" 
-            parse="xml" 
+<xi:include href="mod_ruby.apr.pool.xml"
+            parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
 </appendix>

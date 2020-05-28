@@ -5,7 +5,7 @@
 %doc.mod;
 ]>
 
-<book id="mod_ruby" version="5.0" xmlns="http://docbook.org/ns/docbook"
+<book id="modruby" version="5.0" xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       xmlns:svg="http://www.w3.org/2000/svg"
@@ -29,19 +29,19 @@
       </author>
 
     </authorgroup>
-   
+
     <edition>Version &modrubyreleaseversion;</edition>
 
     <pubdate>&modrubyreleasedate;</pubdate>
 
     <copyright>
-      <year>2007-2019</year>
+      <year>2007-2020</year>
       <holder role="mailto:mikeowens@gmail.com">Mike Owens</holder>
     </copyright>
 
   </info>
 
-  <preface xml:id="mod_ruby.forward"><title>Foreword</title>
+  <preface xml:id="modruby.forward"><title>Foreword</title>
 
   <blockquote><attribution>Jeremiah 33:3 (ESV)</attribution>
 
@@ -52,32 +52,32 @@
 
   </preface>
 
-    <xi:include href="mod_ruby.module.intro.index.xml" 
-                parse="xml" 
+    <xi:include href="mod_ruby.module.intro.index.xml"
+                parse="xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-    <xi:include href="mod_ruby.module.config.index.xml" 
-                parse="xml" 
+    <xi:include href="mod_ruby.module.config.index.xml"
+                parse="xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-    <xi:include href="mod_ruby.module.api.index.xml" 
-                parse="xml" 
+    <xi:include href="mod_ruby.module.api.index.xml"
+                parse="xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
   <!-- Appendices -->
 
-  <xi:include href="mod_ruby.reference.global.index.xml" 
-              parse="xml" 
+  <xi:include href="mod_ruby.reference.global.index.xml"
+              parse="xml"
               xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-  <xi:include href="mod_ruby.reference.apache.index.xml" 
-              parse="xml" 
+  <xi:include href="mod_ruby.reference.apache.index.xml"
+              parse="xml"
               xmlns:xi="http://www.w3.org/2001/XInclude"/>
-  
-  <xi:include href="mod_ruby.bibliography.xml" 
-              parse="xml" 
+
+  <xi:include href="mod_ruby.bibliography.xml"
+              parse="xml"
               xmlns:xi="http://www.w3.org/2001/XInclude"/>
-  
+
   <index id="mod_ruby.index"/>
 
 </book>

@@ -27,7 +27,7 @@ methods, in alphabetical order. The documentation of each method follows.
     <tgroup cols="2" colsep="1">
       <colspec colnum="1" colname="c1" align="left" valign="top"/>
       <colspec colnum="2" colname="c2"/>
-      
+
       <thead>
         <row>
           <entry><emphasis role="bold">Type</emphasis></entry>
@@ -37,7 +37,6 @@ methods, in alphabetical order. The documentation of each method follows.
       </thead>
 
       <tbody>
-
 
         <row>
           <entry>method</entry>
@@ -219,7 +218,6 @@ methods, in alphabetical order. The documentation of each method follows.
           <entry>0</entry>
         </row>
 
-
       </tbody>
     </tgroup>
   </table>
@@ -229,64 +227,47 @@ methods, in alphabetical order. The documentation of each method follows.
 <bridgehead id="atime_def" renderas="sect4">atime()</bridgehead>
 <para><function>atime()</function> ...</para>
 
-
 <bridgehead id="csize_def" renderas="sect4">csize()</bridgehead>
 <para><function>csize()</function> ...</para>
-
 
 <bridgehead id="ctime_def" renderas="sect4">ctime()</bridgehead>
 <para><function>ctime()</function> ...</para>
 
-
 <bridgehead id="device_def" renderas="sect4">device()</bridgehead>
 <para><function>device()</function> ...</para>
-
 
 <bridgehead id="filetype_def" renderas="sect4">filetype()</bridgehead>
 <para><function>filetype()</function> ...</para>
 
-
 <bridgehead id="fname_def" renderas="sect4">fname()</bridgehead>
 <para><function>fname()</function> ...</para>
-
 
 <bridgehead id="group_def" renderas="sect4">group()</bridgehead>
 <para><function>group()</function> ...</para>
 
-
 <bridgehead id="initialize_def" renderas="sect4">initialize()</bridgehead>
 <para><function>initialize()</function> ...</para>
-
 
 <bridgehead id="inode_def" renderas="sect4">inode()</bridgehead>
 <para><function>inode()</function> ...</para>
 
-
 <bridgehead id="mtime_def" renderas="sect4">mtime()</bridgehead>
 <para><function>mtime()</function> ...</para>
-
 
 <bridgehead id="name_def" renderas="sect4">name()</bridgehead>
 <para><function>name()</function> ...</para>
 
-
 <bridgehead id="nlink_def" renderas="sect4">nlink()</bridgehead>
 <para><function>nlink()</function> ...</para>
-
 
 <bridgehead id="protection_def" renderas="sect4">protection()</bridgehead>
 <para><function>protection()</function> ...</para>
 
-
 <bridgehead id="size_def" renderas="sect4">size()</bridgehead>
 <para><function>size()</function> ...</para>
 
-
 <bridgehead id="user_def" renderas="sect4">user()</bridgehead>
 <para><function>user()</function> ...</para>
-
-
-
 
 </sect2>
 

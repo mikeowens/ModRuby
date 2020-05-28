@@ -30,7 +30,7 @@ by the <link linkend="method_number_def">
     <title>Apache HTTP Method Constants</title>
     <tgroup cols="1" colsep="1">
       <colspec colnum="1" colname="c1" align="left" valign="top"/>
-      
+
       <thead>
         <row>
           <entry><emphasis role="bold">Name</emphasis></entry>
@@ -76,7 +76,7 @@ by the <link linkend="method_number_def">
     <title>Apache Logging Constants</title>
     <tgroup cols="1" colsep="1">
       <colspec colnum="1" colname="c1" align="left" valign="top"/>
-      
+
       <thead>
         <row>
           <entry><emphasis role="bold">Name</emphasis></entry>
@@ -112,7 +112,7 @@ functions, in alphabetical order. The documentation of each method follows.
     <tgroup cols="2" colsep="1">
       <colspec colnum="1" colname="c1" align="left" valign="top"/>
       <colspec colnum="2" colname="c2"/>
-      
+
       <thead>
         <row>
           <entry><emphasis role="bold">Type</emphasis></entry>

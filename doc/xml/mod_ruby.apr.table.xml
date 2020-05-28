@@ -31,7 +31,7 @@ methods, in alphabetical order. The documentation of each method follows.
     <tgroup cols="2" colsep="1">
       <colspec colnum="1" colname="c1" align="left" valign="top"/>
       <colspec colnum="2" colname="c2"/>
-      
+
       <thead>
         <row>
           <entry><emphasis role="bold">Type</emphasis></entry>
@@ -377,7 +377,6 @@ table.</para></listitem>
 </itemizedlist>
 </para>
 
-
 <!-- join() -->
 
 <bridgehead id="join_def" renderas="sect4">join()</bridgehead>
@@ -395,7 +394,6 @@ each element in the table, delimited by the value provided as the argument.</par
 </itemizedlist>
 </para>
 
-
 <!-- keys() -->
 
 <bridgehead id="keys_def" renderas="sect4">keys()</bridgehead>
@@ -403,7 +401,6 @@ each element in the table, delimited by the value provided as the argument.</par
 <para><function>keys()</function> returns a Ruby Array containing all keys in
 the table.
 </para>
-
 
 <!-- merge() -->
 
@@ -441,7 +438,6 @@ will be <literal>"bar, baz"</literal>.
 </itemizedlist>
 </para>
 
-
 <!-- set() -->
 
 <bridgehead id="set_def" renderas="sect4">set()</bridgehead>
@@ -473,14 +469,12 @@ the APR table API.
 
 </para>
 
-
 <!-- size() -->
 
 <bridgehead id="size_def" renderas="sect4">size()</bridgehead>
 
 <para><function>size()</function> returns the number of elements in the table.
 </para>
-
 
 <!-- unset() -->
 
@@ -499,7 +493,6 @@ key.</para>
 <listitem><para><parameter>key</parameter>: the key value.</para></listitem>
 </itemizedlist>
 </para>
-
 
 <!-- values() -->
 
