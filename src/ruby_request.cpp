@@ -725,7 +725,14 @@ VALUE m_make_etag(VALUE self, VALUE force_weak)
 
     Check_Type(force_weak, T_FIXNUM);
 
-    return INT2FIX(req->make_etag(NUM2INT(force_weak)));
+    char* etag = req->make_etag(NUM2INT(force_weak));
+
+    if (etag == nullptr)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new2(etag);
 }
 
 VALUE m_meets_conditions(VALUE self)
