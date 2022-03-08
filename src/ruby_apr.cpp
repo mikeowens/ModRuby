@@ -16,20 +16,20 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-    static VALUE m_chmod(VALUE cls, VALUE path, VALUE perms);
-    static VALUE m_cp(VALUE cls, VALUE source_path, VALUE dest_path);
-    static VALUE m_cwd(VALUE cls);
-    static VALUE m_mkdir(VALUE cls, VALUE dir);
-    static VALUE m_mv(VALUE cls, VALUE source_path, VALUE dest_path);
-    static VALUE m_rm(VALUE cls, VALUE dir);
-    static VALUE m_rmdir(VALUE cls, VALUE dir);
-    static VALUE m_stat(int args, VALUE* argv, VALUE self);
-    static VALUE m_filepath_is_relative(VALUE self, VALUE path);
-    static VALUE m_filepath_merge(VALUE self, VALUE root_path, VALUE add_path);
-    static VALUE m_filepath_root(VALUE self, VALUE path);
-    static VALUE m_init(VALUE self, VALUE file);
+static VALUE m_chmod(VALUE cls, VALUE path, VALUE perms);
+static VALUE m_cp(VALUE cls, VALUE source_path, VALUE dest_path);
+static VALUE m_cwd(VALUE cls);
+static VALUE m_mkdir(VALUE cls, VALUE dir);
+static VALUE m_mv(VALUE cls, VALUE source_path, VALUE dest_path);
+static VALUE m_rm(VALUE cls, VALUE dir);
+static VALUE m_rmdir(VALUE cls, VALUE dir);
+static VALUE m_stat(int args, VALUE* argv, VALUE self);
+static VALUE m_filepath_is_relative(VALUE self, VALUE path);
+static VALUE m_filepath_merge(VALUE self, VALUE root_path, VALUE add_path);
+static VALUE m_filepath_root(VALUE self, VALUE path);
+static VALUE m_init(VALUE self, VALUE file);
 
-}
+} // extern "C"
 
 using namespace modruby;
 
@@ -47,9 +47,6 @@ static VALUE cls;
 
 void init_apr(VALUE module)
 {
-    //cls = rb_define_class_under(module, CLASS_NAME, rb_cObject);
-    //rb_define_alloc_func(cls, allocator);
-
     rb_define_module_function(module, "chmod", (fn)m_chmod, 2);
     rb_define_module_function(module, "cp",    (fn)m_cp, 2);
     rb_define_module_function(module, "cwd",   (fn)m_cwd, 0);

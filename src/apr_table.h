@@ -10,14 +10,14 @@ namespace modruby
 namespace apr
 {
 
-/** This class is a thin C++ wrapper around the APR table structure and
- * associated methods. It simply provides a C++ interface for the main Apache
- * C++ classes to use for convenience.
- */
+/// This class is a thin C++ wrapper around the APR table structure and
+/// associated methods. It simply provides a C++ interface for the main Apache
+/// C++ classes to use for convenience.
+
 class table
 {
   protected:
-    
+
     // All memory management methods are not allowed. This class does not do
     // memory management of tables or pools. It is a simple wrapper to make
     // operating on tables easier.
@@ -53,10 +53,10 @@ class table
         bool last() const;
         bool next() const;
         bool prev() const;
-        
+
         const char* key() const;
         const char* data() const;
-        
+
         int remove(modruby::i32 del);
 
         void rebind(const table& t);
@@ -68,7 +68,7 @@ class table
 
     const table& operator=(apr_table_t* t);
     const table& operator=(const table& t);
-   
+
     const apr_array_header_t* begin();
 
     std::string join(const char* sep);
@@ -86,7 +86,6 @@ class table
     void merge(const char* key, const char* val);
     void mergen(const char* key, const char* val);
     void unset(const char* key);
-
 };
 
 } // end namespace apr

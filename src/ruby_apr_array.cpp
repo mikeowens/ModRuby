@@ -12,12 +12,12 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-    static VALUE m_init(VALUE self);
-    static VALUE m_each(VALUE self);
-    static VALUE m_keys(VALUE self);
-    static VALUE m_size(VALUE self);
+static VALUE m_init(VALUE self);
+static VALUE m_each(VALUE self);
+static VALUE m_keys(VALUE self);
+static VALUE m_size(VALUE self);
 
-}
+} // extern "C"
 
 static apr_array_header_t* get_object(VALUE self);
 

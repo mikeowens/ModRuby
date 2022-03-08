@@ -80,16 +80,13 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
 
     int x = getpid();
 
-    //> Get the module configuration
-    // ruby_config* cfg = ruby_server_config(server->module_config);
-
     // Initialize the Ruby VM and load C extensions
     try
     {
         // Start up VM
         ruby::startup("ModRuby Ruby VM");
 
-        //> Set default encoding to UTF-8.
+        // Set default encoding to UTF-8.
         //
         // Ruby docs say not to do this within Ruby. So we do it here
         // immediately on startup. Could do it this way:
@@ -98,7 +95,8 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
         //
         // But this is more 3733t
         VALUE encoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
-        rb_funcall(encoding, rb_intern("default_external="), 1, rb_str_new_cstr("UTF-8"));
+        rb_funcall( encoding, rb_intern("default_external="),
+                    1, rb_str_new_cstr("UTF-8") );
 
         // Apache log constants for log() in ruby_request.cpp
         rb_define_global_const("APLOG_EMERG",        INT2NUM(APLOG_EMERG));
@@ -144,12 +142,10 @@ int ruby_init_module(apr_pool_t* p, server_rec* server)
         rb_define_global_const("M_INVALID",          INT2NUM(M_INVALID));
         rb_define_global_const("M_METHODS",          INT2NUM(64));
 
-        // The following modules are registered under the Apache
-        // namespace.
-
+        // Submodules are registered under the Apache namespace
         VALUE apache = rb_define_module("Apache");
 
-        // ModRuby module functions
+        // ModRuby module functions under ModRuby namespace
         VALUE ruby = rb_define_module("ModRuby");
 
         rb_define_module_function(ruby, "version", (fn)ruby_version, 0);
@@ -210,7 +206,6 @@ int ruby_shutdown_module()
     map<string, ruby::Object*>::iterator i;
     for(i = handlers.begin(); i != handlers.end(); i++)
     {
-        //fprintf(stderr, "ruby_shutdown_module() starting\n");
         ap_log_error( APLOG_MARK, APLOG_NOTICE, 0, NULL,
                       "mod_ruby[%i]: ruby_shutdown_module() starting",
                       getpid() );
@@ -221,8 +216,6 @@ int ruby_shutdown_module()
         }
         catch (const ruby::Exception& e)
         {
-            //fprintf(stderr, "ruby_shutdown_module(): Ruby Exception\n");
-
             // Create the error message
             stringstream strm;
             strm << "ruby_shutdown_module(): Ruby Exception: " << e.what() << "\n"
@@ -423,13 +416,11 @@ modruby::Handler ruby_request_load_handler( request_rec* r,
         const char* cls,
         const char* method )
 {
-    /* Handler resolution. Look for RubyHandler directive in dir_config or
-    ** server_config. Handler must be a registered CustomHandler. If not
-    ** present, use RubyDefaultHandler.
-    **
-    ** Handler can be in server or dir config. dir overrides server.
-    */
-
+    // Handler resolution. Look for RubyHandler directive in dir_config or
+    // server_config. Handler must be a registered CustomHandler. If not
+    // present, use RubyDefaultHandler.
+    //
+    // Handler can be in server or dir config. dir overrides server.
     modruby::Handler handler(module, cls, method);
 
     ruby::require(handler.module());
@@ -492,12 +483,11 @@ modruby::Handler::Handler( const char* module, const char* klass,
 // Gets selected handler
 modruby::Handler ruby_request_get_handler(request_rec* r)
 {
-    /* Handler resolution. Look for RubyHandler directive in dir_config or
-    ** server_config. Handler must be a registered CustomHandler. If not
-    ** present, use RubyDefaultHandler.
-    **
-    ** Handler can be in server or dir config. dir overrides server.
-    */
+    // Handler resolution. Look for RubyHandler directive in dir_config or
+    // server_config. Handler must be a registered CustomHandler. If not
+    // present, use RubyDefaultHandler.
+    //
+    // Handler can be in server or dir config. dir overrides server.
 
     apache::Request req(r);
 
@@ -557,8 +547,7 @@ modruby::Handler ruby_request_get_handler(request_rec* r)
             throw e;
         }
 
-        // Add these for reference, as they are what is being run as the current
-        // handler.
+        // Add for reference: what is being run as the current handler.
         notes.set("RubyHandlerModule", module);
         notes.set("RubyHandlerClass", cls);
         notes.set("RubyHandlerMethod", method);
@@ -570,14 +559,13 @@ modruby::Handler ruby_request_get_handler(request_rec* r)
     return modruby::Handler();
 }
 
-/* retreives the AccessHandler, or Default if it's not defined */
+// retreives the AccessHandler, or Default if it's not defined
 modruby::Handler ruby_request_get_access_handler(request_rec* r)
 {
-    /* Handler resolution. Look for RubyAccessHandler directive in dir_config or
-    ** server_config. If not present, do nothing
-    **
-    ** Handler can be in server or dir config. dir overrides server.
-    */
+    // Handler resolution. Look for RubyAccessHandler directive in dir_config or
+    // server_config. If not present, do nothing
+    //
+    // Handler can be in server or dir config. dir overrides server.
 
     apache::Request req(r);
 
@@ -614,6 +602,7 @@ modruby::Handler ruby_request_get_access_handler(request_rec* r)
             return ruby_request_load_handler(r, module, cls, method);
         }
     }
+
     // Empty handler -- signifies error
     return modruby::Handler();
 }
@@ -660,6 +649,7 @@ int ruby_request_handler(request_rec* r)
 
             return OK;
         }
+
         // Call the method, passing in the request object
         VALUE result = handler.object->method( handler.method(), 1,
                                                make_request(r) );
@@ -668,7 +658,8 @@ int ruby_request_handler(request_rec* r)
     {
         // Something in the Ruby failed. Report it. This should not be an
         // application error, as all of those should (in theory) be caught in
-        // ruby_handler. This error will have to something within the ruby_handler.
+        // ruby_handler. This error will have to something within the
+        // ruby_handler.
 
         // Create a C++ request object, for convenience
         apache::Request request(r);
@@ -742,7 +733,7 @@ int ruby_request_handler(request_rec* r)
     }
 }
 
-/* Common code used for RHTML and Ruby script handlers */
+// Common code used for RHTML and Ruby script handlers
 int ruby_generic_handler( request_rec* r,
                           const char* handler_name,
                           const char* method_name )
@@ -890,15 +881,17 @@ int ruby_request_access_handler(request_rec* r)
             // no RubyAccessHandler is defined, return DECLINED
             return DECLINED;
         }
+
         // Call the method, passing in the request object
-        VALUE result = handler.object->method( handler.method(), 1,
-                                               make_request(r) );
+        VALUE result = handler.object->method( handler.method(),
+                                               1, make_request(r) );
     }
     catch (const ruby::Exception& e)
     {
         // Something in the Ruby failed. Report it. This should not be an
         // application error, as all of those should (in theory) be caught in
-        // ruby_handler. This error will have to something within the ruby_handler.
+        // ruby_handler. This error will have to something within the
+        // ruby_handler.
 
         // Create a C++ request object, for convenience
         apache::Request request(r);

@@ -20,8 +20,8 @@ apr_hash_t* ruby_handler_config(request_rec* r, const char* name)
     ruby_config* cfg = ruby_server_config(r->server->module_config);
 
     apr_hash_t* h_config;
-    h_config = (apr_hash_t*)apr_hash_get( cfg->handlers, 
-                                          name, 
+    h_config = (apr_hash_t*)apr_hash_get( cfg->handlers,
+                                          name,
                                           APR_HASH_KEY_STRING );
 
     return h_config;

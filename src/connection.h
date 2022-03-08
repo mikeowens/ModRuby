@@ -1,17 +1,6 @@
 #ifndef MODRUBY_CONNECTION_DECL
 #define MODRUBY_CONNECTION_DECL
 
-#ifdef WIN32
-#pragma warning( disable : 4275 4273 4786 )
-#ifdef EXPORT_MODCPP
-#define MODCPP_API __declspec(dllexport)
-#else
-#define MODCPP_API __declspec(dllimport)
-#endif /* EXPORT_MODCPP */
-#else
-#define MODCPP_API
-#endif /* WIN32 */
-
 #include <httpd.h>
 #include <http_request.h>
 #include <http_config.h>
@@ -26,10 +15,10 @@ using std::string;
 namespace apache
 {
 
-class MODCPP_API Connection
+class Connection
 {
   protected:
-    
+
     conn_rec* _c;
 
     Connection();

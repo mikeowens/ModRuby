@@ -1,4 +1,4 @@
-<?xml version='1.0'?> 
+<?xml version='1.0'?>
 <!-- Technical documentation DocBook customization layer
      Tested with (and requires):
        xsltproc from libxslt 1.1.11 (RedHat RPM)
@@ -9,18 +9,18 @@
      Customization layer overrides:
        Template 'header.content' for graphics (org. from pagesetup.xsl, xmlns:d)
 -->
-<xsl:stylesheet  
+<xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:fox="http://xml.apache.org/fop/extensions"
     xmlns:d="http://docbook.org/ns/docbook"
-    version="1.0"> 
-               
-<xsl:import href="docbook/xsl/html/chunk.xsl"/> 
-<xsl:import href="custom.xsl"/> 
+    version="1.0">
+
+<xsl:import href="docbook/xsl/html/chunk.xsl"/>
+<xsl:import href="custom.xsl"/>
 
 <xsl:template name="user.footer.navigation">
-  <!-- 
+  <!--
   <xsl:comment>#include virtual="/nav/footer.html"</xsl:comment>
   <xsl:text>&#10;</xsl:text>
   -->
@@ -36,7 +36,7 @@
 
   <xsl:variable name="row1" select="$navig.showtitles != 0"/>
   <xsl:variable name="row2" select="count($prev) &gt; 0
-                                    or (count($up) &gt; 0 
+                                    or (count($up) &gt; 0
                                         and $up != $home
                                         and $navig.showtitles != 0)
                                     or count($next) &gt; 0"/>
@@ -243,4 +243,4 @@
 </xsl:template>
 
 
-</xsl:stylesheet> 
+</xsl:stylesheet>

@@ -9,10 +9,11 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-    static VALUE m_init(VALUE self);
-    static VALUE m_id(VALUE self);
-    static VALUE m_set(VALUE self, VALUE key);
-}
+static VALUE m_init(VALUE self);
+static VALUE m_id(VALUE self);
+static VALUE m_set(VALUE self, VALUE key);
+
+} // extern "C"
 
 static apr_pool_t* get_object(VALUE self);
 

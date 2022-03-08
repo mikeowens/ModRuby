@@ -13,19 +13,19 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-    static VALUE m_aborted(VALUE self);
-    static VALUE m_init(VALUE self);
-    static VALUE m_id(VALUE self);
-    static VALUE m_keepalive(VALUE self);
-    static VALUE m_local_host(VALUE self);
-    static VALUE m_local_ip(VALUE self);
-    static VALUE m_local_port(VALUE self);
-    static VALUE m_remote_host(VALUE self);
-    static VALUE m_remote_ip(VALUE self);
-    static VALUE m_remote_port(VALUE self);
-    static VALUE m_remote_logname(VALUE self);
+static VALUE m_aborted(VALUE self);
+static VALUE m_init(VALUE self);
+static VALUE m_id(VALUE self);
+static VALUE m_keepalive(VALUE self);
+static VALUE m_local_host(VALUE self);
+static VALUE m_local_ip(VALUE self);
+static VALUE m_local_port(VALUE self);
+static VALUE m_remote_host(VALUE self);
+static VALUE m_remote_ip(VALUE self);
+static VALUE m_remote_port(VALUE self);
+static VALUE m_remote_logname(VALUE self);
 
-}
+} // extern "C"
 
 static apache::Connection* get_object(VALUE self);
 

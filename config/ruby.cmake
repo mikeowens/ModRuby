@@ -1,7 +1,7 @@
 # Find Ruby -- This is an override of the default cmake FindRuby module.  The
 # default does not work well finding ruby.h with ruby 1.9.
 
-FIND_PROGRAM( RUBY_EXECUTABLE 
+FIND_PROGRAM( RUBY_EXECUTABLE
               NAMES ruby2.1 ruby2.0 ruby1.9.3 ruby1.9 ruby19 ruby ruby.exe
               PATHS /usr/bin /usr/local/bin /usr/pkg/bin e:/usr/local/bin )
 

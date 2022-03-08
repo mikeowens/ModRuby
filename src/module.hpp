@@ -25,9 +25,9 @@ class Handler
 
     ruby::Object* object;
 
-    Handler( const char* module = "", const char* klass = "", 
+    Handler( const char* module = "", const char* klass = "",
              const char* method = "");
- 
+
     virtual ~Handler() {}
 
     // Unique key/name/id of this handler
@@ -61,6 +61,5 @@ class Handler
 
 modruby::Handler ruby_request_get_handler(request_rec* r);
 modruby::Handler ruby_request_get_access_handler(request_rec* r);
-
 
 #endif

@@ -31,12 +31,12 @@ set(CMAKE_INSTALL_PREFIX ${PREFIX})
 set(CMAKE_INCLUDE_PATH ${PREFIX}/include ${ALTERNATE_PREFIX/include})
 set(CMAKE_LIBRARY_PATH ${PREFIX}/lib ${ALTERNATE_PREFIX/lib})
 
-include_directories( -I ${CMAKE_INCLUDE_PATH} 
-                     -I ${CMAKE_INCLUDE_PATH}/${APR_ROOT}                     
+include_directories( -I ${CMAKE_INCLUDE_PATH}
+                     -I ${CMAKE_INCLUDE_PATH}/${APR_ROOT}
                      -I ${CMAKE_INCLUDE_PATH}/${APACHE_INCLUDE_ROOT}
-                     -I ${RUBY_INCLUDE_PATH}  
-                     -I ${RUBY_INCLUDE_ARCH_PATH} 
-                     -I ${RUBY_INCLUDE_PATH}/${RUBY_SITE_ARCH}  
+                     -I ${RUBY_INCLUDE_PATH}
+                     -I ${RUBY_INCLUDE_ARCH_PATH}
+                     -I ${RUBY_INCLUDE_PATH}/${RUBY_SITE_ARCH}
                      -I "${PROJECT_SOURCE_DIR}/include" )
 
 set(CMAKE_BUILD_TYPE Debug)
@@ -54,7 +54,7 @@ endif()
 set(PROJECT_NAME ruby)
 
 # Create configuration file from .in file
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
                 ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 # List of source files
@@ -78,7 +78,7 @@ set_target_properties( shared_lib PROPERTIES
   # Avoid conflicts between library and binary target names
   OUTPUT_NAME mod_${PROJECT_NAME} )
 
-target_link_libraries( shared_lib -L${CMAKE_LIBRARY_PATH} 
+target_link_libraries( shared_lib -L${CMAKE_LIBRARY_PATH}
    ${SYSTEM_LINK_FLAGS} ${RUBY_LIBRARY} )
 
 # 2. Static library for testing
@@ -103,7 +103,7 @@ set_target_properties( rhtml_lib PROPERTIES
   # Avoid conflicts between library and binary target names
   OUTPUT_NAME librhtml )
 
-target_link_libraries( rhtml_lib -L${CMAKE_LIBRARY_PATH} 
+target_link_libraries( rhtml_lib -L${CMAKE_LIBRARY_PATH}
   ${SYSTEM_LINK_FLAGS} ${RUBY_LIBRARY} )
 
 #-------------------------------------------------------------------------------
@@ -146,13 +146,6 @@ install( TARGETS rhtml_lib
   OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE
   WORLD_READ WORLD_EXECUTE )
-
-# Export build settings
-include( CMakeExportBuildSettings )
-
-cmake_export_build_settings( "config/BuildSettings.cmake" )
-# Export library dependencies (keep this as the last line in the file)
-export_library_dependencies( "config/LibDeps.cmake" )
 
 # Enable with cmake -Ddev=1 .
 if(${dev})

@@ -15,13 +15,6 @@ Object::Object(const char* name, int n, ...)
     va_list vl;
     va_start(vl, n);
 
-    /*
-    for(int i=0;i<count;i++)
-    {
-
-    }
-    */
-
     self = ruby::create_object(name, n, vl);
 
     va_end(vl);
@@ -67,7 +60,9 @@ VALUE Object::method(const char* name, int n, ...)
     arg.argv = argv;
 
     int error = 0;
-    VALUE result = rb_protect(ruby::method_wrap, reinterpret_cast<VALUE>(&arg), &error);
+    VALUE result = rb_protect( ruby::method_wrap,
+                               reinterpret_cast<VALUE>(&arg),
+                               &error );
 
     if (error)
     {
@@ -184,14 +179,14 @@ void startup(const char* script_name)
     // #3  0x0000000802c9433c in rb_loaderror () from /usr/local/lib/libruby24.so.24
     // #4  0x0000000802c94d1f in rb_sys_warning () from /usr/local/lib/libruby24.so.24
     // #5  0x0000000802d5b392 in rb_load_file_str () from /usr/local/lib/libruby24.so.24
-    // #6  0x0000000802d5c43f in ruby_process_options () from /usr/local/lib/libruby24.so.24            
+    // #6  0x0000000802d5c43f in ruby_process_options () from /usr/local/lib/libruby24.so.24
     //
     // Which seems to imply that it is trying to load /dev/null as a Ruby
     // module. So I modified it and this is what works now:
-       
+
     static char* args[] = { "ruby" };
     ruby_process_options(1, args);
-    
+
     // Load Ruby encodings, otherwise we'll get all kinds of "Unitialized
     // constanct Encoding::UTF-7", etc. everywhere.
     rb_enc_find_index("encdb");
@@ -273,17 +268,6 @@ void Exception::backtrace() throw()
 {
     _backtrace.clear();
 
-    /*
-    const char* file = ruby_sourcefile;
-
-    if(file == NULL)
-    {
-        file = "(Ruby VM)";
-    }
-
-    msg << "File    : " << file << "\n";
-    */
-
     // Get the glocal exception object
     VALUE exception_instance = rb_gv_get("$!");
 
@@ -324,8 +308,10 @@ void Exception::backtrace() throw()
 //------------------------------------------------------------------------------
 
 extern "C" {
-    static int collect_hash_vals(VALUE key, VALUE value, VALUE data);
-}
+
+static int collect_hash_vals(VALUE key, VALUE value, VALUE data);
+
+} // extern "C"
 
 static int collect_hash_vals(VALUE key, VALUE value, VALUE data)
 {
@@ -402,27 +388,26 @@ VALUE method_wrap(VALUE arg)
     return rb_funcall2(a.recv, a.id, a.n, a.argv);
 }
 
-/* Purpose: Call a ruby function in a safe way. Translate ruby errors into c++
-** exceptions.
-**
-**    VALUE Unsafe() {
-**        return rb_funcall(
-**            self,
-**            rb_intern("test"),
-**            1,
-**            INT2NUM(42)
-**        );
-**    }
-**
-**    VALUE Safe() {
-**        return ruby::method(
-**            self,
-**            rb_intern("test"),
-**            1,
-**            INT2NUM(42)
-**        );
-**    }
-*/
+// Purpose: Call a ruby function in a safe way. Translate ruby errors into c++
+// exceptions.
+//
+//    VALUE Unsafe() {
+//        return rb_funcall(
+//            self,
+//            rb_intern("test"),
+//            1,
+//            INT2NUM(42)
+//        );
+//    }
+//
+//    VALUE Safe() {
+//        return ruby::method(
+//            self,
+//            rb_intern("test"),
+//            1,
+//            INT2NUM(42)
+//        );
+//    }
 
 VALUE method(VALUE recv, ID id, int n, ...)
 {
@@ -515,28 +500,10 @@ void eval(const char* code, const char* filename, int sl, VALUE binding)
     // list the source of every frame as "(eval)".
 
     method( Qnil, rb_intern("eval"), 4,
-            rb_str_new2(code),     // code
-            binding,               // binding
-            rb_str_new2(fn),       // filename
-            INT2NUM(sl) );         // source line
-
-    /* old method
-
-    // Set the Ruby source line to 0. This is a Ruby hack. There might be a
-    // better way to do this, but we are telling Ruby that we are starting a new
-    // file and that the first line of this chunk of code is line 1.
-
-    ruby_sourceline = sl;
-
-    rb_eval_string_protect(code, &error);
-
-    if(error)
-    {
-        linterra::buffer msg;
-
-        throw Exception();
-    }
-    */
+            rb_str_new2(code), // code
+            binding,           // binding
+            rb_str_new2(fn),   // filename
+            INT2NUM(sl) );     // source line
 }
 
 VALUE require_protect(VALUE arg)
@@ -563,10 +530,8 @@ bool call_function(const char* method, int n, ...)
     }
     catch (const ::ruby::Exception& e)
     {
-        // User needs to see this error on command line, so will we pipe it to
-        // stdout.
+        // User needs this error on command line, so pipe it to stdout.
         fprintf(stdout, "%s\n", e.what());
-
         ret = Qfalse;
     }
 
@@ -626,11 +591,8 @@ struct NewArguments
 VALUE create_object_protect(VALUE arg)
 {
     NewArguments& a = *reinterpret_cast<NewArguments*>(arg);
-    //VALUE class_name = rb_const_get(rb_cObject, rb_intern(a.class_name));
     VALUE class_name = rb_path2class(a.class_name);
-
     VALUE self = rb_class_new_instance(a.n, a.argv, class_name);
-    //VALUE self = rb_funcall2(class_name, rb_intern("new"), a.n, a.argv);
 
     return self;
 }

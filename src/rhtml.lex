@@ -141,7 +141,7 @@ void RhtmlParser::init()
 }
 
 int RhtmlParser::finalize()
-{    
+{
     change(ruby::RhtmlParser::TEXT_STATE);
 
     return 0;
@@ -158,7 +158,7 @@ bool RhtmlParser::compile_file(const char* filename)
         {
             return false;
         }
- 
+
         in = fopen(filename, "r");
 
         _file_name = filename;
@@ -190,7 +190,7 @@ bool RhtmlParser::compile_text(const char* str)
     int ret = lexscan(*this, scanner);
     finalize();
     yy_delete_buffer(lexstate, scanner);
-    yylex_destroy(scanner);    
+    yylex_destroy(scanner);
 
     return true;
 }

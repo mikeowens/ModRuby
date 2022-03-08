@@ -15,7 +15,7 @@ class Process
     Process();
 
   protected:
-    
+
     process_rec* _r;
 
   public:

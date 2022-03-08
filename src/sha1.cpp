@@ -27,10 +27,6 @@ bool sha1::hashfile(const char* path)
 
     if (access(path, R_OK) != 0)
     {
-        //string msg = (string)"sha1() : No such file: " << path;
-
-        // TODO
-        //throw std::exception(msg.string());
         return false;
     }
 

@@ -1,16 +1,15 @@
-/* This code implements the MD5 message-digest algorithm.  The algorithm is due
- * to Ron Rivest.  This code was written by Colin Plumb in 1993, no copyright is
- * claimed.  This code is in the public domain; do with it what you wish.
- *
- * Equivalent code is available from RSA Data Security, Inc.  This code has been
- * tested against that, and is equivalent, except that you don't need to include
- * two pages of legalese with every copy.
- *
- * To compute the message digest of a chunk of bytes, declare an MD5Context
- * structure, pass it to MD5Init, call MD5Update as needed on buffers full of
- * bytes, and then call MD5Final, which will fill a supplied 16-byte array with
- * the digest.
- */
+// This code implements the MD5 message-digest algorithm.  The algorithm is due
+// to Ron Rivest.  This code was written by Colin Plumb in 1993, no copyright is
+// claimed.  This code is in the public domain; do with it what you wish.
+//
+// Equivalent code is available from RSA Data Security, Inc.  This code has been
+// tested against that, and is equivalent, except that you don't need to include
+// two pages of legalese with every copy.
+//
+// To compute the message digest of a chunk of bytes, declare an MD5Context
+// structure, pass it to MD5Init, call MD5Update as needed on buffers full of
+// bytes, and then call MD5Final, which will fill a supplied 16-byte array with
+// the digest.
 
 #include <unistd.h>
 #include <stdio.h>
@@ -193,20 +192,20 @@ void md5::update( const char* buf,
     struct Context* ctx = (struct Context*)&context;
     uint32 t;
 
-    /* Update bitcount */
+    // Update bitcount
     t = ctx->bits[0];
     if ((ctx->bits[0] = t + ((uint32)len << 3)) < t)
     {
-        /* Carry from low to high */
+        // Carry from low to high
         ctx->bits[1]++;
     }
 
     ctx->bits[1] += len >> 29;
 
-    /* Bytes already in shsInfo->data */
+    // Bytes already in shsInfo->data
     t = (t >> 3) & 0x3f;
 
-    /* Handle any leading odd-sized chunks */
+    // Handle any leading odd-sized chunks
     if ( t )
     {
         unsigned char* p = (unsigned char*)ctx->in + t;
@@ -225,7 +224,7 @@ void md5::update( const char* buf,
         len -= t;
     }
 
-    /* Process data in 64-byte chunks */
+    // Process data in 64-byte chunks
     while (len >= 64)
     {
         memcpy(ctx->in, buf, 64);
@@ -235,7 +234,7 @@ void md5::update( const char* buf,
         len -= 64;
     }
 
-    /* Handle any remaining bytes of data. */
+    // Handle any remaining bytes of data.
     memcpy(ctx->in, buf, len);
 }
 
@@ -245,37 +244,37 @@ void md5::final()
     unsigned count;
     unsigned char* p;
 
-    /* Compute number of bytes mod 64 */
+    // Compute number of bytes mod 64
     count = (ctx->bits[0] >> 3) & 0x3F;
 
-    /* Set the first char of padding to 0x80.  This is safe since there is
-       always at least one byte free */
+    // Set the first char of padding to 0x80. This is safe since there is always
+    // at least one byte free
     p = ctx->in + count;
     *p++ = 0x80;
 
-    /* Bytes of padding needed to make 64 bytes */
+    // Bytes of padding needed to make 64 bytes
     count = 64 - 1 - count;
 
-    /* Pad out to 56 mod 64 */
+    // Pad out to 56 mod 64
     if (count < 8)
     {
-        /* Two lots of padding:  Pad the first block to 64 bytes */
+        // Two lots of padding:  Pad the first block to 64 bytes
         memset(p, 0, count);
         byteReverse(ctx->in, 16);
         transform(ctx->buf, (uint32*)ctx->in);
 
-        /* Now fill the next block with 56 bytes */
+        // Now fill the next block with 56 bytes
         memset(ctx->in, 0, 56);
     }
     else
     {
-        /* Pad block to 56 bytes */
+        // Pad block to 56 bytes
         memset(p, 0, count - 8);
     }
 
     byteReverse(ctx->in, 14);
 
-    /* Append length in bits and transform */
+    // Append length in bits and transform
     ((uint32*)ctx->in)[ 14 ] = ctx->bits[0];
     ((uint32*)ctx->in)[ 15 ] = ctx->bits[1];
 
@@ -285,7 +284,8 @@ void md5::final()
     memcpy(_hash, ctx->buf, 16);
     DigestToBase16(_hash, _hash_str);
 
-    memset(ctx, 0, sizeof(*ctx));    /* In case it's sensitive */
+    // In case it's sensitive
+    memset(ctx, 0, sizeof(*ctx));
 }
 
 string md5::debug()

@@ -6,9 +6,11 @@
 #include "request.h"
 
 extern "C" {
+
 void init_request(VALUE module);
 VALUE request_class();
 VALUE make_request(request_rec* r);
-}
+
+} // extern "C"
 
 #endif

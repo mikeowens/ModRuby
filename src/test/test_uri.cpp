@@ -33,7 +33,7 @@ class UnitTest : public testing::Test
 
     }
 
-  protected:  
+  protected:
 
     int my_data;
 

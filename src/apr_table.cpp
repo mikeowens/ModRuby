@@ -13,7 +13,9 @@ namespace modruby
 namespace apr
 {
 
-// APR Table
+//------------------------------------------------------------------------------
+// Table
+//------------------------------------------------------------------------------
 
 table::table(apr_pool_t* p)
 {
@@ -49,8 +51,6 @@ const table& table::operator=(const table& t)
 
 table::iterator table::operator[](i32 idx) const
 {
-    // const apr_array_header_t* h = apr_table_elts(handle);
-
     iterator i(*this);
 
     i.seek(idx);

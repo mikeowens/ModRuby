@@ -15,29 +15,30 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-    static VALUE m_init(VALUE self, VALUE dir, VALUE pool, VALUE want_flags);
+static VALUE m_init(VALUE self, VALUE dir, VALUE pool, VALUE want_flags);
 
-    static VALUE m_atime(VALUE self);
-    static VALUE m_csize(VALUE self);
-    static VALUE m_ctime(VALUE self);
-    static VALUE m_device(VALUE self);
-    static VALUE m_fname(VALUE self);
-    static VALUE m_group(VALUE self);
-    static VALUE m_inode(VALUE self);
-    static VALUE m_md5(VALUE self);
-    static VALUE m_mode(VALUE self);
-    static VALUE m_name(VALUE self);
-    static VALUE m_nlink(VALUE self);
-    static VALUE m_protection(VALUE self);
-    static VALUE m_user(VALUE self);
-    static VALUE m_sha1(VALUE self);
-    static VALUE m_size(VALUE self);
-    static VALUE m_mtime(VALUE self);
-    static VALUE m_type(VALUE self);
-    static VALUE m_valid(VALUE self);
+static VALUE m_atime(VALUE self);
+static VALUE m_csize(VALUE self);
+static VALUE m_ctime(VALUE self);
+static VALUE m_device(VALUE self);
+static VALUE m_fname(VALUE self);
+static VALUE m_group(VALUE self);
+static VALUE m_inode(VALUE self);
+static VALUE m_md5(VALUE self);
+static VALUE m_mode(VALUE self);
+static VALUE m_name(VALUE self);
+static VALUE m_nlink(VALUE self);
+static VALUE m_protection(VALUE self);
+static VALUE m_user(VALUE self);
+static VALUE m_sha1(VALUE self);
+static VALUE m_size(VALUE self);
+static VALUE m_mtime(VALUE self);
+static VALUE m_type(VALUE self);
+static VALUE m_valid(VALUE self);
 
-    static VALUE m_stat(VALUE file);
-}
+static VALUE m_stat(VALUE file);
+
+} // extern "C"
 
 using namespace modruby;
 

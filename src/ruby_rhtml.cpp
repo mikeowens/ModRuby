@@ -69,12 +69,10 @@ VALUE rhtml_compile(int args, VALUE* argv, VALUE self)
     {
         stringstream strm;
         strm << "File does not exist: " << filename;
-
         rb_raise(rb_eIOError, strm.str().c_str());
     }
 
     ruby::RhtmlParser parser;
-
     parser.compile_file(filename);
 
     return rb_str_new(parser.text.data(), parser.text.size());

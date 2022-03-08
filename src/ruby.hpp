@@ -22,17 +22,15 @@ void shutdown(int exit_code=0);
 // Object Wrapper
 //------------------------------------------------------------------------------
 
-/** This class implements a C handle for a Ruby Object. That is, the object
- ** instantiated is defined within a Ruby script or library; it exists within the
- ** Ruby language. This class creates and holds an instance of the class given by
- ** the name argument in the constructor. 
- **
-
- ** It holds this instance in memory, keeping it safe from the Ruby garbage
- ** collector (GC), by registering it in the underlying ruby::register_object
- ** API. This keeps the object in a Ruby array, which in turn keeps an active
- ** reference to that object, which keeps the GC from reaping it.
- */
+/// This class implements a C handle for a Ruby Object. That is, the object
+/// instantiated is defined within a Ruby script or library; it exists within the
+/// Ruby language. This class creates and holds an instance of the class given by
+/// the name argument in the constructor.
+///
+/// It holds this instance in memory, keeping it safe from the Ruby garbage
+/// collector (GC), by registering it in the underlying ruby::register_object
+/// API. This keeps the object in a Ruby array, which in turn keeps an active
+/// reference to that object, which keeps the GC from reaping it.
 
 class Object
 {
@@ -93,21 +91,20 @@ void free_all();
 // Exceptions
 //------------------------------------------------------------------------------
 
-/* Translate a ruby exception into an c++ exception. 
-** 
-** Example:
-**
-** void Test()
-** {
-**     int error = 0;
-**       rb_protect(WrapTest, reinterpret_cast<VALUE>(this), &error);
-**
-**       if(error)
-**     {
-**           throw ruby::Exception("error loading test.rb");
-**     }
-** }
-*/
+// Translate a ruby exception into an c++ exception.
+//
+// Example:
+//
+// void Test()
+// {
+//     int error = 0;
+//       rb_protect(WrapTest, reinterpret_cast<VALUE>(this), &error);
+//
+//       if(error)
+//     {
+//           throw ruby::Exception("error loading test.rb");
+//     }
+// }
 
 class Exception : public std::exception
 {
@@ -140,18 +137,17 @@ struct Arguments
     VALUE *argv;
 };
 
-/* Call a ruby function in a safe way. Translate ruby errors into c++
-** exceptions. Instead of calling rb_funcall(), do this:
-**
-**    VALUE Safe() {
-**        return ruby::method(
-**            self, 
-**            rb_intern("test"), 
-**            1, 
-**            INT2NUM(42)
-**        );
-**    }
-*/
+// Call a ruby function in a safe way. Translate ruby errors into c++
+// exceptions. Instead of calling rb_funcall(), do this:
+//
+//    VALUE Safe() {
+//        return ruby::method(
+//            self,
+//            rb_intern("test"),
+//            1,
+//            INT2NUM(42)
+//        );
+//   }
 VALUE method_wrap(VALUE arg);
 VALUE method(VALUE recv, ID id, int n, ...);
 VALUE vm_method(VALUE recv, ID id, int n, va_list ar);
@@ -179,34 +175,5 @@ void require_class(VALUE x, VALUE cls);
 VALUE create_object(const char* class_name, int n, va_list ar);
 
 } // end namespace ruby
- 
 
-/* Translate from c++ 2 ruby exceptions
-
-adapted from 
-http://groups.google.com/groups?hl=en&lr=&ie=UTF-8&selm=20020408192019.E15413%40atdesk.com&rnum=10
-
-RUBY_CATCH
-Cant raise the exception from catch block, because 
-the C++ exception wont get properly destroyed.
-Thus we must delay it til after the catch block!
-
-#define RUBY_TRY \
-    extern VALUE ruby_errinfo; \
-    ruby_errinfo = Qnil; \
-    try
-
-#define RUBY_CATCH \
-    catch(const std::exception &e) { \
-        buffer str;
-        o << "c++error: " << e.what(); \
-        ruby_errinfo = rb_exc_new2(rb_eRuntimeError, str.c_string()); \
-    } catch(...) { \
-        ruby_errinfo = rb_exc_new2(rb_eRuntimeError, "c++error: Unknown error"); \
-    } \
-    if(!NIL_P(ruby_errinfo)) { \
-        rb_exc_raise(ruby_errinfo); \
-    }
-*/
-
-#endif // EMBEDRUBY_LIBRARY_H
+#endif // MODRUBY_EMBEDRUBY_LIBRARY_H

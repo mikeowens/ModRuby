@@ -142,7 +142,7 @@ int rmdir(const char* path)
     apr_pool_t*  subpool;
     apr_int32_t  flags = APR_FINFO_TYPE | APR_FINFO_NAME;
 
-    /* APR doesn't like "" directories */
+    // APR doesn't like "" directories
     if (path[0] == '\0')
     {
         path = ".";
@@ -152,11 +152,7 @@ int rmdir(const char* path)
 
     if (apr_status)
     {
-        string err = (string)"Can't open directory " + path + ".";
-
-        // TODO
-        //log(err);
-
+        // Can't open directory
         return apr_status;
     }
 
@@ -178,7 +174,7 @@ int rmdir(const char* path)
         }
         else
         {
-            /* something other than "." or "..", so proceed */
+            // Something other than "." or "..", so proceed
             const char* fullpath, *entry;
 
             entry = this_entry.name;
@@ -209,8 +205,6 @@ int rmdir(const char* path)
                 {
                     return apr_status;
                 }
-
-                //MACOSX_REWINDDIR_HACK (this_dir, path);
             }
             else
             {
@@ -218,18 +212,11 @@ int rmdir(const char* path)
 
                 if (apr_status)
                 {
-                    string err = (string)"Can't remove  " + fullpath + ".";
-
-                    // TODO
-                    //log(err);
-
+                    // Can't remove file
                     apr_pool_destroy(subpool);
 
                     return apr_status;
                 }
-
-                // TODO:
-                //MACOSX_REWINDDIR_HACK (this_dir, path);
             }
         }
     }
@@ -238,10 +225,7 @@ int rmdir(const char* path)
 
     if (!APR_STATUS_IS_ENOENT(apr_status))
     {
-        string err = (string)"Can't read directory  " + path + ".";
-        // TODO
-        //log(err);
-
+        // Can't read directory
         return apr_status;
     }
 
@@ -249,22 +233,15 @@ int rmdir(const char* path)
 
     if (apr_status)
     {
-        string err = (string)"Error closing directory  " + path + ".";
-        // log(err);
-
+        // Error closing directory
         return apr_status;
     }
 
     apr_status = apr_dir_remove(path, pool());
 
-    // TODO:
-    //WIN32_RETRY_LOOP (status, apr_dir_remove (path_apr, pool));
-
     if (apr_status)
     {
-        string err = (string)"Can't remove  " + path + ".";
-        // log(err);
-
+        // Can't remove path
         return apr_status;
     }
 

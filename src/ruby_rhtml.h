@@ -7,6 +7,6 @@ void init_rhtml();
 VALUE rhtml_eval(int args, VALUE* argv, VALUE self);
 VALUE rhtml_compile(int args, VALUE* argv, VALUE self);
 
-}
+} // extern "C"
 
 #endif

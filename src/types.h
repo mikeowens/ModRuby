@@ -1,13 +1,11 @@
 #ifndef MODRUBY_STD_TYPES_DECLARE
 #define MODRUBY_STD_TYPES_DECLARE
 
-/*
-** Integers of known sizes.  These typedefs might change for architectures
-** where the sizes vary.  Preprocessor macros are available so that the
-** types can be conveniently redefined at compile-type, like this:
-**
-**         cc '-DUINTPTR_TYPE=long long int' ...
-*/
+// Integers of known sizes. These typedefs might change for architectures where
+// the sizes vary. Preprocessor macros are available so that the types can be
+// conveniently redefined at compile-type, like this:
+//
+//         cc '-DUINTPTR_TYPE=long long int' ...
 
 //------------------------------------------------------------------------------
 // x86
@@ -164,7 +162,7 @@ typedef INT8_TYPE       i8; // 1-byte signed integer
 typedef UINT8_TYPE      u8; // 1-byte unsigned integer
 typedef INT16_TYPE     i16; // 2-byte signed integer
 typedef UINT16_TYPE    u16; // 2-byte unsigned integer
-typedef INT32_TYPE     i32; // 4-byte signed integer  
+typedef INT32_TYPE     i32; // 4-byte signed integer
 typedef UINT32_TYPE    u32; // 4-byte unsigned integer
 typedef INT64_TYPE     i64; // 8-byte signed integer
 typedef UINT64_TYPE    u64; // 8-byte unsigned integer
@@ -186,4 +184,3 @@ typedef ADDR_TYPE     addr; // Platform dependent address
 } // end namespace modruby;
 
 #endif
-

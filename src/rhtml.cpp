@@ -209,12 +209,6 @@ bool RhtmlParser::eval(VALUE b)
         return false;
     }
 
-    //ruby::method( rb_stdout, rb_intern("write"), 1,
-    //              rb_str_new(text.c_str(), text.size()) );
-
-    // Flush Ruby standard output.
-    //ruby::method(rb_stdout, rb_intern("flush"), 0);
-
     if (b == Qnil)
     {
         // Release binding

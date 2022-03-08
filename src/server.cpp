@@ -1,5 +1,3 @@
-#define EXPORT_MODCPP
-
 #include "server.h"
 
 using namespace apache;

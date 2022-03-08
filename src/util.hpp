@@ -38,9 +38,9 @@ int inline replace(T& source, const char* find, const char* replace)
     return num;
 }
 
-std::vector<std::string>& 
+std::vector<std::string>&
 split(const std::string &s, char delim, std::vector<std::string> &elems);
 
 } // ! namespace modruby
- 
+
 #endif

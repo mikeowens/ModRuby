@@ -148,7 +148,7 @@ that ask for files with <filename>.rhtml</filename>, <filename>.rb</filename> or
 <varname>RubyDefaultHandlerClass</varname>. They specify the Ruby module and the
 class within that module that contains the handlers. ModRuby includes a default
 module that implements both handlers, called
-<filename>modruby/handler</filename>.  Its implementation is as follows:
+<filename>modruby/handler</filename>. Its implementation is as follows:
 
 <sourcecode href="modruby_handler_module.rb"/>
 

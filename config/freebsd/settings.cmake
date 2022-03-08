@@ -20,4 +20,3 @@ SET(RUBY_POSSIBLE_INCLUDE_PATHS
    /usr/local/include/ruby-2.4/
    /usr/local/include/ruby-2.5/
    /usr/local/include/ruby-2.6/)
- 

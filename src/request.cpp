@@ -1,5 +1,3 @@
-#define EXPORT_MODCPP
-
 #include <string>
 #include <sstream>
 
@@ -154,7 +152,7 @@ apr_table_t* Request::queries() const
         return _queries;
     }
 
-    //> Parse query string to table
+    // Parse query string to table
     if (_req->args != NULL)
     {
         apr::table t(pool());

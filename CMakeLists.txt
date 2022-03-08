@@ -1,5 +1,7 @@
-cmake_minimum_required( VERSION 2.6 )
+cmake_minimum_required(VERSION 3.00)
 mark_as_advanced(CMAKE_BACKWARDS_COMPATIBILITY)
+
+project(ModRuby)
 
 # Allow more human readable "if then else" constructs
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
@@ -49,10 +51,20 @@ if( PLATFORM STREQUAL "darwin" )
 endif()
 
 if( PLATFORM STREQUAL "linux" )
-  find_program(LSB_RELEASE_EXEC lsb_release)
-  execute_process(COMMAND ${LSB_RELEASE_EXEC} -is
+  find_program(LSB_RELEASE lsb_release)
+
+  execute_process(COMMAND ${LSB_RELEASE} -si
     OUTPUT_VARIABLE LSB_RELEASE_ID
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    OUTPUT_STRIP_TRAILING_WHITESPACE )
+
+  execute_process(COMMAND ${LSB_RELEASE} -sd
+    OUTPUT_VARIABLE LINUX_DISTRO_NAME
+    OUTPUT_STRIP_TRAILING_WHITESPACE )
+
+  execute_process(COMMAND ${LSB_RELEASE} -sc
+    OUTPUT_VARIABLE LINUX_DISTRO_CODENAME
+    OUTPUT_STRIP_TRAILING_WHITESPACE )
+
   message( STATUS "LSB_RELEASE_ID: ${LSB_RELEASE_ID}" )
   include(${CMAKE_CURRENT_SOURCE_DIR}/config/linux/${LSB_RELEASE_ID}/settings.cmake)
 endif()
@@ -74,32 +86,32 @@ message( STATUS "SOVERSION:    ${SOVERSION}" )
 include(${CMAKE_CURRENT_SOURCE_DIR}/config/ruby.cmake)
 
 # Create debian/changelog file
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/debian/changelog.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/debian/changelog.in
                 ${CMAKE_CURRENT_SOURCE_DIR}/debian/changelog )
 
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/debian/mod_ruby-git.gitmap.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/debian/mod_ruby-git.gitmap.in
                 ${CMAKE_CURRENT_SOURCE_DIR}/debian/mod_ruby-git.gitmap )
 
 # Create configuration file from .in file
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/platform.h.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/platform.h.in
                 ${CMAKE_CURRENT_BINARY_DIR}/include/platform.h )
 
 # Create configuration file from .in file
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/common.h.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/common.h.in
                 ${CMAKE_CURRENT_BINARY_DIR}/include/common.h )
 
 # Create configuration file from .in file
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/apr.h.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/apr.h.in
                 ${CMAKE_CURRENT_BINARY_DIR}/include/apr.h )
 
 # Apache config file
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config/mod_ruby.conf.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config/mod_ruby.conf.in
                 ${CMAKE_CURRENT_SOURCE_DIR}/config/mod_ruby.conf )
 
 # Documentation
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/doc/xml/doc.mod.in 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/doc/xml/doc.mod.in
                 ${CMAKE_CURRENT_SOURCE_DIR}/doc/xml/doc.mod )
-              
+
 #-------------------------------------------------------------------------------
 # Project Options
 #-------------------------------------------------------------------------------
@@ -145,9 +157,3 @@ message( STATUS " INSTALL_DOC = ${INSTALL_DOC}" )
 message( STATUS " Change a value with: cmake -D<Variable>=<Value>" )
 message( STATUS "-------------------------------------------------------------------------------" )
 message( STATUS )
-
-# Export build settings
-include( CMakeExportBuildSettings )
-
-cmake_export_build_settings( "config/BuildSettings.cmake" )
-

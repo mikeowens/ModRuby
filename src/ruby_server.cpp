@@ -14,33 +14,33 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-    static VALUE m_init(VALUE self);
-    static VALUE m_addrs(VALUE self);
-    static VALUE m_defn_line_number(VALUE self);
-    static VALUE m_defn_name(VALUE self);
-    static VALUE m_error_log(VALUE self);
-    static VALUE m_error_fname(VALUE self);
-    static VALUE m_is_virtual(VALUE self);
-    static VALUE m_keep_alive(VALUE self);
-    static VALUE m_keep_alive_max(VALUE self);
-    static VALUE m_keep_alive_timeout(VALUE self);
-    static VALUE m_limit_req_fields(VALUE self);
-    static VALUE m_limit_req_fieldsize(VALUE self);
-    static VALUE m_limit_req_line(VALUE self);
-    static VALUE m_loglevel(VALUE self);
-    static VALUE m_lookup_defaults(VALUE self);
-    static VALUE m_names(VALUE self);
-    static VALUE m_next(VALUE self);
-    static VALUE m_path(VALUE self);
-    static VALUE m_pathlen(VALUE self);
-    static VALUE m_port(VALUE self);
-    static VALUE m_process(VALUE self);
-    static VALUE m_server_admin(VALUE self);
-    static VALUE m_server_hostname(VALUE self);
-    static VALUE m_timeout(VALUE self);
-    static VALUE m_wild_names(VALUE self);
+static VALUE m_init(VALUE self);
+static VALUE m_addrs(VALUE self);
+static VALUE m_defn_line_number(VALUE self);
+static VALUE m_defn_name(VALUE self);
+static VALUE m_error_log(VALUE self);
+static VALUE m_error_fname(VALUE self);
+static VALUE m_is_virtual(VALUE self);
+static VALUE m_keep_alive(VALUE self);
+static VALUE m_keep_alive_max(VALUE self);
+static VALUE m_keep_alive_timeout(VALUE self);
+static VALUE m_limit_req_fields(VALUE self);
+static VALUE m_limit_req_fieldsize(VALUE self);
+static VALUE m_limit_req_line(VALUE self);
+static VALUE m_loglevel(VALUE self);
+static VALUE m_lookup_defaults(VALUE self);
+static VALUE m_names(VALUE self);
+static VALUE m_next(VALUE self);
+static VALUE m_path(VALUE self);
+static VALUE m_pathlen(VALUE self);
+static VALUE m_port(VALUE self);
+static VALUE m_process(VALUE self);
+static VALUE m_server_admin(VALUE self);
+static VALUE m_server_hostname(VALUE self);
+static VALUE m_timeout(VALUE self);
+static VALUE m_wild_names(VALUE self);
 
-}
+} // extern "C"
 
 static apache::Server* get_object(VALUE self);
 

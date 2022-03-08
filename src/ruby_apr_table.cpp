@@ -15,23 +15,23 @@ typedef VALUE (*fn)(...);
 
 extern "C" {
 
-    static VALUE m_init(VALUE self, VALUE pool);
-    static VALUE m_id(VALUE self);
+static VALUE m_init(VALUE self, VALUE pool);
+static VALUE m_id(VALUE self);
 
-    static VALUE m_each(VALUE self);
-    static VALUE m_keys(VALUE self);
-    static VALUE m_values(VALUE self);
-    static VALUE m_size(VALUE self);
-    static VALUE m_clear(VALUE self);
-    static VALUE m_has_key(VALUE self, VALUE key);
-    static VALUE m_get(VALUE self, VALUE key);
-    static VALUE m_set(VALUE self, VALUE key, VALUE value);
-    static VALUE m_add(VALUE self, VALUE key, VALUE value);
-    static VALUE m_merge(VALUE self, VALUE key, VALUE value);
-    static VALUE m_unset(VALUE self, VALUE key);
-    static VALUE m_join(VALUE self, VALUE delimiter);
+static VALUE m_each(VALUE self);
+static VALUE m_keys(VALUE self);
+static VALUE m_values(VALUE self);
+static VALUE m_size(VALUE self);
+static VALUE m_clear(VALUE self);
+static VALUE m_has_key(VALUE self, VALUE key);
+static VALUE m_get(VALUE self, VALUE key);
+static VALUE m_set(VALUE self, VALUE key, VALUE value);
+static VALUE m_add(VALUE self, VALUE key, VALUE value);
+static VALUE m_merge(VALUE self, VALUE key, VALUE value);
+static VALUE m_unset(VALUE self, VALUE key);
+static VALUE m_join(VALUE self, VALUE delimiter);
 
-}
+} // extern "C"
 
 static modruby::apr::table* get_object(VALUE self);
 

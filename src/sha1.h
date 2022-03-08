@@ -7,7 +7,7 @@
 namespace modruby
 {
 
-/** This class encapsulates an SHA1 hash */
+// This class encapsulates an SHA1 hash
 class sha1
 {
     apr_sha1_ctx_t _context;
@@ -32,19 +32,17 @@ class sha1
         return (const char*)_hash;
     }
 
-    /** Start SHA1 accumulation.  Set bit count to 0 and buffer to mysterious
-     * initialization constants.
-     */
+    // Start SHA1 accumulation. Set bit count to 0 and buffer to mysterious
+    // initialization constants.
+
     void init();
 
-    /** Update context to reflect the concatenation of another buffer full
-     * of bytes.
-     */
+    // Update context to reflect the concatenation of another buffer full of
+    // bytes.
     void update(const char *buf, unsigned int len);
 
-    /** Final wrapup - pad to 64-byte boundary with the bit pattern 1 0* (64-bit
-     * count of bits processed, MSB-first)
-     */
+    // Final wrapup - pad to 64-byte boundary with the bit pattern 1 0* (64-bit
+    // count of bits processed, MSB-first).
     void final();
 };
 

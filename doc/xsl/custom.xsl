@@ -1,12 +1,10 @@
-<?xml version='1.0'?> 
+<?xml version='1.0'?>
 <!-- Common DocBook customization layer settings -->
-<xsl:stylesheet  
+<xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:d="http://docbook.org/ns/docbook"
-    version="1.0"> 
-
-
+    version="1.0">
 
 <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
 <!-- Utility                                                                  -->
@@ -15,11 +13,11 @@
 <!-- For importing HTML into documents. For example, if you want to natively
      include an HTML file named code.html, you would simply do the following
      in your XML.
-     
+
      <?htmlcode  include/code.html ?>
-     
+
      Note that the HTML must be XHTML, so you may have to run it through
-     htmltidy first to clean it up. 
+     htmltidy first to clean it up.
 -->
 
 <xsl:template match="processing-instruction('htmlcode')">
@@ -27,12 +25,12 @@
   <xsl:copy-of select="$codefile/*/node()"/>
 </xsl:template>
 
-<xsl:template match="sourcecode">
+<xsl:template match="d:sourcecode">
 
   <xsl:variable name="href" select="@href"/>
 
   <xsl:variable name="sourcefile">
-    <xsl:value-of select="concat('include/', @href, '.html')"/>
+    <xsl:value-of select="concat('../xml/include/', @href, '.html')"/>
   </xsl:variable>
 
   <xsl:message terminate="no">
@@ -58,7 +56,7 @@
 <xsl:template match="rhtml">
   <a>
     <xsl:attribute name="href">
-      <xsl:value-of select="@href" disable-output-escaping="yes"/>      
+      <xsl:value-of select="@href" disable-output-escaping="yes"/>
     </xsl:attribute>
     <xsl:apply-templates/>
   </a>
@@ -94,7 +92,7 @@
   </pre></p>
 </xsl:template>
 
-  
+
 <!-- For importing HTML into documents. For example, if you want to natively
      include an HTML file named code.html, you would simply do the following
      in your XML.
@@ -102,7 +100,7 @@
      <?htmlcode  include/code.html ?>
 
      Note that the HTML must be XHTML, so you may have to run it through
-     htmltidy first to clean it up. 
+     htmltidy first to clean it up.
  -->
 
 <xsl:template match="processing-instruction('htmlcode')">
@@ -146,4 +144,4 @@
   -->
 </xsl:template>
 
-</xsl:stylesheet> 
+</xsl:stylesheet>
