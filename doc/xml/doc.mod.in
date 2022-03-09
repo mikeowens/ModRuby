@@ -3,7 +3,7 @@
 <!ENTITY modrubyreleaseversion "${MODRUBY_RELEASE_VERSION}">
 <!ENTITY modrubyreleasedate    "${MODRUBY_RELEASE_DATE}">
 <!ENTITY apdocurl              "http://httpd.apache.org/docs/2.2/">
-<!ENTITY modrubyreleaseyear    "2019">
+<!ENTITY modrubyreleaseyear    "2022">
 <!ENTITY modrubyexmpurl        "modruby.example.org/doc/examples">
 <!ENTITY exmpsite              "modruby.example.org">
 

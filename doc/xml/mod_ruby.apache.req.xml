@@ -2241,8 +2241,6 @@ the Apache <function>ap_rwrite()</function>. This is useful for then you want to
 send images or binary files directly from a controller method. Here is an
 example of sending a captcha using RMagic:
 
-<sourcecode href="ruby_request_captcha_ex.rb"/>
-
 </para>
 
 <bridgehead renderas="sect5">Definition</bridgehead>

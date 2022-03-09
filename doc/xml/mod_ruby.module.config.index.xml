@@ -23,7 +23,7 @@ most bare-bones CGI scripts to hooking in entire web frameworks.</para>
 
 <para>Connecting ModRuby to your code is all done via Apache configuration
 directives. There are endless ways you can do this, but it’s all ultimately
-pretty simpe. We will cover the necessary Apache configuration mechanics and
+pretty simple. We will cover the necessary Apache configuration mechanics and
 work through many different scenarios which should give you a good feel for how
 everything works and what you can do.</para>
 
