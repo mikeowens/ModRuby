@@ -29,8 +29,8 @@ available for you to use.</para>
 
 <para>To be useful, a module handler must be linked up to a Ruby method of some
 kind. We refer to these Ruby methods as just “Ruby handlers” &mdash; they are
-what handles the request. There are three parameters that must specified to link
-a module handler to a Ruby method:
+what handles the request. There are three parameters that must be specified to
+link a module handler to a Ruby method:
 
 <itemizedlist>
 
@@ -84,9 +84,9 @@ must address in order to connect a web request to your Ruby handler:
 </listitem>
 
 <listitem>
-  <para>You associate the respective module handler with a specific Ruby method
-  that is to service the request. This completes the route from Apache request
-  to Ruby code.</para>
+  <para>You associate the ModRuby handler with a specific Ruby method that is to
+  service the request. This completes the route from Apache request to Ruby
+  code.</para>
 </listitem>
 
 </orderedlist>
@@ -148,7 +148,7 @@ that ask for files with <filename>.rhtml</filename>, <filename>.rb</filename> or
 <varname>RubyDefaultHandlerClass</varname>. They specify the Ruby module and the
 class within that module that contains the handlers. ModRuby includes a default
 module that implements both handlers, called
-<filename>modruby/handler</filename>. Its implementation is as follows:
+<filename>modruby/handler</filename>.  Its implementation is as follows:
 
 <sourcecode href="modruby_handler_module.rb"/>
 
@@ -337,7 +337,7 @@ parameterized in framework handlers.</para>
 <para>Say our fictional sheepdip files use our fictional
 <filename>sheepdip/handler</filename> module, which contains our
 <classname>Sheepdip::Handler</classname> class which contains a
-<methodname>handler()</methodname> method. One way to use it would be to set our
+<methodname>handle()</methodname> method. One way to use it would be to set our
 configuration as follows:
 
 <programlisting><![CDATA[
@@ -419,7 +419,7 @@ and set up your own independent handler with the more general
 </para>
 
 <para>These work similarly to the default handler directives, but they take as
-an argument the name of the framework handler to define. They are not defaults,
+an argument the name of the framework handler to define. They are not defaults;
 they are specifics. To use this approach, we would change our configuration to
 something like the following:
 
@@ -443,8 +443,8 @@ RubyHandlerMethod  SHEEPDIP handle
 </IfModule>]]>
 </programlisting>
 
-In "phase 0", <literal>SHEEPDIP</literal> argument is just a unique key used to
-declare and reference a given framework handler. When you declare a framework
+In "Phase 0", the <literal>SHEEPDIP</literal> argument is just a unique key used
+to declare and reference a given framework handler. When you declare a framework
 hander, the ModRuby module creates an entry in an internal hash table of
 framework handlers, using the name as the key. Thus you can define as many
 framework handlers as you like, the only constraint being that they must all
@@ -498,7 +498,7 @@ extension <filename>.dip</filename> to <function>ruby-handler</function> &mdash;
 that’s the point here, and you can do that however you like.<footnote><para>For
 more information on <varname>AddHandler</varname> verses
 <varname>SetHandler</varname>, see the Apache <link
-xlink:href="http://httpd.apache.org/docs/2.4/mod/mod_mime.html#addhandler">documentation</link>.</para></footnote>
+xlink:href="http://httpd.apache.org/docs/current/mod/mod_mime.html#addhandler">documentation</link>.</para></footnote>
 Next is phase 2, where we weld the <function>ruby-handler</function> to the
 <literal>SHEEPDIP</literal> framework handler using the
 <varname>RubyHandler</varname> directive. The <varname>RubyHandler</varname>
@@ -526,15 +526,15 @@ works in the next section.</para>
 
 <sect2><title>Access Handlers</title>
 
-<para>An access handler implements the
-<ulink url="https://ci.apache.org/projects/httpd/trunk/doxygen/group__APACHE__CORE__REQ.html#ga2a9dc3af1fbed52e36fc9e9386e4f919">
-Apache ap_hook_check_access_ex handler</ulink>.  This is a special handler that
-inspects the request headers or request body and makes an authentication and
-authorization decision.  This handler is run before other handlers and is a nice
-method to separate authentication code from content.</para>
+<para>An access handler implements the Apache
+<function>ap_hook_check_access_ex()</function> handler. This is a special
+handler that inspects the request headers or request body and makes an
+authentication and authorization decision. This handler is run before other
+handlers and is a nice method to separate authentication code from
+content.</para>
 
 <para>If the user passes the checks, nothing happens and the RubyHandler or any
-other handler is run.  This is also compatible with any other content handlers
+other handler is run. This is also compatible with any other content handlers
 like <literal>mod_cgi</literal>, <literal>mod_dir</literal>,
 <literal>mod_autoindex</literal>, etc.</para>
 
@@ -570,11 +570,7 @@ RubyHandlerMethod  DECLINED check_access
 ]]></programlisting>
 </para>
 
-<para>
-
-some pseudocode that might be used as access_test.rb:
-
-</para>
+<para>Some pseudocode that might be used as <filename>access_test.rb</filename>:
 
 <programlisting><![CDATA[
 module AccessTest
@@ -591,9 +587,11 @@ module AccessTest
 end
 ]]></programlisting>
 
+</para>
+
 <para>In some cases, you might want to exclude some paths from authentication,
 like assets. Since you can’t remove a <literal>RubyAccessHandler</literal>, we
-can set a new one that does nothing but return. It’s lightweight, and doesn't
+can set a new one that does nothing but return. It’s lightweight, and doesn’t
 add the extra overhead of authentication.</para>
 
 <programlisting><![CDATA[

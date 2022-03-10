@@ -1,0 +1,785 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48+devel r"
+   sodipodi:docname="modruby_framework_handlers_table.svg"
+   inkscape:export-filename="/home/owensmk/data/code/projects/active/r4a/doc/images/r4a_framework_handlers_table.png"
+   inkscape:export-xdpi="109.76"
+   inkscape:export-ydpi="109.76">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mend"
+       style="overflow:visible;">
+      <path
+         id="path4009"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         transform="scale(0.4) rotate(180) translate(10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-4"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4009-3"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-8"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4009-7"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-7"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4009-70"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-83"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4009-8"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5007"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5009"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5011"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5013"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5015"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5017"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-7-3"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4009-70-8"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="557.12606"
+     inkscape:cy="802.38667"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="false"
+     inkscape:window-width="1600"
+     inkscape:window-height="880"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3224"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       empcolor="#0000ff"
+       empopacity="0.07058824" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:0.25;fill:#d4ff2a;fill-opacity:1;stroke:none"
+       id="rect3069-5-1-1-3-0"
+       width="119.54464"
+       height="22.303854"
+       x="456.11798"
+       y="348.79056"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="480.74722"
+       y="362.42538"
+       id="text3096-0-7-1-4-1"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         x="480.74722"
+         y="362.42538"
+         id="tspan4522-0-5">/var/sheepdip</tspan></text>
+    <rect
+       style="opacity:1;fill:#b3ff80;fill-opacity:0.25098041;stroke:#000000;stroke-opacity:1"
+       id="rect3069-4"
+       width="79.54464"
+       height="22.303854"
+       x="180"
+       y="252.36218"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="198.0106"
+       y="266.79022"
+       id="text3071"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3073"
+         x="198.0106"
+         y="266.79022">SHEEPDIP</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+       x="160"
+       y="212.36218"
+       id="text3096-0"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3098-4"
+         x="160"
+         y="212.36218">ModRuby Framework Handlers Table</tspan></text>
+    <rect
+       style="opacity:0.25;fill:#b3ff80;fill-opacity:1;stroke:none"
+       id="rect3069"
+       width="119.54464"
+       height="22.303854"
+       x="304.33737"
+       y="262.5939"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="318.03961"
+       y="277.12521"
+       id="text3071-3"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3073-8"
+         x="318.03961"
+         y="277.12521">RubyHandlerModule</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 425.17601,273.74583 c 30,0 30,0 30,0"
+       id="path3226"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <g
+       id="g4619"
+       transform="translate(-19.823986,-36.080169)"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76">
+      <rect
+         ry="3"
+         y="298.67407"
+         x="475.94196"
+         height="22.303854"
+         width="119.54464"
+         id="rect3069-5-1-1"
+         style="opacity:0.25;fill:#d4ff2a;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3096-0-7"
+         y="312.33307"
+         x="492.10294"
+         style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+         xml:space="preserve"><tspan
+           y="312.33307"
+           x="492.10294"
+           id="tspan3098-4-5"
+           sodipodi:role="line">sheepdip/handler</tspan></text>
+    </g>
+    <rect
+       style="opacity:0.25;fill:#b3ff80;fill-opacity:1;stroke:none"
+       id="rect3069-5"
+       width="119.54464"
+       height="22.303854"
+       x="304.33737"
+       y="291.32614"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="320.92682"
+       y="305.85745"
+       id="text3096"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3098"
+         x="320.92682"
+         y="305.85745">RubyHandlerClass</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 425.17601,302.47805 c 30,0 30,0 30,0"
+       id="path3226-4"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <g
+       id="g4624"
+       transform="translate(-19.823986,-35.097931)"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76">
+      <rect
+         ry="3"
+         y="326.42404"
+         x="475.94196"
+         height="22.303854"
+         width="119.54464"
+         id="rect3069-5-1-1-5"
+         style="opacity:0.25;fill:#d4ff2a;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3096-0-7-1"
+         y="340.08304"
+         x="489.5585"
+         style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+         xml:space="preserve"><tspan
+           id="tspan4522"
+           y="340.08304"
+           x="489.5585"
+           sodipodi:role="line">Sheepdip::Handler</tspan></text>
+    </g>
+    <rect
+       style="opacity:0.25;fill:#b3ff80;fill-opacity:1;stroke:none"
+       id="rect3069-6"
+       width="119.54464"
+       height="22.303854"
+       x="304.33737"
+       y="320.05832"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="318.03961"
+       y="334.58963"
+       id="text3100"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3102"
+         x="318.03961"
+         y="334.58963">RubyHandlerModule</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 425.17601,331.21024 c 30,0 30,0 30,0"
+       id="path3226-3"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <g
+       id="g4629"
+       transform="translate(-19.823986,-35.812408)"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76">
+      <rect
+         ry="3"
+         y="355.87073"
+         x="475.94196"
+         height="22.303854"
+         width="119.54464"
+         id="rect3069-5-1-1-3"
+         style="opacity:0.25;fill:#d4ff2a;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3096-0-7-1-4"
+         y="370.40204"
+         x="519.30731"
+         style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+         xml:space="preserve"><tspan
+           id="tspan4522-0"
+           y="370.40204"
+           x="519.30731"
+           sodipodi:role="line">handle</tspan></text>
+    </g>
+    <rect
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:0.96385801;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3069-5-1-5"
+       width="299.99997"
+       height="130"
+       x="290"
+       y="252.36218"
+       ry="4.5676923"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <rect
+       style="opacity:0.25;fill:#b3ff80;fill-opacity:1;stroke:none"
+       id="rect3069-6-0"
+       width="119.54464"
+       height="22.303854"
+       x="304.33737"
+       y="348.79056"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="339.94635"
+       y="362.42538"
+       id="text3100-4"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3102-2"
+         x="339.94635"
+         y="362.42538">GEM_PATH</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 425.17601,359.94248 c 30,0 30,0 30,0"
+       id="path3226-3-4"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <rect
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3069-5-1-5-8"
+       width="450"
+       height="340"
+       x="160"
+       y="222.36218"
+       ry="5.3125"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.86602539px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-7)"
+       d="m 260,262.36218 c 30,0 30,0 30,0"
+       id="path4781"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <rect
+       style="opacity:1;fill:#b3ff80;fill-opacity:0.25098041;stroke:#000000"
+       id="rect3069-4-4"
+       width="79.54464"
+       height="22.303854"
+       x="180"
+       y="412.36218"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="195.27061"
+       y="426.7309"
+       id="text3071-8"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3073-1"
+         x="195.27061"
+         y="426.7309">JUJIFRUIT</tspan></text>
+    <rect
+       style="opacity:0.25;fill:#b3ff80;fill-opacity:1;stroke:none"
+       id="rect3069-48"
+       width="119.54464"
+       height="22.303854"
+       x="305.16135"
+       y="422.47803"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="318.86359"
+       y="437.00934"
+       id="text3071-3-7"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3073-8-6"
+         x="318.86359"
+         y="437.00934">RubyHandlerModule</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 426,433.62996 c 30,0 30,0 30,0"
+       id="path3226-2"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <g
+       id="g5304"
+       transform="translate(-14,-70)"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76">
+      <rect
+         ry="3"
+         y="492.47803"
+         x="470.94196"
+         height="22.303854"
+         width="119.54464"
+         id="rect3069-5-1-1-4"
+         style="opacity:0.25;fill:#d4ff2a;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3096-0-7-3"
+         y="506.13702"
+         x="484.45523"
+         style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+         xml:space="preserve"><tspan
+           y="506.13702"
+           x="484.45523"
+           id="tspan3098-4-5-4"
+           sodipodi:role="line">jujifruit/handler</tspan></text>
+    </g>
+    <rect
+       style="opacity:0.25;fill:#b3ff80;fill-opacity:1;stroke:none"
+       id="rect3069-5-2"
+       width="119.54464"
+       height="22.303854"
+       x="305.16135"
+       y="451.21027"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="321.75079"
+       y="465.74158"
+       id="text3096-1"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3098-9"
+         x="321.75079"
+         y="465.74158">RubyHandlerClass</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 426,462.36218 c 30,0 30,0 30,0"
+       id="path3226-4-0"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <g
+       id="g5321"
+       transform="translate(-14,-70)"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76">
+      <rect
+         ry="3"
+         y="521.21027"
+         x="470.94196"
+         height="22.303854"
+         width="119.54464"
+         id="rect3069-5-1-1-5-2"
+         style="opacity:0.25;fill:#d4ff2a;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3096-0-7-1-8"
+         y="534.86926"
+         x="481.91739"
+         style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+         xml:space="preserve"><tspan
+           id="tspan4522-3"
+           y="534.86926"
+           x="481.91739"
+           sodipodi:role="line">Jujifruit::Handler</tspan></text>
+    </g>
+    <rect
+       style="opacity:0.25;fill:#b3ff80;fill-opacity:1;stroke:none"
+       id="rect3069-6-8"
+       width="119.54464"
+       height="22.303854"
+       x="305.16135"
+       y="479.94244"
+       ry="3"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="318.86359"
+       y="494.47375"
+       id="text3100-3"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3102-4"
+         x="318.86359"
+         y="494.47375">RubyHandlerModule</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 426,491.09437 c 30,0 30,0 30,0"
+       id="path3226-3-8"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <g
+       id="g4629-7"
+       transform="translate(-19,124.07172)"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76">
+      <rect
+         ry="3"
+         y="355.87073"
+         x="475.94196"
+         height="22.303854"
+         width="119.54464"
+         id="rect3069-5-1-1-3-4"
+         style="opacity:0.25;fill:#d4ff2a;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3096-0-7-1-4-3"
+         y="370.40204"
+         x="519.30731"
+         style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+         xml:space="preserve"><tspan
+           id="tspan4522-0-7"
+           y="370.40204"
+           x="519.30731"
+           sodipodi:role="line">handle</tspan></text>
+    </g>
+    <rect
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3069-5-1-5-84"
+       width="299.99997"
+       height="130"
+       x="290.82401"
+       y="412.24631"
+       ry="4.5676923"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <g
+       id="g4749-3"
+       transform="translate(-19,123.80396)"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76">
+      <rect
+         ry="3"
+         y="384.87073"
+         x="324.16135"
+         height="22.303854"
+         width="119.54464"
+         id="rect3069-6-0-4"
+         style="opacity:0.25;fill:#b3ff80;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3100-4-1"
+         y="399.29877"
+         x="362.1214"
+         style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+         xml:space="preserve"><tspan
+           y="399.29877"
+           x="362.1214"
+           id="tspan3102-2-1"
+           sodipodi:role="line">PASSWORD</tspan></text>
+      <path
+         inkscape:connector-curvature="0"
+         id="path3226-3-4-9"
+         d="m 445,396.02265 c 30,0 30,0 30,0"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+      <g
+         id="g5284">
+        <rect
+           style="opacity:0.25;fill:#d4ff2a;fill-opacity:1;stroke:none"
+           id="rect3069-5-1-1-3-0-5"
+           width="119.54464"
+           height="22.303854"
+           x="475.94196"
+           y="384.87073"
+           ry="3" />
+        <text
+           xml:space="preserve"
+           style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+           x="519.42816"
+           y="399.37787"
+           id="text3096-0-7-1-4-1-3"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             x="519.42816"
+             y="399.37787"
+             id="tspan4522-0-5-4">banana</tspan></text>
+      </g>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.86602539px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-7)"
+       d="m 260,424.36218 c 30,0 30,0 30,0"
+       id="path4781-2"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+       x="290"
+       y="242.36218"
+       id="text3096-0-9"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3098-4-3"
+         x="290"
+         y="242.36218">Sheepdip Handler Table</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+       x="290"
+       y="402.36218"
+       id="text3096-0-9-8"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3098-4-3-5"
+         x="290"
+         y="402.36218">Jujifruit Handler Table</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+       x="180"
+       y="242.36218"
+       id="text3096-0-9-1"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3098-4-3-9"
+         x="180"
+         y="242.36218">Sheepdip Handler</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+       x="180"
+       y="402.36218"
+       id="text3096-0-9-1-7"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="109.76"
+       inkscape:export-ydpi="109.76"><tspan
+         sodipodi:role="line"
+         id="tspan3098-4-3-9-0"
+         x="180"
+         y="402.36218">Jujifruit Handler</tspan></text>
+  </g>
+</svg>

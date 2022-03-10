@@ -90,6 +90,16 @@ have a <filename>.rb</filename> extension. The point is that the rules for
 defining phase 2 can be layered into different scopes: a global default which
 can then be overridden by directory level settings.</para>
 
+<note><title>Directory and Variable Merging</title>
+
+<para>The only thing you need to be careful about when configuing
+<varname>Directory</varname>, <varname>Location</varname>, and
+<varname>File</varname> blocks is the order in which they are processed. This is
+described in detail <link
+xlink:href="http://httpd.apache.org/docs/current/sections.html#merging">here</link>.</para>
+
+</note>
+
 </sect2>
 
 <sect2><title>Configuration Variables</title>

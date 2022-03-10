@@ -35,10 +35,6 @@ everything works and what you can do.</para>
             parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<xi:include href="mod_ruby.module.config.merging.xml"
-            parse="xml"
-            xmlns:xi="http://www.w3.org/2001/XInclude"/>
-
 <xi:include href="mod_ruby.module.config.conclusion.xml"
             parse="xml"
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
