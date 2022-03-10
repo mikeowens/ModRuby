@@ -2,6 +2,51 @@ require 'time'
 
 module Apache
 
+class Url
+
+  def initialize(request)
+    @request = request
+  end
+
+  def queries()
+    @request.queries()
+  end
+
+  def host()
+    @request.cgi['SERVER_NAME']
+  end
+
+  def path()
+    @request.cgi['REQUEST_URI']
+  end
+
+  def port()
+    @request.connection.remote_port
+  end
+
+  def queryString()
+    @request.cgi['QUERY_STRING']
+  end
+
+  # The fragment, if any appended to URL delimted by hash (#)
+  def ref()
+    @request.unparsed_uri.split('#')
+  end
+
+  def scheme()
+    @request.cgi['SERVER_PROTOCOL'].split('/')[0].downcase
+  end
+
+  def username()
+    # IMPLEMENT
+  end
+
+  def password()
+    # IMPLEMENT
+  end
+
+end
+
 # <tt>Request</tt> extends the Apache::Request object C-extension. It's main
 # purpose to provide additional convenience functions which are not part of the
 # core Apache request structure. From the programmer's perspctive in Ruby, the
@@ -27,18 +72,25 @@ class Request
 
   attr_accessor :out
 
-  # Basic extension test. Add method jujifruit(). This proves that the C API
-  # request struct can be extended in Ruby.
-  def jujifruit()
-    return 'yumyum'
+  def url()
+    if @url.nil?
+      @url = Url.new(self)
+    end
+
+    return @url
   end
-  
+
   def serverName()
     return self.cgi['SERVER_NAME']
   end
 
+  # This is a way to get at the RubyConfig vars in the Apache configuration file.
+  def configuration(key)
+    return self.notes()[key]
+  end
+
   # Determination of domain name and host name.
-    
+
   # First look to see if there is a HOST value set in the HTTP headers. If there
   # is one, we use that. If there isn't, then we fall back on the value
   # specified by the virtual host entry in @serverName. This is the canonical
@@ -55,50 +107,49 @@ class Request
   # simple and clean is to set up ServerAliases to redirect to the canonical
   # domain name. In either case, the code here will ensure that cookies work
   # properly (as possible).
-  
+
   def hostName()
-    
-    @hostName ||= nil
+    @host_name ||= nil
 
-    return @hostName if @hostName
+    return @host_name if @host_name
 
-    if self.cgi.has_key?('HTTP_HOST')
-      @hostName = self.cgi['HTTP_HOST']
+    # Check proxy first
+    if self.headers.has_key?('x-forwarded-host')
+      @host_name = self.headers['x-forwarded-host']
+    elsif self.headers.has_key?('host')
+      @host_name = self.headers['host']
     else
-      @hostName = serverName()
+      @host_name = serverName()
     end
-    
-    return @hostName
+
+    return @host_name
   end
-  
+
+  # @return Returns the domain name for the VHost
   def domainName()
-    return @domainName if @domainName
+    return @domain_name if @domain_name
 
     if hostName().index('.') != nil
       # Decompose domain into list
-      domainParts = @hostName.split('.')
+      domainParts = @host_name.split('.')
 
       # Reconstitute last two parts for domain name
-      @domainName = domainParts[-2..-1].join('.')
-
-      # If there is more than 2 elements, use the 1st as the hostName
-      if domainParts.size > 2
-        @hostName = domainParts[-3]
-      end
+      @domain_name = domainParts[-2..-1].join('.')
     else
-      @domainName = @hostName
+      @domain_name = @host_name
     end
 
     # If there is a port number, trim it
-    if @domainName.index(':') != nil
-      @domainName = @domainName[0..@domainName.index(':')-1]
+    if @domain_name.index(':') != nil
+      @domain_name = @domain_name[0..@domain_name.index(':')-1]
     end
-    
-    return @domainName
+
+    return @domain_name
   end
 
+  # @return Returns the referrer for the request URL
   def referrer()
-    return @referrer if @referrer 
+    return @referrer if @referrer
 
     if self.cgi.has_key?('HTTP_REFERER')
       @referrer = self.cgi['HTTP_REFERER']
@@ -106,40 +157,82 @@ class Request
 
     return @referrer
   end
-  
+
+  # @return Returns the document root for the VHost
   def documentRoot()
     return self.cgi['DOCUMENT_ROOT']
   end
-  
+
+  # @return Returns the OS directory corresponding the the request URL
   def dir()
-    ospath = self.cgi['SCRIPT_NAME']
+    ospath = self.cgi['SCRIPT_FILENAME']
     ospath = ospath[0..ospath.rindex('/')]
 
-    # Shave the ending / if there
+    # Shave the ending / if there is one
     ospath = ospath[0..-2] || '' if ospath[-1] == '/'
+
+    # Shave of any extra // in path
+    ospath.gsub!(/\/+/, '/')
 
     return ospath
   end
 
-  def file()
-    ospath = self.cgi['SCRIPT_NAME']
-    file = ospath[ospath.rindex('/') + 1 .. -1]    
+  # @return Returns the directory relative to document root
+  def uriDir()
+    ospath = self.cgi['SCRIPT_FILENAME']
+
+    # If the path ends in /, it's already a directory
+    if ospath[-1] == '/'
+      osdir = ospath
+    else
+      # Strip off the filename to get directory
+      osdir = File.dirname(ospath)
+    end
+
+    # Remove document root to get URI path
+    uripath = osdir.gsub(self.cgi['DOCUMENT_ROOT'], '')
+
+    # Shave the ending / if there is one
+    uripath = uripath[0..-2] || '' if uripath[-1] == '/'
+
+    # Shave off any extra // in path
+    uripath.gsub!(/\/+/, '/')
+
+    return uripath
   end
 
+  # @return Returns the file name corresponding to the request URL
+  def file()
+    ospath = self.cgi['SCRIPT_FILENAME']
+    file = ospath[ospath.rindex('/') + 1 .. -1]
+  end
+
+  # @return Returns the HTTP request headers
+  def headers()
+    return self.headers_in()
+  end
+
+  # @return Returns the binding of this request object
   def bdg()
     return binding
   end
- 
+
+  # @return Returns the HTTP method (e.g. GET, POST, etc.)
   def method()
     self.cgi['REQUEST_METHOD']
   end
 
+  def method()
+    self.cgi['REQUEST_METHOD']
+  end
+
+  # @return Returns a hash containing the cookies
   def cookies()
-    
+
     return @cookies if @cookies
 
     @cookies  = {}
-    text      = self.headers_in['Cookie']
+    text      = self.headers['cookie']
 
     if text != nil
       text.split(';').each do |cookie|
@@ -173,28 +266,29 @@ class Request
   # The expiration date is determined by days+minutes.  If <tt>days</tt> = -1
   # and <tt>minutes</tt> = -1, then it sets the expiry to 2038 Rather than use
   # this convention, use <tt>clearCookie()</tt> in code.
+  def setCookie(name, value, days=0, minutes=0, path=nil)
 
-  def setCookie( name, value,
-                 days=0, minutes=0,
-                 path=nil )
-      
     if path == nil
       path = '/'
     end
 
-    cookieString = "%s=%s;path=%s;domain=.%s" 
-    cookieString = cookieString % [name, value, path, domainName()]
-    
+    cookie_string = "%s=%s;path=%s;domain=.%s"
+    cookie_string = cookie_string % [name, value, path, @request.domainName()]
+
     if days != 0 or minutes != 0
       if days==-1 and minutes==-1
-        cookieString += ";Expires=Sun, 17-Jan-2038 19:14:07 -0600"
+        cookie_string += ";expires=Sun, 17-Jan-2038 19:14:07 -0600"
       else
-        cookieString += ";Expires=%s" % expirationDate(days, minutes)
+        cookie_string += ";expires=%s" % expirationDate(days, minutes)
       end
     end
 
-    # Append this cookie to the array
-    self.headers_out.add('Set-Cookie', cookieString)
+    # https://blog.heroku.com/chrome-changes-samesite-cookie
+    cookie_string += ";Secure; SameSite=None"
+
+    # Append this cookie to the array. You would use set() to overwrite and
+    # previous value if exists.
+    self.headers_out.add('Set-Cookie', cookie_string)
   end
 
   # Clears a cookie. Just sets a cookie with an expiry in the past, which should
@@ -203,10 +297,10 @@ class Request
     setCookie(name, '', -1)
   end
 
-  #------------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
   # HTTP Parameters
-  #------------------------------------------------------------------------------
-  
+  #-----------------------------------------------------------------------------
+
   # Searches for a variable with the name of <tt>name</tt> in <tt>params</tt>,
   # then <tt>@queries</tt>, and then <tt>cgi</tt>. Returns true for
   # the first find, false otherwise.
@@ -225,7 +319,7 @@ class Request
             return true
           end
         end
-        
+
         return false
       end
 
@@ -265,7 +359,6 @@ class Request
   # (which itself defaults to <tt>nil</tt>).
   #
   # Returns an Array value.
-
   def values(name, default=nil)
 
     # Post
@@ -283,7 +376,16 @@ class Request
 
     # Queries
     if self.queries.has_key?(name)
-      return [self.queries[name]]
+      results = []
+
+      # Collect all elements with key=name
+      self.queries.each do |k,v|
+        if k == name
+          results.push v
+        end
+      end
+
+      return results
     end
 
     # Environmental variables
@@ -293,15 +395,15 @@ class Request
 
     return default
   end
-  
+
   #------------------------------------------------------------------------------
   # HTTP Header Functions
   #------------------------------------------------------------------------------
 
   # Returns the multi-part boundary given in the Content-Type header, if exists.
   def boundary()
-    ct = self.headers_in['Content-Type']
-    
+    ct = self.headers['Content-Type']
+
     if ct != nil
       return '--' + ct.split('boundary=')[1]
     end
@@ -383,7 +485,7 @@ class Request
   def flush()
     self.rflush()
   end
-  
+
   #------------------------------------------------------------------------------
   # Utility Functions
   #------------------------------------------------------------------------------
@@ -394,11 +496,11 @@ class Request
       self.err_headers_out.add(k,v)
     end
   end
-    
+
   # Compute and format a RFC 1123 expiration date <tt>days</tt> days in the future.
   def expirationDate(days, minutes=0)
     secs_per_day = 86400
-    
+
     t = Time.now() + days*secs_per_day + minutes*60
     return t.httpdate()
   end

@@ -21,7 +21,7 @@ class Handler
   def script(request)
     Runner.new(request).runScript()
   end
-  
+
   # Called on module shutdown
   def shutdown()
 

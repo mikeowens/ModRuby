@@ -12,7 +12,7 @@ module Debug
   def Debug.dumpRequest(req)
 
     req.log(APLOG_NOTICE, 'Debug::dumpEnv()')
-  
+
     # Request Object
 
     log 'Request::uri', req.uri
@@ -51,7 +51,7 @@ module Debug
     env.each do |key, value|
       log '  ' + key, value
     end
-      
+
     # Server Object
 
     s = req.server()

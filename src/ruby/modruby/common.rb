@@ -3,6 +3,7 @@ require 'fileutils'
 require 'digest/md5'
 require 'stringio'
 require 'modruby/request'
+require 'modruby/response'
 
 module ModRuby
 
@@ -47,18 +48,18 @@ class RequestTermination < Exception
 
 end
 
-# Print a backtrace from the exception. 
+# Print a backtrace from the exception.
 def ModRuby.backtrace(e, message)
 
   msg = sprintf("%-11s: %s\n", e.class, e.to_s)
 
   # Escape HTML
-  msg.gsub!( /[&\"<>]/, 
-             { 
+  msg.gsub!( /[&\"<>]/,
+             {
                '&' => '&amp;',
                '"' => '&quot;',
                '<' => '&lt;',
-               '>' => '&gt;' 
+               '>' => '&gt;'
              })
 
   out = "<pre>ModRuby BACKTRACE\n\n"
@@ -70,7 +71,7 @@ def ModRuby.backtrace(e, message)
     out << sprintf("%3i. %s\n", i, stack)
     i += 1
   end
-  
+
   return out
 end
 
@@ -96,7 +97,7 @@ end
 
 # Simple class to set up simple environment to run scripts and catch errors
 class Runner
-  
+
   def initialize(req)
     @request = req
   end
@@ -110,18 +111,18 @@ class Runner
 
       # Store the current (real) stdout
       previous = $stdout
-  
+
       # Create a new stringio object to capture diverted stdout
       out = StringIO.new
-      
+
       # Redirect standard out to stringio buffer
       $stdout = out
-      
+
       # Store this so view's and/or contollers can get to it
       @request.out = out
-      
+
       yield file
-      
+
     rescue Exception
       # Something blew up. Print a stack trace
       @request.puts '<pre>' + ModRuby.backtrace($!, 'ModRuby Turnstile')
