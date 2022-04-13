@@ -10,7 +10,7 @@ docker run \
   -v $root:/usr/src/mod_ruby \
   -ti \
   -p 8080:80 \
-  mod_ruby /bin/bash -l -c 'cmake . && make install && /httpd-gdb'
+  mod_ruby /bin/bash -l -c 'cmake3 . && make install && /httpd-gdb'
 #If you run httpd in FOREGROUND and run the container
 #with -d instead of -ti
 #docker logs -f mod_ruby_run_container
