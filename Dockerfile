@@ -1,6 +1,6 @@
 FROM centos:centos7
 
-RUN yum -y upgrade && yum install -y \
+RUN yum install -y epel-release && yum -y upgrade && yum install -y \
   apr-devel \
   apr-util \
   apr-util-devel \
@@ -8,7 +8,7 @@ RUN yum -y upgrade && yum install -y \
   automake \
   bison \
   bzip2 \
-  cmake \
+  cmake3 \
   curl \
   cyrus-sasl \
   cyrus-sasl-devel \
@@ -35,7 +35,7 @@ RUN yum -y upgrade && yum install -y \
 
 # Import GPG key for RVM
 RUN gpg \
-  --keyserver hkp://keys.gnupg.net \
+  --keyserver keyserver.ubuntu.com \
   --recv-keys \
     409B6B1796C275462A1703113804BB82D39DC0E3 \
     7D2BAF1CF37B13E2069D6956105BD0E739499BDB
@@ -62,7 +62,7 @@ WORKDIR /usr/src/mod_ruby
 COPY . /usr/src/mod_ruby
 
 # Pulls in the RVM environment and installed ruby
-RUN cmake . && make -j4 && make install
+RUN cmake3 . && make -j4 && make install
 
 # Remove some junk that the httpd package installs 
 RUN rm -f /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.modules.d/00-systemd.conf
