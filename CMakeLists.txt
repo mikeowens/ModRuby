@@ -6,6 +6,9 @@ project(ModRuby)
 # Allow more human readable "if then else" constructs
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
+# Set C++ 11 standard
+set (CMAKE_CXX_STANDARD 11)
+
 #-------------------------------------------------------------------------------
 # Platform Options
 #-------------------------------------------------------------------------------
